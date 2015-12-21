@@ -215,6 +215,7 @@
     <Compile Include="Assets\Scripts\Camera\TapEventDriver.cs" />
     <Compile Include="Assets\Scripts\Camera_pan_RTS.cs" />
     <Compile Include="Assets\Scripts\Camera_zoom_RTS.cs" />
+    <Compile Include="Assets\Scripts\CapturePoint.cs" />
     <Compile Include="Assets\Scripts\Cloud_Opacity.cs" />
     <Compile Include="Assets\Scripts\CommanderButton.cs" />
     <Compile Include="Assets\Scripts\CommanderMGMT.cs" />
@@ -238,6 +239,7 @@
     <Compile Include="Assets\Scripts\OptionsButton.cs" />
     <Compile Include="Assets\Scripts\OptionsPanel.cs" />
     <Compile Include="Assets\Scripts\Paths\ProgressLine.cs" />
+    <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Scripts\RadialTimer.cs" />
     <Compile Include="Assets\Scripts\RadialTimerBubble.cs" />
     <Compile Include="Assets\Scripts\RandomTileSpanwer.cs" />

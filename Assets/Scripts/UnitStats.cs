@@ -7,7 +7,7 @@ public class UnitStats : MonoBehaviour {
 
 	public int unitID;
 	public string unitName;
-	public bool unitIsActive = false;
+    public bool unitIsActive = false;
 	public Sprite unitButtonSprite;
 
 	public RectTransform button;
@@ -16,13 +16,18 @@ public class UnitStats : MonoBehaviour {
 	public Transform unitPos;
 	private ArmyStats stats;
 
-	public float healthMax = 100;
-	public float healthCurrent = 100;
-	public float damage = 10;
-	public float attackRange = 20;
+    public string unitType;
+    public int unitCost = 1;
+    public int movementCost = 1;
+    public int speed = 1;
+    public int unitBuildTime = 1;
+    public int unitPop = 1;
+    public float healthMax = 3;
+	public float healthCurrent = 3;
+	public float damage = 1;
+	public float attackRange = 1;
 	public float armourPoints = 0;
-	public float LoS = 25;
-	public float speed = 1f;
+	public float lineOfSight = 2;
 	public RectTransform healthRect;
 	public RectTransform damageRect;
 	public GameObject healthbar;
