@@ -1,0 +1,140 @@
+fileFormatVersion: 2
+guid: 94b0dd27086065c4aa7b84ae67d4f767
+timeCreated: 1428596239
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: group345
+    100002: //RootNode
+    100004: OrcCamp01_BASE01
+    100006: OrcCamp01_FLAG01
+    100008: OrcCamp01_HUT01
+    100010: OrcCamp01_HUT02
+    100012: joint1
+    100014: joint2
+    100016: joint3
+    400000: group345
+    400002: //RootNode
+    400004: OrcCamp01_BASE01
+    400006: OrcCamp01_FLAG01
+    400008: OrcCamp01_HUT01
+    400010: OrcCamp01_HUT02
+    400012: joint1
+    400014: joint2
+    400016: joint3
+    2300000: OrcCamp01_BASE01
+    2300002: OrcCamp01_FLAG01
+    2300004: OrcCamp01_HUT01
+    2300006: OrcCamp01_HUT02
+    3300000: OrcCamp01_BASE01
+    3300002: OrcCamp01_FLAG01
+    3300004: OrcCamp01_HUT01
+    3300006: OrcCamp01_HUT02
+    4300000: OrcCamp01_FLAG01
+    4300002: OrcCamp01_BASE01
+    4300004: OrcCamp01_HUT01
+    4300006: OrcCamp01_HUT02
+    7400000: FlagWave01
+    9500000: //RootNode
+    13700000: OrcCamp01_FLAG01
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 3
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: FlagWave01
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 12
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: joint1
+        weight: 1
+      - path: joint1/joint2
+        weight: 1
+      - path: joint1/joint2/joint3
+        weight: 1
+      - path: OrcCamp01_BASE01
+        weight: 1
+      - path: OrcCamp01_FLAG01
+        weight: 1
+      - path: OrcCamp01_HUT01
+        weight: 1
+      - path: OrcCamp01_HUT02
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 0
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
