@@ -176,9 +176,9 @@ namespace HoneyFramework
             else
             {
 				#if UNITY_WEBPLAYER
-				Debug.LogError(path);
+				//Debug.LogError(path);
 				var shortPath = Path.GetFileNameWithoutExtension(path);
-				Debug.LogError(shortPath);
+				//Debug.LogError(shortPath);
 				var file = Resources.Load(shortPath) as TextAsset;
 				if (file!=null){
 					return file.bytes;
