@@ -18,7 +18,7 @@ HighKings.sln.sln
 HighKings.sln*.sln
 UnityVS*
 
-
+Temp*
 Library/
 Temp/
 obj/
