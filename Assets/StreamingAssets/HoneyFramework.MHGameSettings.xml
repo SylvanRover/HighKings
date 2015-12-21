@@ -8,7 +8,7 @@
       </QualityOptions>
     </qualitySettings>
     <worldSeed>0</worldSeed>
-    <dx11Mode>true</dx11Mode>
+    <dx11Mode>false</dx11Mode>
     <markers>true</markers>
   </MHGameSettings>
 </ArrayOfMHGameSettings>

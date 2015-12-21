@@ -174,8 +174,22 @@ namespace HoneyFramework
                 return file.bytes;
             }
             else
-            {                
+            {
+				#if UNITY_WEBPLAYER
+				Debug.LogError(path);
+				var shortPath = Path.GetFileNameWithoutExtension(path);
+				Debug.LogError(shortPath);
+				var file = Resources.Load(shortPath) as TextAsset;
+				if (file!=null){
+					return file.bytes;
+				}else{
+					Debug.LogError("Null file");
+					return null;
+				}
+				#else    
+
                 return System.IO.File.ReadAllBytes(path);
+				#endif
             }                
         }
     }

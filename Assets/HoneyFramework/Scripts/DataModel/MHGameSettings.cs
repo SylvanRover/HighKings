@@ -29,7 +29,7 @@ namespace HoneyFramework
         public List<QualityOptions> qualitySettings = new List<QualityOptions>();
 
         public int worldSeed = 0;
-        public bool dx11Mode = true;
+        public bool dx11Mode = false; // Using Macs
         public bool markers = true;
 
         static public List<MHGameSettings> list;
