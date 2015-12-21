@@ -220,6 +220,7 @@
     <Compile Include="Assets\Scripts\CommanderButton.cs" />
     <Compile Include="Assets\Scripts\CommanderMGMT.cs" />
     <Compile Include="Assets\Scripts\DestroyHero.cs" />
+    <Compile Include="Assets\Scripts\Draggable.cs" />
     <Compile Include="Assets\Scripts\EnemyCampCollision.cs" />
     <Compile Include="Assets\Scripts\EventTriggerDrag.cs" />
     <Compile Include="Assets\Scripts\EventTriggerDragIcon.cs" />
