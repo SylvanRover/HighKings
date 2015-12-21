@@ -32,7 +32,7 @@ namespace HoneyFramework
             Vector3 v = transform.position;
 
             UpdateTeselationLevel(v.y);
-
+			/*
             // camera up or down
             if (Input.GetKey("z") && v.y < 25.0f)
             {
@@ -106,6 +106,7 @@ namespace HoneyFramework
                     Debug.LogWarning("click outside world? e.g. horizontal");
                 }
             }
+			*/
         }
 
         void OnGUI()
