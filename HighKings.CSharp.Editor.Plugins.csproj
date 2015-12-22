@@ -132,6 +132,7 @@
     <Compile Include="Assets\Standard Assets\3rdParty\TouchKit\Editor\TouchKitEditor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\AllAssets\readme.txt" />
     <None Include="Assets\Fonts\Bowlby_One\OFL.txt" />
     <None Include="Assets\HoneyFramework\3rd party\AstarPathfindingProject\Editor\EditorAssets\Materials\Navmesh2.shader" />
     <None Include="Assets\HoneyFramework\3rd party\AstarPathfindingProject\Plugins\DotNetZip\License.txt" />
