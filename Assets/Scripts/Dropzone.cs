@@ -6,10 +6,15 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
     public bool isCapturePoint = false;
     public bool isOwned = false;
+    public bool isAvailable = true;
+    private PlayerController playerController;
+    private UnitCardStats unitCardStats;
     private MakePrefabAppear spawn;
     
     void Start() {
         spawn = gameObject.GetComponent<MakePrefabAppear>();
+        playerController = GameObject.FindGameObjectWithTag("PlayerController").GetComponent<PlayerController>();
+
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
@@ -28,8 +33,13 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
             d.ParentToReturnTo = this.transform;
         }*/
 
-        if (isCapturePoint && isOwned) {
+        unitCardStats = d.GetComponent<UnitCardStats>();
+
+        if (isCapturePoint && isOwned && isAvailable) {
             spawn.Appear();
+            if (playerController.GoldCurrent >= unitCardStats.unitCost) {
+                playerController.GoldCurrent = playerController.GoldCurrent - unitCardStats.unitCost;
+            }
         }
     }
 

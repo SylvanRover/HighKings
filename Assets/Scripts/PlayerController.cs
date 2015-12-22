@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour {
 
     public int playerID;
     public int popCap;
-    public int goldCurrent;
+   [SerializeField] private int goldCurrent;
     public int goldMax;
     public int goldPerTurn;
     public int techAge = 0;
@@ -15,6 +15,15 @@ public class PlayerController : MonoBehaviour {
 
     public Text goldCurrentText;
     public Text goldPerTurnText;
+
+    public int GoldCurrent {
+
+        get { return goldCurrent; }
+        set {
+            goldCurrent = value;
+            goldCurrentText.text = goldCurrent.ToString();
+        }
+    }
 
     /*[System.Serializable]
     public class Unit {

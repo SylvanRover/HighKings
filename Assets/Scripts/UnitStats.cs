@@ -167,6 +167,10 @@ public class UnitStats : MonoBehaviour {
 			onDrag = false;
 			onUp = false;
 		}
+
+        if (healthCurrent <= 0) {
+            Destroy(this.gameObject);
+        }
 	}
 
 	void OnDestroy(){			

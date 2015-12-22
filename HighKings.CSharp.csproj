@@ -273,6 +273,7 @@
     <Compile Include="Assets\Scripts\UICommanderBubble.cs" />
     <Compile Include="Assets\Scripts\UIFollowWorldPoint.cs" />
     <Compile Include="Assets\Scripts\UIScreenCurve.cs" />
+    <Compile Include="Assets\Scripts\UnitCardStats.cs" />
     <Compile Include="Assets\Scripts\UnitStats.cs" />
     <Compile Include="Assets\Scripts\UnitStats_1.cs" />
     <Compile Include="Assets\Scripts\WorldspaceScreenGUI.cs" />
