@@ -7,6 +7,7 @@ public class MakePrefabAppear : MonoBehaviour {
 	[SerializeField] private string _prefabName = "Type Prefab Name Here";
 	[SerializeField] public Transform _where;
 	private GameObject _theGameObject;
+    private UnitStats unitStats;
 	// Use this for initialization
 
 	public void Appear () {
@@ -22,9 +23,22 @@ public class MakePrefabAppear : MonoBehaviour {
 		Appear ();
 		_theGameObject.transform.LookAt(lookAtPoint);
 	}
-	
-	// Update is called once per frame
-	public void Clear() {
+
+    public void SpawnUnit(int i) {
+        if (_where == null) {
+            _where = this.transform;
+        }
+        Clear();
+        _theGameObject = (GameObject)GameObject.Instantiate(Resources.Load(_prefabName));
+        _theGameObject.transform.parent = _where;
+        _theGameObject.transform.localPosition = Vector3.zero;
+        unitStats = _theGameObject.GetComponent<UnitStats>();
+        unitStats.unitID = i;
+        unitStats.SetUnitType();
+    }
+
+    // Update is called once per frame
+    public void Clear() {
 		if (_theGameObject != null) {
 			Destroy (_theGameObject);
 		}
