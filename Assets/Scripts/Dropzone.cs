@@ -36,8 +36,8 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         unitCardStats = d.GetComponent<UnitCardStats>();
 
         if (isCapturePoint && isOwned && isAvailable) {
-            spawn.Appear();
             if (playerController.GoldCurrent >= unitCardStats.unitCost) {
+                spawn.Appear();
                 playerController.GoldCurrent = playerController.GoldCurrent - unitCardStats.unitCost;
             }
         }
