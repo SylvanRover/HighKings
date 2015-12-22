@@ -38,6 +38,10 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         this.transform.SetParent( ParentToReturnTo );
         this.transform.SetSiblingIndex( placeholder.transform.GetSiblingIndex() );
 
+        //this.transform.localPosition = Vector3.zero;
+        //this.transform.localScale = Vector3.one;
+        //this.transform.rotation = Quaternion.identity;
+
         GetComponent<CanvasGroup>().blocksRaycasts = true;
 
         Destroy(placeholder);

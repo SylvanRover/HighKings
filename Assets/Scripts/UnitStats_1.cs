@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using Map.Events;
 
-public class UnitStats : MonoBehaviour {
+public class UnitStats_1 : MonoBehaviour {
 
 	public int commanderID;
 	public string commanderName;
