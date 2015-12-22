@@ -12,10 +12,15 @@ public class UnitStats : MonoBehaviour {
 	public SelectionRingAnim selectionRing;
 
 	public Transform unitPos;
-    //private ArmyStats stats;
+
+    public Image healthbarImage;
+    public Color neutralOwned;
+    public Color playerOwned;
+    public Color enemyOwned;
 
     // Unit Variables
     public int unitID;
+    public int ownership = 0;
     public string unitName;
     public string unitType;
     public int unitCost;
@@ -30,6 +35,23 @@ public class UnitStats : MonoBehaviour {
 	public float attackRange;
 	public float armourPoints;
 	public float lineOfSight;
+
+    public int Ownership {
+
+        get { return ownership; }
+        set {
+            ownership = value;
+            if (ownership == 0) {
+                healthbarImage.color = neutralOwned;
+            }
+            if (ownership == 1) {
+                healthbarImage.color = playerOwned;
+            }
+            if (ownership == 2) {
+                healthbarImage.color = enemyOwned;
+            }
+        }
+    }
 
     public Text unitNameText;
 
@@ -121,7 +143,6 @@ public class UnitStats : MonoBehaviour {
 		}
 	}*/
 
-	// Use this for initialization
 	void Start () {
 		// Setting Health
 		healthCurrent = healthMax;
@@ -129,6 +150,18 @@ public class UnitStats : MonoBehaviour {
 		anim = healthbar.GetComponent<Animator>();
 
         SetUnitType();
+
+        if (healthbarImage != null) {
+            if (ownership == 0) {
+                healthbarImage.color = neutralOwned;
+            }
+            if (ownership == 1) {
+                healthbarImage.color = playerOwned;
+            }
+            if (ownership == 2) {
+                healthbarImage.color = enemyOwned;
+            }
+        }
 
         /*InteractionEvents.OnBroadcastSelected += IsSelected;
 		InteractionEvents.OnBroadcastSwitch += UnitIsSelected;*/

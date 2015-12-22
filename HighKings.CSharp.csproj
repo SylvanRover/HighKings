@@ -226,6 +226,7 @@
     <Compile Include="Assets\Scripts\Camera_pan_RTS.cs" />
     <Compile Include="Assets\Scripts\Camera_zoom_RTS.cs" />
     <Compile Include="Assets\Scripts\CapturePoint.cs" />
+    <Compile Include="Assets\Scripts\CastleStats.cs" />
     <Compile Include="Assets\Scripts\Cloud_Opacity.cs" />
     <Compile Include="Assets\Scripts\CommanderButton.cs" />
     <Compile Include="Assets\Scripts\CommanderMGMT.cs" />
@@ -261,6 +262,7 @@
     <Compile Include="Assets\Scripts\SelectionRingAnim.cs" />
     <Compile Include="Assets\Scripts\Settlement.cs" />
     <Compile Include="Assets\Scripts\Shell\ShellExplosion.cs" />
+    <Compile Include="Assets\Scripts\SimpleNet\SimpleNet.cs" />
     <Compile Include="Assets\Scripts\Tank\TankHealth.cs" />
     <Compile Include="Assets\Scripts\Tank\TankMovement.cs" />
     <Compile Include="Assets\Scripts\Tank\TankSetup.cs" />

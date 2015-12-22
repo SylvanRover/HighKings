@@ -24,7 +24,7 @@ public class MakePrefabAppear : MonoBehaviour {
 		_theGameObject.transform.LookAt(lookAtPoint);
 	}
 
-    public void SpawnUnit(int i) {
+    public void SpawnUnit(int i, int o) {
         if (_where == null) {
             _where = this.transform;
         }
@@ -34,6 +34,7 @@ public class MakePrefabAppear : MonoBehaviour {
         _theGameObject.transform.localPosition = Vector3.zero;
         unitStats = _theGameObject.GetComponent<UnitStats>();
         unitStats.unitID = i;
+        unitStats.ownership = o;
         unitStats.SetUnitType();
     }
 

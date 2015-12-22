@@ -37,7 +37,7 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
         if (isCapturePoint && isOwned && isAvailable) {
             if (playerController.GoldCurrent >= unitCardStats.unitCost) {
-                spawn.SpawnUnit(unitCardStats.unitID);
+                spawn.SpawnUnit(unitCardStats.unitID, unitCardStats.ownership);
                 playerController.GoldCurrent = playerController.GoldCurrent - unitCardStats.unitCost;
             }
         }
