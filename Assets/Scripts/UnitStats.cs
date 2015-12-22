@@ -5,8 +5,6 @@ using Map.Events;
 
 public class UnitStats : MonoBehaviour {
 
-	public int unitID;
-	public string unitName;
     public bool unitIsActive = false;
 	public Sprite unitButtonSprite;
 
@@ -14,20 +12,27 @@ public class UnitStats : MonoBehaviour {
 	public SelectionRingAnim selectionRing;
 
 	public Transform unitPos;
-	private ArmyStats stats;
+    //private ArmyStats stats;
 
+    // Unit Variables
+    public int unitID;
+    public string unitName;
     public string unitType;
-    public int unitCost = 1;
-    public int movementCost = 1;
-    public int speed = 1;
-    public int unitBuildTime = 1;
-    public int unitPop = 1;
-    public float healthMax = 3;
-	public float healthCurrent = 3;
-	public float damage = 1;
-	public float attackRange = 1;
-	public float armourPoints = 0;
-	public float lineOfSight = 2;
+    public int unitCost;
+    public int movementCost;
+    public int movementMax;
+    public int speed;
+    public int unitBuildTime;
+    public int unitPop;
+    public float healthMax;
+	public float healthCurrent;
+	public float damage;
+	public float attackRange;
+	public float armourPoints;
+	public float lineOfSight;
+
+    public Text unitNameText;
+
 	public RectTransform healthRect;
 	public RectTransform damageRect;
 	public GameObject healthbar;
@@ -79,7 +84,7 @@ public class UnitStats : MonoBehaviour {
 		}
 	}*/
 
-	public void UnitIsSelected(int ID){
+	/*public void UnitIsSelected(int ID){
 		if (ID == unitID) {		
 			InteractionEvents.BroadcastSelected (unitID, unitButtonSprite, unitPos.transform, stats);
 			if (selectionRing != null) {
@@ -92,7 +97,7 @@ public class UnitStats : MonoBehaviour {
 				selectionRing.Deselect ();
 			}
 		}
-	}
+	}*/
 		
 	public void Damage (float value) {
 		anim = healthbar.GetComponent<Animator>();
@@ -105,7 +110,7 @@ public class UnitStats : MonoBehaviour {
 		StartCoroutine(HealthbarFade());
 	}
 
-	public void IsSelected(int ID, Sprite commanderSprite, Transform commanderPos, ArmyStats commanderStats){
+	/*public void IsSelected(int ID, Sprite commanderSprite, Transform commanderPos, ArmyStats commanderStats){
 		//Debug.LogError ("Recieved at ArmyStats. Commander ID " + ID);
 		if (ID != unitID) {
 			//Debug.LogError ("Comparing Commander ID " + ID + " with " + commanderID);
@@ -114,7 +119,7 @@ public class UnitStats : MonoBehaviour {
 				selectionRing.Deselect ();
 			}
 		}
-	}
+	}*/
 
 	// Use this for initialization
 	void Start () {
@@ -122,19 +127,75 @@ public class UnitStats : MonoBehaviour {
 		healthCurrent = healthMax;
 		resetSize = healthRect.sizeDelta;
 		anim = healthbar.GetComponent<Animator>();
-		
-		InteractionEvents.OnBroadcastSelected += IsSelected;
-		InteractionEvents.OnBroadcastSwitch += UnitIsSelected;
 
-		// Select First Commander		
-		stats = this.transform.GetComponent<ArmyStats> ();
+        SetUnitType();
 
-		if (unitID == 1) {
+        /*InteractionEvents.OnBroadcastSelected += IsSelected;
+		InteractionEvents.OnBroadcastSwitch += UnitIsSelected;*/
+
+        // Select First Commander		
+        //stats = this.transform.GetComponent<ArmyStats> ();
+
+        /*if (unitID == 1) {
 			UnitIsSelected(unitID);
 			IsSelected(unitID, unitButtonSprite, this.unitPos, stats);
-		}
-	}
+		}*/
+    }
 
+    public void SetUnitType() {
+        // Setting Unit Variables
+        if (unitID == 0) {
+            unitName = "Swordsman";
+            unitNameText.text = unitName;
+            unitType = "Infantry";
+            unitCost = 1;
+            movementCost = 1;
+            movementMax = 3;
+            speed = 1;
+            unitBuildTime = 1;
+            unitPop = 1;
+            healthMax = 4;
+            healthCurrent = 4;
+            damage = 1;
+            attackRange = 1;
+            armourPoints = 0;
+            lineOfSight = 2;
+        }
+        if (unitID == 1) {
+            unitName = "Archer";
+            unitNameText.text = unitName;
+            unitType = "Ranged";
+            unitCost = 2;
+            movementCost = 1;
+            movementMax = 3;
+            speed = 1;
+            unitBuildTime = 1;
+            unitPop = 1;
+            healthMax = 2;
+            healthCurrent = 2;
+            damage = 1;
+            attackRange = 2;
+            armourPoints = 0;
+            lineOfSight = 4;
+        }
+        if (unitID == 2) {
+            unitName = "Knight";
+            unitNameText.text = unitName;
+            unitType = "Mounted";
+            unitCost = 4;
+            movementCost = 1;
+            movementMax = 6;
+            speed = 2;
+            unitBuildTime = 1;
+            unitPop = 1;
+            healthMax = 5;
+            healthCurrent = 5;
+            damage = 2;
+            attackRange = 1;
+            armourPoints = 0;
+            lineOfSight = 2;
+        }
+    }
 
 	void Update(){
 
@@ -152,7 +213,7 @@ public class UnitStats : MonoBehaviour {
 		}
 
 		//Event Trigger nn Click but not after Drag
-		if (onUp && !onDrag) {
+		/*if (onUp && !onDrag) {
 			Camera_pan_RTS[] cp_arr = FindObjectsOfType<Camera_pan_RTS> ();
 			foreach(Camera_pan_RTS cp in cp_arr) {
 				cp.AnimateToWorldPos(unitPos.position);
@@ -162,19 +223,19 @@ public class UnitStats : MonoBehaviour {
 			foreach(Camera_zoom_RTS cz in cz_arr) {
 				cz.IconZoomCamera();
 			}
-		}
-		if (onUp || onDrag) {
+		}*/
+		/*if (onUp || onDrag) {
 			onDrag = false;
 			onUp = false;
-		}
+		}*/
 
         if (healthCurrent <= 0) {
             Destroy(this.gameObject);
         }
 	}
 
-	void OnDestroy(){			
+	/*void OnDestroy(){			
 		InteractionEvents.OnBroadcastSelected -= IsSelected;
 		InteractionEvents.OnBroadcastSwitch -= UnitIsSelected;
-	}
+	}*/
 }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
 
@@ -42,14 +42,13 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         }*/
 
         unitCardStats = d.GetComponent<UnitCardStats>();
-
+		//FOR now no checking
         //if (isCapturePoint && isOwned && isAvailable) {
             //if (playerController.GoldCurrent >= unitCardStats.unitCost) {
-                
-                playerController.GoldCurrent = playerController.GoldCurrent - unitCardStats.unitCost;
-				_state.owned = false;	
+                _state.owned = false;	
 				_state.playerOccupier = SimpleNet.PlayerID;
-				spawn.Appear (); //FOR NOW
+				spawn.SpawnUnit(unitCardStats.unitID);
+                playerController.GoldCurrent = playerController.GoldCurrent - unitCardStats.unitCost;
            // }
         //}
     }
