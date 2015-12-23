@@ -22,8 +22,9 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 		_state.playerOccupier = -1;
 		_state.owned = false;
         spawn = gameObject.GetComponent<MakePrefabAppear>();
-        playerController = GameObject.FindGameObjectWithTag("PlayerController").GetComponent<PlayerController>();
         hexGrid = GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>();
+
+        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>(); 
 
     }
 

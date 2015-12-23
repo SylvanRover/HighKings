@@ -45,6 +45,8 @@ public class HexGrid : MonoBehaviour {
     public Color attackColor;
     public Color cursorColor;
 
+    private PlayerController playerController;
+
     public void wait() {
 		waiting = true;
 	}
@@ -126,6 +128,8 @@ public class HexGrid : MonoBehaviour {
             captureObj[1].transform.position = position.getPosition(); // maight want to move parent instead
             position.flag("CapturePoint");
         }
+        
+        playerController = GameObject.FindGameObjectWithTag("PlayerController").GetComponent<PlayerController>();
     }
 	
 	private void select () {
@@ -154,7 +158,11 @@ public class HexGrid : MonoBehaviour {
 		foreach (Unit unit in units) {	//I only need to do this with units on that team, but checking won't speed things up. I could also only do it when player overflows.
 			unit.newTurn ();
 		}
-		player = (player + 1) % PLAYERS;
+
+        playerController = GameObject.FindGameObjectWithTag("PlayerController").GetComponent<PlayerController>();
+        playerController.RoundStart();
+
+        player = (player + 1) % PLAYERS;
 		if(player == 0 || !computerPlayer) {
 			selectSelectable ();
 		}
