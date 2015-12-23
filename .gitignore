@@ -31,6 +31,7 @@ Assembly-CSharp*.csproj
 *.orig.meta
 *.swatch
 
+.vs/
 HighKings.CSharp.csproj
 HighKings.CSharp.Editor.csproj
 HighKings.CSharp.Editor.Plugins.csproj
