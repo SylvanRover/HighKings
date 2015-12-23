@@ -14,6 +14,7 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
     private HexGrid hexGrid;
 
     private SimpleStatus.DropZoneState _state;
+    private CapturePoint capturePoint;
 
 
     void Start() {
@@ -24,7 +25,8 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         spawn = gameObject.GetComponent<MakePrefabAppear>();
         hexGrid = GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>();
 
-        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>(); 
+        playerController = GameObject.FindGameObjectWithTag("PlayerController").GetComponent<PlayerController>();
+        capturePoint = transform.parent.GetComponent<CapturePoint>();
 
     }
 
@@ -45,6 +47,11 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         }*/
 
         unitCardStats = d.GetComponent<UnitCardStats>();
+
+        if (capturePoint.ownership == 0) { // will need to not be hard coded as player 0 is the only player
+            _state.owned = true;
+        }
+
 		//FOR now no checking
         if (_state.owned) {
             //_state.owned = true;	

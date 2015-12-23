@@ -160,7 +160,9 @@ public class HexGrid : MonoBehaviour {
 		}
 
         playerController = GameObject.FindGameObjectWithTag("PlayerController").GetComponent<PlayerController>();
-        playerController.RoundStart();
+        if (player != playerController.playerID) {
+            playerController.RoundStart();
+        }
 
         player = (player + 1) % PLAYERS;
 		if(player == 0 || !computerPlayer) {
