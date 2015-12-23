@@ -205,8 +205,12 @@ public class Unit : MonoBehaviour {
                 MAX_HP = 5;
                 hp = MAX_HP;
             }
+        } else {
+            MAX_HP = 10;
+            hp = MAX_HP;
         }
-        
+
+
     }
 
     /*void SetPosition (HexPosition position) {
