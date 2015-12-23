@@ -29,6 +29,12 @@ Assembly-CSharp*.csproj
 *.orig
 *.orig.meta
 *.swatch
+HighKings.CSharp.csproj
+HighKings.CSharp.Editor.csproj
+HighKings.CSharp.Editor.Plugins.csproj
+HighKings.CSharp.Plugins.csproj
+HighKings.sln
+HighKings-csharp.sln
 
 /.vscode/
 
