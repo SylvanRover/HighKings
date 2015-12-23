@@ -45,19 +45,24 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
         unitCardStats = d.GetComponent<UnitCardStats>();
 		//FOR now no checking
-        //if (isCapturePoint && isOwned && isAvailable) {
-            //if (playerController.GoldCurrent >= unitCardStats.unitCost) {
-                _state.owned = false;	
-				_state.playerOccupier = SimpleNet.PlayerID;
-				GameObject myObject = spawn.SpawnUnit(unitCardStats.unitID, unitCardStats.ownership);
+        if (_state.owned) {
+            //_state.owned = true;	
+			_state.playerOccupier = SimpleNet.PlayerID;
 
-        Unit myUnit = myObject.GetComponent<Unit>();
-        myUnit.SetGrid(hexGrid);
-        hexGrid.AddUnit(myUnit);
-
+            if (playerController.GoldCurrent >= unitCardStats.unitCost) {
+                GameObject myObject = spawn.SpawnUnit(unitCardStats.unitID, unitCardStats.ownership);
+                Unit myUnit = myObject.GetComponent<Unit>();
+                myUnit.SetGrid(hexGrid);
+                hexGrid.AddUnit(myUnit);
                 playerController.GoldCurrent = playerController.GoldCurrent - unitCardStats.unitCost;
-           // }
+            }                
+        }
         //}
+    }
+
+    public void Capture() {
+        _state.owned = true;	
+        _state.playerOccupier = SimpleNet.PlayerID;
     }
 
 	public void UpdateState(SimpleStatus.DropZoneState state){

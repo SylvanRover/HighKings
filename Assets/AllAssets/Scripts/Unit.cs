@@ -219,6 +219,7 @@ public class Unit : MonoBehaviour {
 						transform.position = path[n];
 						moving = false;
 						grid.actionComplete ();
+                        Debug.LogError(string.Format("End of movement at u:{0}v:{1} isCapturePoint?:{2}", position.U, position.V, position.containsKey("CapturePoint")));
 						return;
 					} else {
 						transform.rotation = horizontalLookRotation (path[n]-path[n-1]);

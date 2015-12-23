@@ -18,7 +18,8 @@ public class HexGrid : MonoBehaviour {
 	public GameObject marker;
 	public GameObject unitsRoot;
 	public GameObject obstacles;
-	private List<Unit> units = new List<Unit>();		//I should make this thread safe.
+    //public List<Dropzone> capturePoints;
+    private List<Unit> units = new List<Unit>();		//I should make this thread safe.
 	//public GameObject[] players;
 	
 	private bool waiting = false;
@@ -119,7 +120,13 @@ public class HexGrid : MonoBehaviour {
 			child.position = position.getPosition();
 			position.flag("Obstacle");
 		}
-	}
+        GameObject[] captureObj = GameObject.FindGameObjectsWithTag("MapDropZone");
+        for (int i=0; i< captureObj.Length; i++) {
+            HexPosition position = new HexPosition(captureObj[i].transform.position);
+            captureObj[1].transform.position = position.getPosition(); // maight want to move parent instead
+            position.flag("CapturePoint");
+        }
+    }
 	
 	private void select () {
 		if (mouse.isSelected ("Selectable")) {
