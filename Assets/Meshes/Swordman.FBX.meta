@@ -105,6 +105,10 @@ ModelImporter:
     4300014: Sword_Body
     4300016: Sword_ArmL
     9500000: //RootNode
+    13700000: Sword_ArmL
+    13700002: Sword_ArmR
+    13700004: Sword_Body
+    13700006: Sword_Trousers
   materials:
     importMaterials: 1
     materialName: 0

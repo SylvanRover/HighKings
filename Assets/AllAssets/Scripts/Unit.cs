@@ -8,63 +8,67 @@ public class Unit : MonoBehaviour {
 	public enum State {MOVE, ATTACK, WAIT};
 	private State state = State.MOVE;
 	public int PLAYER;
-	public int MAX_HP;
-	private int hp;
+	public float MAX_HP;
+	public float hp;
 	public float STRENGTH;
 	public float VARIATION;
 	public int SPEED;
 	public int RANGE;
-	private int HP_BAR_WIDTH = 64;
-	private int HP_BAR_HEIGHT = 16;
+	//private int HP_BAR_WIDTH = 64;
+	//private int HP_BAR_HEIGHT = 16;
 	private bool moving = false;
 	private float t;
 	private Vector3[] path;
 	private int n;	//position on the path
 	private const float MOTION_SPEED = 0.05f;
 
-    public bool unitIsActive = false;
-    public Sprite unitButtonSprite;
+    //public bool unitIsActive = false;
+    //public Sprite unitButtonSprite;
 
-    public RectTransform button;
-    public SelectionRingAnim selectionRing;
+    //public RectTransform button;
+    //public SelectionRingAnim selectionRing;
 
-    public Transform unitPos;
+    //public Transform unitPos;
 
     public Image healthbarImage;
     public Color neutralOwned;
     public Color playerOwned;
     public Color enemyOwned;
 
+    public GameObject unitMesh;
+    //private Animator unitAnimr;
+
     // Unit Variables
     public int unitID;
     public int ownership = 0;
     public string unitName;
-    public string unitType;
-    public int unitCost;
-    public int movementCost;
-    public int movementMax;
-    public int speed;
-    public int unitBuildTime;
-    public int unitPop;
-    public float healthMax;
-    public float healthCurrent;
-    public float damage;
-    public float attackRange;
-    public float armourPoints;
-    public float lineOfSight;
+    //public string unitType;
+    //public int unitCost;
+    //public int movementCost;
+    //public int movementMax;
+    //public int speed;
+    //public int unitBuildTime;
+    //public int unitPop;
+    //public float healthMax;
+    //public float healthCurrent;
+    //public float damage;
+    //public float attackRange;
+    //public float armourPoints;
+    //public float lineOfSight;
+    public float movementSpeed = 1;
 
     public int Ownership {
 
         get { return ownership; }
         set {
             ownership = value;
-            if (ownership == 0) {
+            if (ownership == -1) {
                 healthbarImage.color = neutralOwned;
             }
-            if (ownership == 1) {
+            if (ownership == 0) {
                 healthbarImage.color = playerOwned;
             }
-            if (ownership == 2) {
+            if (ownership == 1) {
                 healthbarImage.color = enemyOwned;
             }
         }
@@ -121,7 +125,7 @@ public class Unit : MonoBehaviour {
 		grid.SendMessage ("AddUnit", this);
 	}
 	
-	public int HP {
+	public float HP {
 		get {
 			return hp;
 		}
@@ -130,67 +134,79 @@ public class Unit : MonoBehaviour {
     public void Damage(float value) {
         anim = healthbar.GetComponent<Animator>();
         anim.SetBool("On", true);
-        healthCurrent -= value;
+        hp -= value;
         //endSize = new Vector2 ((healthCurrent/healthMax) * healthbarWidth, health.sizeDelta.y);
-        healthRect.sizeDelta = new Vector2((healthCurrent / healthMax) * healthbarWidth, healthRect.sizeDelta.y);
+        healthRect.sizeDelta = new Vector2((hp / MAX_HP) * healthbarWidth, healthRect.sizeDelta.y);
         StopAllCoroutines();
         StartCoroutine(AnimateDamage());
         StartCoroutine(HealthbarFade());
     }
 
     public void SetUnitType() {
-        // Setting Unit Variables
-        if (unitID == 0) {
-            unitName = "Swordsman";
-            unitNameText.text = unitName;
-            unitType = "Infantry";
-            unitCost = 1;
-            movementCost = 1;
-            movementMax = 3;
-            speed = 1;
-            unitBuildTime = 1;
-            unitPop = 1;
-            healthMax = 4;
-            healthCurrent = 4;
-            damage = 1;
-            attackRange = 1;
-            armourPoints = 0;
-            lineOfSight = 2;
+        if (this.tag == "Unit") {
+            // Setting Unit Variables
+            if (unitID == 0) {
+                unitName = "Swordsman";
+                unitNameText.text = unitName;
+                //unitType = "Infantry";
+                //unitCost = 1;
+                //movementCost = 1;
+                //movementMax = 3;
+                //speed = 1;
+                //unitBuildTime = 1;
+                //unitPop = 1;
+                //healthMax = 4;
+                //healthCurrent = 4;
+                //damage = 1;
+                //attackRange = 1;
+                //armourPoints = 0;
+                //lineOfSight = 2;
+
+                MAX_HP = 4;
+                hp = MAX_HP;
+            }
+            if (unitID == 1) {
+                unitName = "Archer";
+                unitNameText.text = unitName;
+                //unitType = "Ranged";
+                //unitCost = 2;
+                //movementCost = 1;
+                //movementMax = 3;
+                //speed = 1;
+                //unitBuildTime = 1;
+                //unitPop = 1;
+                //healthMax = 2;
+                //healthCurrent = 2;
+                //damage = 1;
+                //attackRange = 2;
+                //armourPoints = 0;
+                //lineOfSight = 4;
+
+                MAX_HP = 2;
+                hp = MAX_HP;
+            }
+            if (unitID == 2) {
+                unitName = "Knight";
+                unitNameText.text = unitName;
+                //unitType = "Mounted";
+                //unitCost = 4;
+                //movementCost = 1;
+                //movementMax = 6;
+                //speed = 2;
+                //unitBuildTime = 1;
+                //unitPop = 1;
+                //healthMax = 5;
+                //healthCurrent = 5;
+                //damage = 2;
+                //attackRange = 1;
+                //armourPoints = 0;
+                //lineOfSight = 2;
+
+                MAX_HP = 5;
+                hp = MAX_HP;
+            }
         }
-        if (unitID == 1) {
-            unitName = "Archer";
-            unitNameText.text = unitName;
-            unitType = "Ranged";
-            unitCost = 2;
-            movementCost = 1;
-            movementMax = 3;
-            speed = 1;
-            unitBuildTime = 1;
-            unitPop = 1;
-            healthMax = 2;
-            healthCurrent = 2;
-            damage = 1;
-            attackRange = 2;
-            armourPoints = 0;
-            lineOfSight = 4;
-        }
-        if (unitID == 2) {
-            unitName = "Knight";
-            unitNameText.text = unitName;
-            unitType = "Mounted";
-            unitCost = 4;
-            movementCost = 1;
-            movementMax = 6;
-            speed = 2;
-            unitBuildTime = 1;
-            unitPop = 1;
-            healthMax = 5;
-            healthCurrent = 5;
-            damage = 2;
-            attackRange = 1;
-            armourPoints = 0;
-            lineOfSight = 2;
-        }
+        
     }
 
     /*void SetPosition (HexPosition position) {
@@ -230,7 +246,7 @@ public class Unit : MonoBehaviour {
 	}
 	
 	public void move (HexPosition[] path) {
-		if(path.Length < 2) {
+        if (path.Length < 2) {
 			skipMove();
 			return;
 		}
@@ -253,7 +269,7 @@ public class Unit : MonoBehaviour {
 		n = 0;
 		moving = true;
 		position = destination;
-	}
+    }
 	
 	public void skipMove () {
 		state = State.ATTACK;
@@ -270,8 +286,9 @@ public class Unit : MonoBehaviour {
 	
 	public void defend (float strength, float variation) {
 		int damage = NegativeBinomialDistribution.fromMeanAndStandardDeviation(strength-1, variation)+1;
-		hp -= damage;
-		if (hp <= 0) {
+		//hp -= damage;
+        Damage(strength);
+        if (hp <= 0) {
 			position.remove ("Unit");
 			grid.remove (this);
 			Object.Destroy(gameObject);
@@ -280,21 +297,26 @@ public class Unit : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+        ownership = PLAYER;
+
+        //unitAnimr = unitMesh.GetComponent<Animator>();
+
         // Setting Health
-        healthCurrent = healthMax;
+        hp = MAX_HP;
         resetSize = healthRect.sizeDelta;
         anim = healthbar.GetComponent<Animator>();
 
         SetUnitType();
 
         if (healthbarImage != null) {
-            if (ownership == 0) {
+            if (ownership == -1) {
                 healthbarImage.color = neutralOwned;
             }
-            if (ownership == 1) {
+            if (ownership == 0) {
                 healthbarImage.color = playerOwned;
             }
-            if (ownership == 2) {
+            if (ownership == 1) {
                 healthbarImage.color = enemyOwned;
             }
         }
@@ -357,7 +379,10 @@ public class Unit : MonoBehaviour {
 
         //There has to be a better way to do this. Especially if I want to stick rotations in there.
         if (moving) {
-			if (path.Length < 2) {	//Shouldn't happen.
+
+            //unitAnimr.SetFloat("UnitSpeed", movementSpeed);
+
+            if (path.Length < 2) {	//Shouldn't happen.
 				moving = false;
 				grid.actionComplete ();
 				return;
@@ -389,7 +414,10 @@ public class Unit : MonoBehaviour {
 					t += MOTION_SPEED;
 				}
 			} else {
-				if (n == 0) {
+
+                //unitAnimr.SetFloat("UnitSpeed", 0);
+
+                if (n == 0) {
 					if (t >= 0.5f) {
 						t -= 0.5f;
 						++n;	//Falls through.
@@ -443,10 +471,10 @@ public class Unit : MonoBehaviour {
 		green.wrapMode = TextureWrapMode.Repeat;
 		green.Apply ();
 		//GUI.Box (new Rect(coordinates.x - 10, coordinates.y - 5, 20, 10), "test");
-		GUI.DrawTexture (new Rect(coordinates.x - HP_BAR_WIDTH/2, coordinates.y + HP_BAR_HEIGHT/2, HP_BAR_WIDTH, HP_BAR_HEIGHT), red);
-		GUI.DrawTexture (new Rect(coordinates.x - HP_BAR_WIDTH/2, coordinates.y + HP_BAR_HEIGHT/2, HP_BAR_WIDTH * hp / MAX_HP, HP_BAR_HEIGHT), green);
+		//GUI.DrawTexture (new Rect(coordinates.x - HP_BAR_WIDTH/2, coordinates.y + HP_BAR_HEIGHT/2, HP_BAR_WIDTH, HP_BAR_HEIGHT), red);
+		//GUI.DrawTexture (new Rect(coordinates.x - HP_BAR_WIDTH/2, coordinates.y + HP_BAR_HEIGHT/2, HP_BAR_WIDTH * hp / MAX_HP, HP_BAR_HEIGHT), green);
 		GUIStyle centered = new GUIStyle ();
 		centered.alignment = TextAnchor.MiddleCenter;
-		GUI.Label (new Rect(coordinates.x - HP_BAR_WIDTH/2, coordinates.y + HP_BAR_HEIGHT/2, HP_BAR_WIDTH, HP_BAR_HEIGHT), hp.ToString (), centered);
+		//GUI.Label (new Rect(coordinates.x - HP_BAR_WIDTH/2, coordinates.y + HP_BAR_HEIGHT/2, HP_BAR_WIDTH, HP_BAR_HEIGHT), hp.ToString (), centered);
 	}
 }
