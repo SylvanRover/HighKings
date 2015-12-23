@@ -36,7 +36,7 @@ public class Unit : MonoBehaviour {
     public Color enemyOwned;
 
     public GameObject unitMesh;
-    //private Animator unitAnimr;
+    private Animator unitAnimr;
 
     // Unit Variables
     public int unitID;
@@ -246,6 +246,7 @@ public class Unit : MonoBehaviour {
 	}
 	
 	public void move (HexPosition[] path) {
+
         if (path.Length < 2) {
 			skipMove();
 			return;
@@ -300,7 +301,7 @@ public class Unit : MonoBehaviour {
 
         ownership = PLAYER;
 
-        //unitAnimr = unitMesh.GetComponent<Animator>();
+        unitAnimr = unitMesh.GetComponent<Animator>();
 
         // Setting Health
         hp = MAX_HP;
@@ -380,7 +381,9 @@ public class Unit : MonoBehaviour {
         //There has to be a better way to do this. Especially if I want to stick rotations in there.
         if (moving) {
 
-            //unitAnimr.SetFloat("UnitSpeed", movementSpeed);
+            if (unitAnimr != null) {
+                unitAnimr.SetFloat("UnitSpeed", movementSpeed);
+            }
 
             if (path.Length < 2) {	//Shouldn't happen.
 				moving = false;
@@ -399,7 +402,8 @@ public class Unit : MonoBehaviour {
 				}
 				
 			} else if (path.Length == 3) {
-				if (t >= 2) {
+
+                if (t >= 2) {
 					transform.position = path[2];
 					moving = false;
 					grid.actionComplete ();
@@ -414,8 +418,6 @@ public class Unit : MonoBehaviour {
 					t += MOTION_SPEED;
 				}
 			} else {
-
-                //unitAnimr.SetFloat("UnitSpeed", 0);
 
                 if (n == 0) {
 					if (t >= 0.5f) {
@@ -455,7 +457,11 @@ public class Unit : MonoBehaviour {
 					}
 				}
 			}
-		}
+		} else {
+            if (unitAnimr != null) {
+                unitAnimr.SetFloat("UnitSpeed", 0);
+            }
+        }
 	}
 	
 	void OnGUI () {	//TODO: Get rid of magic numbers.
