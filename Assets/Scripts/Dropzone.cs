@@ -48,7 +48,7 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
         unitCardStats = d.GetComponent<UnitCardStats>();
 
-        if (capturePoint.ownership == 0) { // will need to not be hard coded as player 0 is the only player
+        if (capturePoint.ownership == playerController.playerID) {
             _state.owned = true;
         }
 
