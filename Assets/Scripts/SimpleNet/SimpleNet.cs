@@ -34,6 +34,11 @@ public class SimpleNet : MonoBehaviour {
 	private int _connectionId;
 	public int maxBufferSize = 1024;
 
+	public static int PlayerID = 0;
+
+	public delegate void DataListener( int connectionID, byte[] recBuffer, int bufferSize, int dataSize);
+	public DataListener dataListener;
+
 	void Start () {
 		// An example of initializing the Transport Layer with custom settings
 		GlobalConfig gConfig = new GlobalConfig();
@@ -77,12 +82,11 @@ public class SimpleNet : MonoBehaviour {
 	}
 
 	public void ConnectToServer(){
-
-		//_serverSocketPort = Int32.Parse (_serverSocketPortText.text);
 		_serverIPAdddress = _serverIPAddressText.text;
 
 		byte error;
 		_connectionId = NetworkTransport.Connect(_socketId, _serverIPAdddress, 8888, 0, out error);
+		PlayerID = _connectionId;
 		Debug.LogError("Connected to server. ConnectionId: " + _connectionId+" port:"+_socketPort);
 		_debug.text += "\nConnected to server. ConnectionId: " + _connectionId+" port:"+_socketPort;
 		NetworkError netError = (NetworkError)error;
@@ -100,8 +104,6 @@ public class SimpleNet : MonoBehaviour {
 
 	public void SendReliableData(byte[] buffer, int bufferLength){
 		byte error;
-		//_socketId
-		//_serverSocketId
 		NetworkTransport.Send(_socketId, _connectionId, _reiliableChannelId, buffer, bufferLength,  out error);
 		NetworkError netError = (NetworkError)error;
 		_debug.text += "\nSendReliableData: "+netError.ToString ();
@@ -126,7 +128,6 @@ public class SimpleNet : MonoBehaviour {
 		int dataSize;
 		byte error;
 		NetworkEventType recData = NetworkTransport.Receive(out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out error);
-		//NetworkEventType recData = NetworkTransport.ReceiveFromHost(_socketId, out recHostId, out connectionId, out channelId, recBuffer, bufferSize, out dataSize, out error);
 
 		switch (recData)
 		{
@@ -144,6 +145,11 @@ public class SimpleNet : MonoBehaviour {
 		case NetworkEventType.DataEvent:       //3
 			//TODO: parse data
 			Debug.LogError ("parse data");
+			_debug.text = "Data: got some";
+			if (this.dataListener!=null){
+				dataListener (connectionId, recBuffer, bufferSize, dataSize);
+			}
+			/*
 			if (bufferSize > 0) {
 				byte[] smallerBuffer = new byte[bufferSize];
 				Array.Copy (recBuffer, smallerBuffer, bufferSize);
@@ -151,6 +157,7 @@ public class SimpleNet : MonoBehaviour {
 			} else {
 				//_debug.text = "Data: none";
 			}
+			*/
 			break;
 		case NetworkEventType.DisconnectEvent: //4
 			if(_connectionId == connectionId){

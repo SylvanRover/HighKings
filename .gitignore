@@ -14,6 +14,7 @@
 *.mdw
 builds/
 
+HighKings.sln
 HighKings.sln.sln
 HighKings.sln*.sln
 UnityVS*
@@ -29,6 +30,7 @@ Assembly-CSharp*.csproj
 *.orig
 *.orig.meta
 *.swatch
+
 HighKings.CSharp.csproj
 HighKings.CSharp.Editor.csproj
 HighKings.CSharp.Editor.Plugins.csproj
