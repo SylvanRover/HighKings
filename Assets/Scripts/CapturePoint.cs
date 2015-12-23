@@ -25,15 +25,15 @@ public class CapturePoint : MonoBehaviour {
         set {
             ownership = value;
             if (ownership == 0) {
-                dropZoneImage.color = neutralOwned;
+                //dropZoneImage.color = neutralOwned;
                 hexRenderer.material.SetColor("_Color", neutralOwned);
             }
             if (ownership == 1) {
-                dropZoneImage.color = playerOwned;
+                //dropZoneImage.color = playerOwned;
                 hexRenderer.material.SetColor("_Color", playerOwned);
             }
             if (ownership == 2) {
-                dropZoneImage.color = enemyOwned;
+                //dropZoneImage.color = enemyOwned;
                 hexRenderer.material.SetColor("_Color", enemyOwned);
             }
         }
@@ -42,15 +42,15 @@ public class CapturePoint : MonoBehaviour {
     void Start() {
         if (dropZoneImage != null) {
             if (ownership == 0) {
-                dropZoneImage.color = neutralOwned;
+                //dropZoneImage.color = neutralOwned;
                 hexRenderer.material.SetColor("_Color", neutralOwned);
             }
             if (ownership == 1) {
-                dropZoneImage.color = playerOwned;
+                //dropZoneImage.color = playerOwned;
                 hexRenderer.material.SetColor("_Color", playerOwned);
             }
             if (ownership == 2) {
-                dropZoneImage.color = enemyOwned;
+                //dropZoneImage.color = enemyOwned;
                 hexRenderer.material.SetColor("_Color", enemyOwned);
             }
         }
