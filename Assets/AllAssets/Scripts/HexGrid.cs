@@ -37,8 +37,14 @@ public class HexGrid : MonoBehaviour {
 	bool gameOver = false;
 	bool modeSelected = false;
 	bool computerPlayer;
-	
-	public void wait() {
+
+    public Color pathColor;
+    public Color selectionColor;
+    public Color selectableColor;
+    public Color attackColor;
+    public Color cursorColor;
+
+    public void wait() {
 		waiting = true;
 	}
 
@@ -102,11 +108,11 @@ public class HexGrid : MonoBehaviour {
 	void Start () {
 		unitsRoot.BroadcastMessage ("SetGrid", this);
 		//timeout = MAX_TIME;
-		HexPosition.setColor("Path", Color.yellow, 1);
-		HexPosition.setColor("Selection", Color.green, 2);
-		HexPosition.setColor("Selectable", Color.green, 3);
-		HexPosition.setColor("Attack", Color.red, 4);
-		HexPosition.setColor("Cursor", Color.blue, 5);
+		HexPosition.setColor("Path", pathColor, 1);
+		HexPosition.setColor("Selection", selectionColor, 2);
+		HexPosition.setColor("Selectable", selectableColor, 3);
+		HexPosition.setColor("Attack", attackColor, 4);
+		HexPosition.setColor("Cursor", cursorColor, 5);
 		HexPosition.Marker = marker;
 		foreach (Transform child in obstacles.transform) {
 			HexPosition position = new HexPosition(child.position);
