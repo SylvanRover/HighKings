@@ -32,7 +32,9 @@ public class SimpleNet : MonoBehaviour {
 
 	//private int _webHostId;
 	private int _connectionId;
-	public int maxBufferSize = 1024;
+	private int _otherPlayerConnectionId; //Testing
+	private int _otherPlayerHostId; //Testing
+	private int maxBufferSize = 8192;
 
 	public static int PlayerID = 0;
 
@@ -42,13 +44,14 @@ public class SimpleNet : MonoBehaviour {
 	void Start () {
 		// An example of initializing the Transport Layer with custom settings
 		GlobalConfig gConfig = new GlobalConfig();
-		gConfig.MaxPacketSize = 500;
+		gConfig.MaxPacketSize = 2048; //Needs to be large for json
 		NetworkTransport.Init(gConfig);
 	}
 
 	public void CreateSocket(){
 		if (_server.isOn) {
 			CreateServerSocket ();
+			CreateClientSocket (); // If want a server and client on same machine
 		} else {
 			CreateClientSocket ();
 		}
@@ -73,7 +76,7 @@ public class SimpleNet : MonoBehaviour {
 		ConnectionConfig config = new ConnectionConfig();
 		_reiliableChannelId = config.AddChannel(QosType.Reliable);
 		HostTopology topology = new HostTopology(config, 1);
-		_socketPort = 8889;// Int32.Parse(_socketPortText.text);
+		_socketPort = _server.isOn? 8890 : 8889;// Int32.Parse(_socketPortText.text);
 		_socketId = NetworkTransport.AddHost(topology, _socketPort);
 		_debug.text = "Socket Open. SocketId is: " + _socketId + " port:" + _socketPort;
 		Debug.Log("Socket Open. SocketId is: " + _socketId+" port:"+_socketPort);
@@ -104,7 +107,18 @@ public class SimpleNet : MonoBehaviour {
 
 	public void SendReliableData(byte[] buffer, int bufferLength){
 		byte error;
-		NetworkTransport.Send(_socketId, _connectionId, _reiliableChannelId, buffer, bufferLength,  out error);
+		int connectionId;
+		int socketId;
+		if (_server.isOn) {
+			connectionId = _otherPlayerConnectionId;
+			socketId = _otherPlayerHostId;
+			//Try send to other player
+		} else {
+			connectionId = _connectionId;
+			socketId = _socketId;
+		}
+		//TODO: move to broadcast system if players are to be >2
+		NetworkTransport.Send(socketId, connectionId, _reiliableChannelId, buffer, bufferLength,  out error);
 		NetworkError netError = (NetworkError)error;
 		_debug.text += "\nSendReliableData: "+netError.ToString ();
 		Debug.LogError (netError.ToString ());
@@ -131,35 +145,41 @@ public class SimpleNet : MonoBehaviour {
 
 		switch (recData)
 		{
-		case NetworkEventType.Nothing:         //1
+		case NetworkEventType.Nothing:
 			break;
-		case NetworkEventType.ConnectEvent:    //2
+		case NetworkEventType.ConnectEvent:
 			if(_connectionId == connectionId){
 				//my active connect request approved
 				Debug.LogError("my active connect request approved");
 			}else{
+				_otherPlayerConnectionId = connectionId;
+				_otherPlayerHostId = recHostId;
 				//somebody else connect to me
 				Debug.LogError("somebody else connect to me");
 			}
 			break;
-		case NetworkEventType.DataEvent:       //3
-			//TODO: parse data
+		case NetworkEventType.BroadcastEvent:
+			_debug.text = "Data: got BroadcastEvent some";
+			int broadcastHostId; 
+			byte[] broadcastBuffer = new byte[maxBufferSize]; 
+			int broadcastDataSize;
+			byte broadcastError;
+
+			NetworkTransport.GetBroadcastConnectionMessage (broadcastHostId, broadcastBuffer, maxBufferSize, broadcastDataSize, broadcastError);
+			if (this.dataListener!=null){
+				//broadcastHostId is prob wrong here
+				dataListener (broadcastHostId, broadcastBuffer, maxBufferSize, broadcastDataSize);
+			}
+			Debug.LogError ("BroadcastEvent");
+			break;
+		case NetworkEventType.DataEvent:
 			Debug.LogError ("parse data");
 			_debug.text = "Data: got some";
 			if (this.dataListener!=null){
 				dataListener (connectionId, recBuffer, bufferSize, dataSize);
 			}
-			/*
-			if (bufferSize > 0) {
-				byte[] smallerBuffer = new byte[bufferSize];
-				Array.Copy (recBuffer, smallerBuffer, bufferSize);
-				_debug.text = "Data: " + System.Text.Encoding.UTF8.GetString (smallerBuffer);
-			} else {
-				//_debug.text = "Data: none";
-			}
-			*/
 			break;
-		case NetworkEventType.DisconnectEvent: //4
+		case NetworkEventType.DisconnectEvent:
 			if(_connectionId == connectionId){
 
 				NetworkError netError = (NetworkError)error;

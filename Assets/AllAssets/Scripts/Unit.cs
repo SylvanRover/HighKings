@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Unit : MonoBehaviour {
 	private HexGrid grid;
 	private HexPosition position;
+	public UnitType unitType;
 	public enum State {MOVE, ATTACK, WAIT};
 	private State state = State.MOVE;
 	public int PLAYER;
@@ -20,6 +22,37 @@ public class Unit : MonoBehaviour {
 	private Vector3[] path;
 	private int n;	//position on the path
 	private const float MOTION_SPEED = 0.05f;
+
+	private SimpleStatus.PlayUnitState _state;
+	public int uniqueID = -1;
+
+	public void UpdateState(SimpleStatus.PlayUnitState state){
+		uniqueID = state.uniqueID;
+		hp = state.health;
+		position.U = state.hexPositionU;
+		position.V = state.hexPositionV;
+		Coordinates = position;
+		unitType = state.unitType;
+		PLAYER = state.playerOwner;
+		_state = state;
+	}
+
+	public SimpleStatus.PlayUnitState GetState(){
+		_state.uniqueID = uniqueID;
+		_state.health = hp;
+		_state.hexPositionU = position.U;
+		_state.hexPositionV = position.V;
+		_state.unitType = unitType;
+		_state.playerOwner = PLAYER;
+		return _state;
+	}
+
+	[Serializable]
+	public enum UnitType{
+		Infantry,
+		Ranged,
+		Mounted
+	}
 
 	void SetGrid (HexGrid grid) {
 		this.grid = grid;
@@ -113,7 +146,7 @@ public class Unit : MonoBehaviour {
 		if (hp <= 0) {
 			position.remove ("Unit");
 			grid.remove (this);
-			Object.Destroy(gameObject);
+			UnityEngine.Object.Destroy(gameObject);
 		}
 	}
 
