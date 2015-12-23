@@ -21,7 +21,7 @@ public class Unit : MonoBehaviour {
 	private int n;	//position on the path
 	private const float MOTION_SPEED = 0.05f;
 
-	void SetGrid (HexGrid grid) {
+	public void SetGrid (HexGrid grid) {
 		this.grid = grid;
 		grid.SendMessage ("AddUnit", this);
 	}

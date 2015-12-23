@@ -14,7 +14,7 @@ public class MakePrefabAppear : MonoBehaviour {
 		if (_where == null) {
 			_where = this.transform;
 		}
-		Clear();
+		//Clear();
 		_theGameObject = (GameObject)GameObject.Instantiate(Resources.Load(_prefabName));
 		_theGameObject.transform.parent = _where;
 		_theGameObject.transform.localPosition = Vector3.zero;
@@ -24,11 +24,11 @@ public class MakePrefabAppear : MonoBehaviour {
 		_theGameObject.transform.LookAt(lookAtPoint);
 	}
 
-    public void SpawnUnit(int i, int o) {
+    public GameObject SpawnUnit(int i, int o) {
         if (_where == null) {
             _where = this.transform;
         }
-        Clear();
+        //Clear();
         _theGameObject = (GameObject)GameObject.Instantiate(Resources.Load(_prefabName));
         _theGameObject.transform.parent = _where;
         _theGameObject.transform.localPosition = Vector3.zero;
@@ -36,6 +36,7 @@ public class MakePrefabAppear : MonoBehaviour {
         unitStats.unitID = i;
         unitStats.ownership = o;
         unitStats.SetUnitType();
+        return _theGameObject;
     }
 
     // Update is called once per frame

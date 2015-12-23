@@ -48,7 +48,7 @@ public class HexGrid : MonoBehaviour {
 	}
 	
 	//Is this thread safe? I don't know how thread safety works.
-	void AddUnit (Unit unit) {
+	public void AddUnit (Unit unit) {
 		while(updating > 0) {
 			//do nothing.
 		}
