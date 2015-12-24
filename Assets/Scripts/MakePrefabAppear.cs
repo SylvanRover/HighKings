@@ -7,7 +7,7 @@ public class MakePrefabAppear : MonoBehaviour {
 	[SerializeField] private string _prefabName = "Type Prefab Name Here";
 	[SerializeField] public Transform _where;
 	private GameObject _theGameObject;
-    private UnitStats unitStats;
+    private Unit unitStats;
 	// Use this for initialization
 
 	public void Appear () {
@@ -32,7 +32,7 @@ public class MakePrefabAppear : MonoBehaviour {
         _theGameObject = (GameObject)GameObject.Instantiate(Resources.Load(_prefabName));
         _theGameObject.transform.parent = _where;
         _theGameObject.transform.localPosition = Vector3.zero;
-        unitStats = _theGameObject.GetComponent<UnitStats>();
+        unitStats = _theGameObject.GetComponent<Unit>();
         unitStats.unitID = i;
         unitStats.ownership = o;
         unitStats.SetUnitType();
