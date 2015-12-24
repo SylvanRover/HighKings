@@ -148,62 +148,32 @@ public class Unit : MonoBehaviour {
             if (unitID == 0) {
                 unitName = "Swordsman";
                 unitNameText.text = unitName;
-                //unitType = "Infantry";
-                //unitCost = 1;
-                //movementCost = 1;
-                //movementMax = 3;
-                //speed = 1;
-                //unitBuildTime = 1;
-                //unitPop = 1;
-                //healthMax = 4;
-                //healthCurrent = 4;
-                //damage = 1;
-                //attackRange = 1;
-                //armourPoints = 0;
-                //lineOfSight = 2;
-
                 MAX_HP = 4;
                 hp = MAX_HP;
+                STRENGTH = 1;
+                VARIATION = 0;
+                SPEED = 3;
+                RANGE = 1;
             }
             if (unitID == 1) {
                 unitName = "Archer";
                 unitNameText.text = unitName;
-                //unitType = "Ranged";
-                //unitCost = 2;
-                //movementCost = 1;
-                //movementMax = 3;
-                //speed = 1;
-                //unitBuildTime = 1;
-                //unitPop = 1;
-                //healthMax = 2;
-                //healthCurrent = 2;
-                //damage = 1;
-                //attackRange = 2;
-                //armourPoints = 0;
-                //lineOfSight = 4;
-
                 MAX_HP = 2;
                 hp = MAX_HP;
+                STRENGTH = 1;
+                VARIATION = 0;
+                SPEED = 3;
+                RANGE = 3;
             }
             if (unitID == 2) {
                 unitName = "Knight";
                 unitNameText.text = unitName;
-                //unitType = "Mounted";
-                //unitCost = 4;
-                //movementCost = 1;
-                //movementMax = 6;
-                //speed = 2;
-                //unitBuildTime = 1;
-                //unitPop = 1;
-                //healthMax = 5;
-                //healthCurrent = 5;
-                //damage = 2;
-                //attackRange = 1;
-                //armourPoints = 0;
-                //lineOfSight = 2;
-
                 MAX_HP = 5;
                 hp = MAX_HP;
+                STRENGTH = 2;
+                VARIATION = 0;
+                SPEED = 6;
+                RANGE = 1;
             }
         } else {
             MAX_HP = 10;
