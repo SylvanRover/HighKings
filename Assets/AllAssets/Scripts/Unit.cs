@@ -14,9 +14,9 @@ public class Unit : MonoBehaviour {
 	public float VARIATION;
 	public int SPEED;
 	public int RANGE;
-	//private int HP_BAR_WIDTH = 64;
-	//private int HP_BAR_HEIGHT = 16;
-	private bool moving = false;
+    //private int HP_BAR_WIDTH = 64;
+    //private int HP_BAR_HEIGHT = 16;
+    private bool moving = false;
 	private float t;
 	private Vector3[] path;
 	private int n;	//position on the path
@@ -37,11 +37,14 @@ public class Unit : MonoBehaviour {
 
     public GameObject unitMesh;
     private Animator unitAnimr;
+    private MakePrefabAppear spawn;
+    private UnitManager unitManager;
 
     // Unit Variables
     public int unitID;
     public int ownership = 0;
     public string unitName;
+    public string unitPrefabName;
     //public string unitType;
     //public int unitCost;
     //public int movementCost;
@@ -81,7 +84,7 @@ public class Unit : MonoBehaviour {
     public GameObject healthbar;
     public float healthbarWidth = 54;
     public float healthbarFadeTime = 3;
-    public Animator anim;
+    private Animator anim;
     public float wait = 0.5f;
     public Vector2 currentSize;
     private Vector2 endSize;
@@ -105,6 +108,59 @@ public class Unit : MonoBehaviour {
         if (!onDrag) {
             onUp = true;
         }
+    }
+
+    public void SetUnitType() {
+        if (this.tag == "Unit") {
+            // Setting Unit Variables
+            if (unitID == 0) {
+                unitName = "Swordsman";
+                unitPrefabName = "Unit_00";
+                unitNameText.text = unitName;
+                MAX_HP = 4;
+                hp = MAX_HP;
+                STRENGTH = 1;
+                VARIATION = 0;
+                SPEED = 3;
+                RANGE = 1;
+                unitMesh = spawn.SpawnUnit(unitID, PLAYER, unitPrefabName);
+                unitAnimr = unitMesh.GetComponentInChildren<Animator>();
+            }
+            if (unitID == 1) {
+                unitName = "Archer";
+                unitPrefabName = "Unit_01";
+                unitNameText.text = unitName;
+                MAX_HP = 2;
+                hp = MAX_HP;
+                STRENGTH = 1;
+                VARIATION = 0;
+                SPEED = 3;
+                RANGE = 3;
+                unitMesh = spawn.SpawnUnit(unitID, PLAYER, unitPrefabName);
+                unitAnimr = unitMesh.GetComponentInChildren<Animator>();
+            }
+            if (unitID == 2) {
+                unitName = "Knight";
+                unitPrefabName = "Unit_02";
+                unitNameText.text = unitName;
+                MAX_HP = 5;
+                hp = MAX_HP;
+                STRENGTH = 2;
+                VARIATION = 0;
+                SPEED = 6;
+                RANGE = 1;
+                unitMesh = spawn.SpawnUnit(unitID, PLAYER, unitPrefabName);
+                unitAnimr = unitMesh.GetComponentInChildren<Animator>();
+            }
+        } else {
+            unitName = "Castle";
+            unitPrefabName = "Castle_00";
+            MAX_HP = 10;
+            hp = MAX_HP;
+            //spawn.SpawnUnit(unitID, PLAYER, unitPrefabName);
+        }
+
+
     }
 
     //Healbar
@@ -140,47 +196,6 @@ public class Unit : MonoBehaviour {
         StopAllCoroutines();
         StartCoroutine(AnimateDamage());
         StartCoroutine(HealthbarFade());
-    }
-
-    public void SetUnitType() {
-        if (this.tag == "Unit") {
-            // Setting Unit Variables
-            if (unitID == 0) {
-                unitName = "Swordsman";
-                unitNameText.text = unitName;
-                MAX_HP = 4;
-                hp = MAX_HP;
-                STRENGTH = 1;
-                VARIATION = 0;
-                SPEED = 3;
-                RANGE = 1;
-            }
-            if (unitID == 1) {
-                unitName = "Archer";
-                unitNameText.text = unitName;
-                MAX_HP = 2;
-                hp = MAX_HP;
-                STRENGTH = 1;
-                VARIATION = 0;
-                SPEED = 3;
-                RANGE = 3;
-            }
-            if (unitID == 2) {
-                unitName = "Knight";
-                unitNameText.text = unitName;
-                MAX_HP = 5;
-                hp = MAX_HP;
-                STRENGTH = 2;
-                VARIATION = 0;
-                SPEED = 6;
-                RANGE = 1;
-            }
-        } else {
-            MAX_HP = 10;
-            hp = MAX_HP;
-        }
-
-
     }
 
     /*void SetPosition (HexPosition position) {
@@ -274,8 +289,8 @@ public class Unit : MonoBehaviour {
 	void Start () {
 
         ownership = PLAYER;
-
-        unitAnimr = unitMesh.GetComponent<Animator>();
+        
+        spawn = this.GetComponent<MakePrefabAppear>();
 
         // Setting Health
         hp = MAX_HP;
