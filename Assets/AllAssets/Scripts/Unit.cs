@@ -36,8 +36,8 @@ public class Unit : MonoBehaviour {
     public Color enemyOwned;
 
     public GameObject unitMesh;
-    private Animator unitAnimr;
-    private MakePrefabAppear spawn;
+    public Animator unitAnimr;
+    public MakePrefabAppear spawn;
     private UnitManager unitManager;
 
     // Unit Variables
@@ -123,7 +123,7 @@ public class Unit : MonoBehaviour {
                 VARIATION = 0;
                 SPEED = 3;
                 RANGE = 1;
-                unitMesh = spawn.SpawnUnit(unitID, PLAYER, unitPrefabName);
+                unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
                 unitAnimr = unitMesh.GetComponentInChildren<Animator>();
             }
             if (unitID == 1) {
@@ -136,7 +136,7 @@ public class Unit : MonoBehaviour {
                 VARIATION = 0;
                 SPEED = 3;
                 RANGE = 3;
-                unitMesh = spawn.SpawnUnit(unitID, PLAYER, unitPrefabName);
+                unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
                 unitAnimr = unitMesh.GetComponentInChildren<Animator>();
             }
             if (unitID == 2) {
@@ -149,7 +149,7 @@ public class Unit : MonoBehaviour {
                 VARIATION = 0;
                 SPEED = 6;
                 RANGE = 1;
-                unitMesh = spawn.SpawnUnit(unitID, PLAYER, unitPrefabName);
+                unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
                 unitAnimr = unitMesh.GetComponentInChildren<Animator>();
             }
         } else {
@@ -289,15 +289,14 @@ public class Unit : MonoBehaviour {
 	void Start () {
 
         ownership = PLAYER;
-        
-        spawn = this.GetComponent<MakePrefabAppear>();
+        //spawn = this.GetComponent<MakePrefabAppear>();
+
+        SetUnitType();
 
         // Setting Health
         hp = MAX_HP;
         resetSize = healthRect.sizeDelta;
         anim = healthbar.GetComponent<Animator>();
-
-        SetUnitType();
 
         if (healthbarImage != null) {
             if (ownership == -1) {

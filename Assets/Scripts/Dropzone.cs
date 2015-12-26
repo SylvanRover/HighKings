@@ -16,6 +16,9 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
     private SimpleStatus.DropZoneState _state;
     private CapturePoint capturePoint;
 
+    private GameObject myObject;
+    private Unit myUnit;
+
 
     void Start() {
 		_state = new SimpleStatus.DropZoneState ();
@@ -58,11 +61,11 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 			_state.playerOccupier = SimpleNet.PlayerID;
 
             if (playerController.GoldCurrent >= unitCardStats.unitCost) {
-                GameObject myObject = spawn.SpawnUnit(unitCardStats.unitID, unitCardStats.ownership, "Unit");
-                Unit myUnit = myObject.GetComponent<Unit>();
+                myObject = spawn.SpawnUnit(unitCardStats.unitID, unitCardStats.ownership);
+                myUnit = myObject.GetComponent<Unit>();
                 myUnit.SetGrid(hexGrid);
                 hexGrid.AddUnit(myUnit);
-                //hexGrid.unselect();
+                hexGrid.unselect();
                 playerController.GoldCurrent = playerController.GoldCurrent - unitCardStats.unitCost;
             }                
         }

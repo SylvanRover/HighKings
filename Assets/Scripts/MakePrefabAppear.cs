@@ -24,7 +24,21 @@ public class MakePrefabAppear : MonoBehaviour {
 		_theGameObject.transform.LookAt(lookAtPoint);
 	}
 
-    public GameObject SpawnUnit(int i, int o, string n) {
+    public GameObject SpawnUnit(int i, int o) {
+        if (_where == null) {
+            _where = this.transform;
+        }
+        //Clear();
+        _theGameObject = (GameObject)GameObject.Instantiate(Resources.Load(_prefabName));
+        _theGameObject.transform.parent = _where;
+        _theGameObject.transform.localPosition = Vector3.zero;
+        unitStats = _theGameObject.GetComponent<Unit>();
+        unitStats.unitID = i;
+        unitStats.ownership = o;
+        //unitStats.SetUnitType();
+        return _theGameObject;
+    }
+    public GameObject SpawnUnitObject(int i, string n) {
         if (_where == null) {
             _where = this.transform;
         }
@@ -32,12 +46,6 @@ public class MakePrefabAppear : MonoBehaviour {
         _theGameObject = (GameObject)GameObject.Instantiate(Resources.Load(n));
         _theGameObject.transform.parent = _where;
         _theGameObject.transform.localPosition = Vector3.zero;
-        unitStats = _theGameObject.GetComponent<Unit>();
-        if (unitStats != null) {
-            unitStats.unitID = i;
-            unitStats.ownership = o;
-            unitStats.SetUnitType();
-        }
         return _theGameObject;
     }
 

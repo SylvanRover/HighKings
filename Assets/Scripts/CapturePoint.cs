@@ -8,7 +8,7 @@ public class CapturePoint : MonoBehaviour {
     public int resourceAmount;
     public bool isTower = false;
     public bool isBarracks = false;
-    public Sprite captureIcon;
+    //public Sprite captureIcon;
 
     public int ownership = -1;
 

@@ -170,7 +170,7 @@ public class HexGrid : MonoBehaviour {
 		}
 	}
 	
-	private void unselect () {
+	public void unselect () {
 		HexPosition.clearSelection ();
 		selection = null;
 		mouse.select ("Cursor");
