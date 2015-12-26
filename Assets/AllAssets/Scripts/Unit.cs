@@ -35,8 +35,8 @@ public class Unit : MonoBehaviour {
     public Color playerOwned;
     public Color enemyOwned;
 
-    public GameObject unitMesh;
-    public Animator unitAnimr;
+    private GameObject unitMesh;
+    private Animator unitAnimr;
     public MakePrefabAppear spawn;
     private UnitManager unitManager;
 
@@ -135,7 +135,7 @@ public class Unit : MonoBehaviour {
                 STRENGTH = 1;
                 VARIATION = 0;
                 SPEED = 3;
-                RANGE = 3;
+                RANGE = 4;
                 unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
                 unitAnimr = unitMesh.GetComponentInChildren<Animator>();
             }
@@ -281,7 +281,7 @@ public class Unit : MonoBehaviour {
         if (hp <= 0) {
 			position.remove ("Unit");
 			grid.remove (this);
-			Object.Destroy(gameObject);
+			Object.Destroy(this.gameObject);
 		}
 	}
 

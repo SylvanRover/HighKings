@@ -35,7 +35,7 @@ public class MakePrefabAppear : MonoBehaviour {
         unitStats = _theGameObject.GetComponent<Unit>();
         unitStats.unitID = i;
         unitStats.ownership = o;
-        //unitStats.SetUnitType();
+        _theGameObject.transform.parent = GameObject.FindGameObjectWithTag("UnitHolder").transform;
         return _theGameObject;
     }
     public GameObject SpawnUnitObject(int i, string n) {

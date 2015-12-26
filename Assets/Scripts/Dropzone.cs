@@ -62,10 +62,14 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
             if (playerController.GoldCurrent >= unitCardStats.unitCost) {
                 myObject = spawn.SpawnUnit(unitCardStats.unitID, unitCardStats.ownership);
+                myObject.name = "Unit";
                 myUnit = myObject.GetComponent<Unit>();
                 myUnit.SetGrid(hexGrid);
-                hexGrid.AddUnit(myUnit);
+                
+                //hexGrid.AddUnit(myUnit);
                 hexGrid.unselect();
+                //hexGrid.unitsRoot.BroadcastMessage("SetGrid", hexGrid);
+
                 playerController.GoldCurrent = playerController.GoldCurrent - unitCardStats.unitCost;
             }                
         }
