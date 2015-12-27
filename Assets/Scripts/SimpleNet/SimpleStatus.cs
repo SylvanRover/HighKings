@@ -55,20 +55,20 @@ public class SimpleStatus : MonoBehaviour {
 		public PlayUnit[] units;
 	}
 
-	public DropZoneState[] GetStates(){
+	/*public DropZoneState[] GetStates(){
 		DropZoneState[] states = new DropZoneState[_dropZones.Length];
 		for(int i=0; i<_dropZones.Length; i++){
 			states[i]=_dropZones [i].GetState();
 		}
 		return states;
-	}
+	}*/
 
-	void UpdateAllDropZones (DropZoneState[] states) {
+	/*void UpdateAllDropZones (DropZoneState[] states) {
 		Debug.LogError ("DropZoneState GOT DATA HERE");
 		for(int i=0; i<states.Length; i++){
 			_dropZones [i].UpdateState (states[i]);
 		}
-	}
+	}*/
 
 	void UpdateAllUnits(PlayUnit[] units){
 		Debug.LogError ("PlayUnit GOT DATA HERE");
@@ -88,14 +88,14 @@ public class SimpleStatus : MonoBehaviour {
 			BinaryFormatter binaryFormatter = new BinaryFormatter ();
 			holder = binaryFormatter.Deserialize (memoryStream) as NetworkData;
 		}
-		UpdateAllDropZones (holder.states);
+		//UpdateAllDropZones (holder.states);
 		UpdateAllUnits (holder.units);
 	}
 
 	public void EndTurn(){
 		// This is inefficient but will work in prototyping
 		NetworkData statesHolder = new NetworkData ();
-		statesHolder.states = GetStates ();
+		//statesHolder.states = GetStates ();
 
 		if (useJson) {
 			string json = JsonUtility.ToJson (statesHolder);

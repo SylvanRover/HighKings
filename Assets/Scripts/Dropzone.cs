@@ -3,34 +3,40 @@ using System.Collections;
 using UnityEngine.EventSystems;
 
 public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler {
-	/*
-    public bool isCapturePoint = false;
-    public bool isOwned = false;
-    public bool isAvailable = true;
-    */
+   
+    private HexGrid grid;
+    private HexPosition position;
+    public enum State { NEUTRAL, PLAYER1, PLAYER2};
+    public State state = State.NEUTRAL;
+
     private PlayerController playerController;
     private UnitCardStats unitCardStats;
     private MakePrefabAppear spawn;
     public HexGrid hexGrid;
 
-    private SimpleStatus.DropZoneState _state;
-    private CapturePoint capturePoint;
+    //private SimpleStatus.DropZoneState _state;
+    public CapturePoint capturePoint;
 
     private GameObject myObject;
     private Unit myUnit;
 
 
     void Start() {
-		_state = new SimpleStatus.DropZoneState ();
+        /*_state = new SimpleStatus.DropZoneState ();
 		_state.isCapturePoint = true;
 		_state.playerOccupier = -1;
-		_state.owned = false;
+		_state.owned = false;*/
         spawn = gameObject.GetComponent<MakePrefabAppear>();
         hexGrid = GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>();
 
         playerController = GameObject.FindGameObjectWithTag("PlayerController").GetComponent<PlayerController>();
         capturePoint = transform.parent.GetComponent<CapturePoint>();
 
+        if (capturePoint.ownership == 0) {
+            state = State.PLAYER1;
+        } else if (capturePoint.ownership == 1) {
+            state = State.PLAYER2;
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
@@ -52,13 +58,13 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         unitCardStats = d.GetComponent<UnitCardStats>();
 
         if (capturePoint.ownership == playerController.playerID) {
-            _state.owned = true;
+            //_state.owned = true;
         }
 
 		//FOR now no checking
-        if (_state.owned) {
+        if (state == State.PLAYER1) { // Need to fix it to make it usable by both players, not just hard coded to be player 1
             //_state.owned = true;	
-			_state.playerOccupier = SimpleNet.PlayerID;
+			//_state.playerOccupier = SimpleNet.PlayerID;
 
             if (playerController.GoldCurrent >= unitCardStats.unitCost) {
                 myObject = spawn.SpawnUnit(unitCardStats.unitID, unitCardStats.ownership);
@@ -71,17 +77,56 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
                 //hexGrid.unitsRoot.BroadcastMessage("SetGrid", hexGrid);
 
                 playerController.GoldCurrent = playerController.GoldCurrent - unitCardStats.unitCost;
-            }                
+            } else {
+            Debug.LogError("Not enough Gold");
+            }
+        } else {
+            Debug.LogError("Capture Point not owned by you");
         }
         //}
     }
 
-    public void Capture() {
-        _state.owned = true;	
-        _state.playerOccupier = SimpleNet.PlayerID;
+    public void SetGrid(HexGrid grid) {
+        this.grid = grid;
+        grid.SendMessage("AddCapturePoint", this);
     }
 
-	public void UpdateState(SimpleStatus.DropZoneState state){
+    public HexPosition Coordinates {
+        get {
+            return position;
+        }
+        set {
+            position = value;
+            transform.parent.position = value.getPosition();
+            value.add("CapturePoint", this);
+        }
+    }
+
+    public State Status {
+        get { return state; }
+        set { state = value; }
+    }
+
+    public void capture(Unit unit) {
+        if (unit.ownership != capturePoint.ownership && state == State.NEUTRAL) {
+            if (unit.ownership == 0) {
+                state = State.PLAYER1;
+            } else {
+                state = State.PLAYER2;
+            }
+            capturePoint.Ownership = unit.ownership;
+        } else if (unit.ownership != capturePoint.ownership && state != State.NEUTRAL) {
+            state = State.NEUTRAL;
+            capturePoint.Ownership = -1;
+        }
+    }
+
+    /*public void Capture() {
+        _state.owned = true;	
+        _state.playerOccupier = SimpleNet.PlayerID;
+    }*/
+
+	/*public void UpdateState(SimpleStatus.DropZoneState state){
 		if (this._state.playerOccupier != state.playerOccupier || this._state.owned != state.owned) {
 			Debug.LogError ("STATE DOES NOT MATCH");
 			if (state.playerOccupier != -1) {
@@ -98,6 +143,6 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
 	public SimpleStatus.DropZoneState GetState(){
 		return this._state;
-	}
+	}*/
 
 }

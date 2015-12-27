@@ -188,8 +188,10 @@ public class Unit : MonoBehaviour {
 	}
 
     public void Damage(float value) {
-        anim = healthbar.GetComponent<Animator>();
-        anim.SetBool("On", true);
+        if (anim != null) {
+            anim = healthbar.GetComponent<Animator>();
+            anim.SetBool("On", true);
+        }
         hp -= value;
         //endSize = new Vector2 ((healthCurrent/healthMax) * healthbarWidth, health.sizeDelta.y);
         healthRect.sizeDelta = new Vector2((hp / MAX_HP) * healthbarWidth, healthRect.sizeDelta.y);
@@ -251,8 +253,17 @@ public class Unit : MonoBehaviour {
 			print ("ERROR: Space occupied.");
 			grid.actionComplete();
 			return;
-		}
-		position.remove ("Unit");
+        }
+
+        // Capture Point
+        if (destination.containsKey("CapturePoint")) {
+            //print("ERROR: Space is capture point.");
+            Debug.LogError("contains dropzone");
+            grid.actuallyCapture();
+            //return;
+        }
+
+        position.remove ("Unit");
 		destination.add ("Unit", this);
 		//transform.position = desitination.getPosition();
 		t = 0;
@@ -270,11 +281,11 @@ public class Unit : MonoBehaviour {
 		enemy.defend(STRENGTH, VARIATION, transform.position);
         unitAnimr.SetTrigger("Attack");
 
+        // Face direction of enemy
         Vector3 heading = (enemy.transform.position - transform.position);
         //float distance = heading.magnitude;
         //Vector3 direction = heading / distance; // This is now the normalized direction.
         transform.rotation = horizontalLookRotation(heading);
-
     }
 	
 	public void newTurn () {
@@ -285,8 +296,11 @@ public class Unit : MonoBehaviour {
 		int damage = NegativeBinomialDistribution.fromMeanAndStandardDeviation(strength-1, variation)+1;
 		//hp -= damage;
         Damage(strength);
-        unitAnimr.SetTrigger("GetHit");
+        if (unitAnimr != null) {
+            unitAnimr.SetTrigger("GetHit");
+        }
 
+        // Face direction of attacker
         Vector3 heading = (attacker - transform.position);
         transform.rotation = horizontalLookRotation(heading);
 
@@ -295,6 +309,10 @@ public class Unit : MonoBehaviour {
 			grid.remove (this);
 			Object.Destroy(this.gameObject);
 		}
+    }
+
+    public void capture(Unit unit, Dropzone dropzone) {
+        dropzone.capture(unit);
     }
 
 	// Use this for initialization

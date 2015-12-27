@@ -21,7 +21,7 @@ public class HexGrid : MonoBehaviour {
     public GameObject obstacles;
     //public List<Dropzone> capturePoints;
     private List<Unit> units = new List<Unit>();		//I should make this thread safe.
-    private List<CapturePoint> capturePoints = new List<CapturePoint>();
+    private List<Dropzone> capturePoints = new List<Dropzone>();
     //public GameObject[] players;
 
     private bool waiting = false;
@@ -69,7 +69,7 @@ public class HexGrid : MonoBehaviour {
 		unit.Coordinates = new HexPosition (unit.transform.position);
 	}
 
-    public void AddCapturePoint(CapturePoint capturePoint) {
+    public void AddCapturePoint(Dropzone capturePoint) {
         while (updating > 0) {
             //do nothing.
         }
@@ -211,6 +211,11 @@ public class HexGrid : MonoBehaviour {
 		checkGameOver ();
 		unselect ();
 	}
+
+    public void actuallyCapture () {
+        Unit unit = (Unit)selection.getValue("Unit");
+        unit.capture(unit,(Dropzone)mouse.getValue("CapturePoint"));
+    }
 	
 	private void move () {
 		if (mouse.Equals (selection)) {
