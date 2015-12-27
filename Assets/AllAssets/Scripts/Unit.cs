@@ -268,7 +268,8 @@ public class Unit : MonoBehaviour {
 	public void attack (Unit enemy) {
 		state = State.WAIT;
 		enemy.defend(STRENGTH, VARIATION);
-	}
+        unitAnimr.SetTrigger("Attack");
+    }
 	
 	public void newTurn () {
 		state = State.MOVE;
@@ -278,6 +279,7 @@ public class Unit : MonoBehaviour {
 		int damage = NegativeBinomialDistribution.fromMeanAndStandardDeviation(strength-1, variation)+1;
 		//hp -= damage;
         Damage(strength);
+        unitAnimr.SetTrigger("GetHit");
         if (hp <= 0) {
 			position.remove ("Unit");
 			grid.remove (this);
