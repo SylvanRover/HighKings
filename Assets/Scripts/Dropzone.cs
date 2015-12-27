@@ -61,8 +61,12 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
             //_state.owned = true;
         }
 
+        if (position.containsKey("Unit")) {
+            Debug.LogError("Tile occupied by Unit");
+        }
+
 		//FOR now no checking
-        if (state == State.PLAYER1) { // Need to fix it to make it usable by both players, not just hard coded to be player 1
+        if (state == State.PLAYER1 && !position.containsKey("Unit")) { // Need to fix it to make it usable by both players, not just hard coded to be player 1
             //_state.owned = true;	
 			//_state.playerOccupier = SimpleNet.PlayerID;
 
@@ -71,10 +75,7 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
                 myObject.name = "Unit";
                 myUnit = myObject.GetComponent<Unit>();
                 myUnit.SetGrid(hexGrid);
-                
-                //hexGrid.AddUnit(myUnit);
                 hexGrid.unselect();
-                //hexGrid.unitsRoot.BroadcastMessage("SetGrid", hexGrid);
 
                 playerController.GoldCurrent = playerController.GoldCurrent - unitCardStats.unitCost;
             } else {
