@@ -83,15 +83,15 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
             } else {
             Debug.LogError("Not enough Gold");
             }
-        } else {
-            Debug.LogError("Capture Point not owned by you");
+        } else if (state != State.PLAYER1) {
+            Debug.LogError("Dropzone not owned by you");
         }
         //}
     }
 
     public void SetGrid(HexGrid grid) {
         this.grid = grid;
-        grid.SendMessage("AddCapturePoint", this);
+        grid.SendMessage("AddDropzone", this);
     }
 
     public HexPosition Coordinates {
@@ -101,7 +101,7 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         set {
             position = value;
             transform.parent.position = value.getPosition();
-            value.add("CapturePoint", this);
+            value.add("Dropzone", this);
         }
     }
 

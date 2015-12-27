@@ -311,8 +311,8 @@ public class Unit : MonoBehaviour {
 		}
     }
 
-    public void capture(Unit unit, Dropzone dropzone) {
-        dropzone.capture(unit);
+    public void capture(Unit unit, CapturePoint capturePoint) {
+        capturePoint.capture(unit);
     }
 
 	// Use this for initialization
