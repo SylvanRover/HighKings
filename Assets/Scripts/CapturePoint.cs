@@ -13,7 +13,7 @@ public class CapturePoint : MonoBehaviour {
     public int ownership = -1;
 
     public Image dropZoneImage;
-    public Renderer hexRenderer;
+    private Renderer hexRenderer;
 
     public Color neutralOwned;
     public Color playerOwned;
@@ -25,35 +25,34 @@ public class CapturePoint : MonoBehaviour {
         set {
             ownership = value;
             if (ownership == -1) {
-                //dropZoneImage.color = neutralOwned;
-                hexRenderer.material.SetColor("_Color", neutralOwned);
+                for (int i = 0; i < gameObject.transform.childCount; i++) {
+                    Transform Go = gameObject.transform.GetChild(i);
+                    hexRenderer = Go.GetComponent<Renderer>();
+                    hexRenderer.material.SetColor("_Color", neutralOwned);
+                }
+                //hexRenderer.material.SetColor("_Color", neutralOwned);
             }
             if (ownership == 0) {
-                //dropZoneImage.color = playerOwned;
-                hexRenderer.material.SetColor("_Color", playerOwned);
+                for(int i = 0; i < gameObject.transform.childCount; i++) {
+                    Transform Go = gameObject.transform.GetChild(i);
+                    hexRenderer = Go.GetComponent<Renderer>();
+                    hexRenderer.material.SetColor("_Color", playerOwned);
+                }
+                //hexRenderer.material.SetColor("_Color", playerOwned);
             }
             if (ownership == 1) {
-                //dropZoneImage.color = enemyOwned;
-                hexRenderer.material.SetColor("_Color", enemyOwned);
+                for(int i = 0; i < gameObject.transform.childCount; i++) {
+                    Transform Go = gameObject.transform.GetChild(i);
+                    hexRenderer = Go.GetComponent<Renderer>();
+                    hexRenderer.material.SetColor("_Color", enemyOwned);
+                }
+                //hexRenderer.material.SetColor("_Color", enemyOwned);
             }
         }
     }
 
     void Start() {
-        if (dropZoneImage != null) {
-            if (ownership == -1) {
-                //dropZoneImage.color = neutralOwned;
-                hexRenderer.material.SetColor("_Color", neutralOwned);
-            }
-            if (ownership == 0) {
-                //dropZoneImage.color = playerOwned;
-                hexRenderer.material.SetColor("_Color", playerOwned);
-            }
-            if (ownership == 1) {
-                //dropZoneImage.color = enemyOwned;
-                hexRenderer.material.SetColor("_Color", enemyOwned);
-            }
-        }
+        Ownership = ownership;
     }   
 
 }

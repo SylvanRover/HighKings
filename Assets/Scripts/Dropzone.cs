@@ -16,6 +16,7 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
     //private SimpleStatus.DropZoneState _state;
     public CapturePoint capturePoint;
+    public Transform captureParent;
 
     private GameObject myObject;
     private Unit myUnit;
@@ -30,7 +31,8 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         hexGrid = GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>();
 
         playerController = GameObject.FindGameObjectWithTag("PlayerController").GetComponent<PlayerController>();
-        capturePoint = transform.parent.GetComponent<CapturePoint>();
+        captureParent = transform.parent;
+        capturePoint = captureParent.transform.parent.GetComponent<CapturePoint>();
 
         if (capturePoint.ownership == 0) {
             state = State.PLAYER1;
