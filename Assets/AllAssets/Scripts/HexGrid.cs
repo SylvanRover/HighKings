@@ -223,11 +223,12 @@ public class HexGrid : MonoBehaviour {
 	}
 
     public void actuallyCapture () {
-        Unit unit = (Unit)selection.getValue("Unit");
-        if (unit != null) {
-            unit.capture(unit,(CapturePoint)mouse.getValue("CapturePoint"));
+        if (selection != null) {
+            Unit unit = (Unit)selection.getValue("Unit");
+            if (unit != null) {
+                unit.capture(unit, (CapturePoint)mouse.getValue("CapturePoint"));
+            }
         }
-        
     }
 	
 	private void move () {

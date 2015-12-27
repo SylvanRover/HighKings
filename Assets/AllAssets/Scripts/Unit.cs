@@ -248,12 +248,6 @@ public class Unit : MonoBehaviour {
 		for (int i = 0; i < path.Length; ++i) {
 			this.path[i] = path[i].getPosition();
 		}
-		state = State.ATTACK;
-		if (destination.containsKey ("Unit")) {
-			print ("ERROR: Space occupied.");
-			grid.actionComplete();
-			return;
-        }
 
         // Capture Point
         if (destination.containsKey("CapturePoint")) {
@@ -261,6 +255,13 @@ public class Unit : MonoBehaviour {
             Debug.LogError("contains dropzone");
             grid.actuallyCapture();
             //return;
+        }
+
+		state = State.ATTACK;
+		if (destination.containsKey ("Unit")) {
+			print ("ERROR: Space occupied.");
+			grid.actionComplete();
+			return;
         }
 
         position.remove ("Unit");
