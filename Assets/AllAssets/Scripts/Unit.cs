@@ -194,7 +194,9 @@ public class Unit : MonoBehaviour {
         }
         hp -= value;
         //endSize = new Vector2 ((healthCurrent/healthMax) * healthbarWidth, health.sizeDelta.y);
+        if (healthRect != null) {
         healthRect.sizeDelta = new Vector2((hp / MAX_HP) * healthbarWidth, healthRect.sizeDelta.y);
+        }
         StopAllCoroutines();
         StartCoroutine(AnimateDamage());
         StartCoroutine(HealthbarFade());

@@ -19,7 +19,7 @@ public class CapturePoint : MonoBehaviour {
     private Unit myUnit;
 
     public int captureState = 0;
-    public int resourceAmount;
+    public int goldAmount;
     public bool isTower = false;
     public bool isBarracks = false;
     //public Sprite captureIcon;
@@ -114,6 +114,7 @@ public class CapturePoint : MonoBehaviour {
         if (unit.ownership != ownership && state == State.NEUTRAL) {
             if (unit.ownership == 0) {
                 state = State.PLAYER1;
+                playerController.AddGoldPerTurn(goldAmount);
             } else {
                 state = State.PLAYER2;
             }
@@ -121,6 +122,9 @@ public class CapturePoint : MonoBehaviour {
         } else if (unit.ownership != ownership && state != State.NEUTRAL) {
             state = State.NEUTRAL;
             Ownership = -1;
+            if (unit.ownership == 1) {
+            playerController.SubtractGoldPerTurn(goldAmount);
+            }
         }
     }
 }
