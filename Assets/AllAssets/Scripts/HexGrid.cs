@@ -17,12 +17,14 @@ public class HexGrid : MonoBehaviour {
 
 	public GameObject marker;
 	public GameObject unitsRoot;
-	public GameObject obstacles;
+    public GameObject capturePointsRoot;
+    public GameObject obstacles;
     //public List<Dropzone> capturePoints;
     private List<Unit> units = new List<Unit>();		//I should make this thread safe.
-	//public GameObject[] players;
-	
-	private bool waiting = false;
+    private List<CapturePoint> capturePoints = new List<CapturePoint>();
+    //public GameObject[] players;
+
+    private bool waiting = false;
 	//private int timeout = 0;		//waiting is still false as this counts down.
 	//private const int MAX_TIME = 1000;
 	
@@ -66,8 +68,18 @@ public class HexGrid : MonoBehaviour {
 		--updating;
 		unit.Coordinates = new HexPosition (unit.transform.position);
 	}
-	
-	public void remove (Unit unit) {
+
+    public void AddCapturePoint(CapturePoint capturePoint) {
+        while (updating > 0) {
+            //do nothing.
+        }
+        ++updating;
+        capturePoints.Add(capturePoint);
+        --updating;
+        capturePoint.Coordinates = new HexPosition(capturePoint.transform.position);
+    }
+
+    public void remove (Unit unit) {
 		units.Remove (unit);
 	}
 	
@@ -110,8 +122,9 @@ public class HexGrid : MonoBehaviour {
 
 	void Start () {
 		unitsRoot.BroadcastMessage ("SetGrid", this);
-		//timeout = MAX_TIME;
-		HexPosition.setColor("Path", pathColor, 1);
+        capturePointsRoot.BroadcastMessage("SetGrid", this);
+        //timeout = MAX_TIME;
+        HexPosition.setColor("Path", pathColor, 1);
 		HexPosition.setColor("Selection", selectionColor, 2);
 		HexPosition.setColor("Selectable", selectableColor, 3);
 		HexPosition.setColor("Attack", attackColor, 4);

@@ -4,6 +4,11 @@ using System.Collections;
 
 public class CapturePoint : MonoBehaviour {
 
+    private HexGrid grid;
+    private HexPosition position;
+    public enum State { NEUTRAL_OWNED, PLAYER_OWNED, ENEMY_OWNED};
+    private State state = State.NEUTRAL_OWNED;
+
     public int captureState = 0;
     public int resourceAmount;
     public bool isTower = false;
@@ -36,6 +41,22 @@ public class CapturePoint : MonoBehaviour {
                 //dropZoneImage.color = enemyOwned;
                 hexRenderer.material.SetColor("_Color", enemyOwned);
             }
+        }
+    }
+
+    public void SetGrid(HexGrid grid) {
+        this.grid = grid;
+        grid.SendMessage("AddCapturePoint", this);
+    }
+
+    public HexPosition Coordinates {
+        get {
+            return position;
+        }
+        set {
+            position = value;
+            transform.position = value.getPosition();
+            value.add("CapturePoint", this);
         }
     }
 

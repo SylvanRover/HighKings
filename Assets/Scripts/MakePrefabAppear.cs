@@ -32,6 +32,7 @@ public class MakePrefabAppear : MonoBehaviour {
         _theGameObject = (GameObject)GameObject.Instantiate(Resources.Load(_prefabName));
         _theGameObject.transform.parent = _where;
         _theGameObject.transform.localPosition = Vector3.zero;
+        _theGameObject.transform.rotation = Quaternion.identity;
         unitStats = _theGameObject.GetComponent<Unit>();
         unitStats.unitID = i;
         unitStats.ownership = o;
@@ -46,6 +47,7 @@ public class MakePrefabAppear : MonoBehaviour {
         _theGameObject = (GameObject)GameObject.Instantiate(Resources.Load(n));
         _theGameObject.transform.parent = _where;
         _theGameObject.transform.localPosition = Vector3.zero;
+        _theGameObject.transform.rotation = _where.rotation;
         return _theGameObject;
     }
 
