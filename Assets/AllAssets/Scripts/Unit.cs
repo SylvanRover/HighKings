@@ -267,25 +267,35 @@ public class Unit : MonoBehaviour {
 	
 	public void attack (Unit enemy) {
 		state = State.WAIT;
-		enemy.defend(STRENGTH, VARIATION);
+		enemy.defend(STRENGTH, VARIATION, transform.position);
         unitAnimr.SetTrigger("Attack");
+
+        Vector3 heading = (enemy.transform.position - transform.position);
+        //float distance = heading.magnitude;
+        //Vector3 direction = heading / distance; // This is now the normalized direction.
+        transform.rotation = horizontalLookRotation(heading);
+
     }
 	
 	public void newTurn () {
 		state = State.MOVE;
 	}
 	
-	public void defend (float strength, float variation) {
+	public void defend (float strength, float variation, Vector3 attacker) {
 		int damage = NegativeBinomialDistribution.fromMeanAndStandardDeviation(strength-1, variation)+1;
 		//hp -= damage;
         Damage(strength);
         unitAnimr.SetTrigger("GetHit");
+
+        Vector3 heading = (attacker - transform.position);
+        transform.rotation = horizontalLookRotation(heading);
+
         if (hp <= 0) {
 			position.remove ("Unit");
 			grid.remove (this);
 			Object.Destroy(this.gameObject);
 		}
-	}
+    }
 
 	// Use this for initialization
 	void Start () {
