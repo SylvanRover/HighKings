@@ -350,7 +350,7 @@ public class Unit : MonoBehaviour {
         if (hp <= 0) {
 			position.remove ("Unit");
 			grid.remove (this);
-			Object.Destroy(this.gameObject);
+			UnityEngine.Object.Destroy(this.gameObject);
 		}
     }
 

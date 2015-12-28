@@ -33,7 +33,7 @@ public class SimpleStatus : MonoBehaviour {
 		public Unit.UnitType unitType;
 		public int hexPositionU;
 		public int hexPositionV;
-		public int health;
+		public float health;
 		public int playerOwner;
 	}
 
