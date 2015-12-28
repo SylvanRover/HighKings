@@ -70,14 +70,12 @@ public class SimpleStatus : MonoBehaviour {
 	}
 
 	void UpdateAllDropZones (DropZoneState[] states) {
-		Debug.LogError ("DropZoneState GOT DATA HERE");
 		for(int i=0; i<states.Length; i++){
 			_dropZones [i].UpdateState (states[i]);
 		}
 	}
 
 	void UpdateAllUnits(PlayUnitState[] states){
-		Debug.LogError ("PlayUnit GOT DATA HERE");
 		GameObject[] objs = GameObject.FindGameObjectsWithTag ("Unit"); // We could use the hex grid.units
 		for(int i=0; i<states.Length; i++){
 			int id = states [i].uniqueID;
@@ -100,7 +98,7 @@ public class SimpleStatus : MonoBehaviour {
 	}
 
 	public void ReceiveData(int connectionID, byte[] recBuffer, int bufferSize, int dataSize){
-		Debug.LogError ("GOT DATA HERE");
+		//Debug.LogError ("GOT DATA HERE");
 		NetworkData holder;
 		if (useJson) {
 			//byte[] smallerBuffer = new byte[dataSize];
@@ -133,11 +131,10 @@ public class SimpleStatus : MonoBehaviour {
 		statesHolder.units = GetUnits ();
 		if (useJson) {
 			string json = JsonUtility.ToJson (statesHolder);
-			//Debug.LogError (json);
 			byte[] byteData = Encoding.ASCII.GetBytes (json);
 			_simpleNet.SendReliableData (byteData, byteData.Length);
 		} else {
-			int bufferSize = 8192;
+			int bufferSize = 1024;
 			byte[] buffer = new byte[bufferSize];
 			Stream stream = new MemoryStream(buffer);
 			BinaryFormatter formatter = new BinaryFormatter();

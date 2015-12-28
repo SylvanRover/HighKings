@@ -29,12 +29,18 @@ public class SimpleNet : MonoBehaviour {
 	public Text _serverSocketIdText;
 	private int _serverSocketId;
 
+	public bool useDebug = false;
+	public int debugSocketID = 0;
+	public int debugConnectionID = 0;
+	public int debugChannelID = 0;
 
 	//private int _webHostId;
+	private int _maxConnections = 2;
 	private int _connectionId;
 	private int _otherPlayerConnectionId; //Testing
 	private int _otherPlayerHostId; //Testing
-	private int maxBufferSize = 8192;
+	private int _otherPlayerChannel; //Testing
+	private int maxBufferSize = 1024;
 
 	public static int PlayerID = 0;
 
@@ -51,7 +57,7 @@ public class SimpleNet : MonoBehaviour {
 	public void CreateSocket(){
 		if (_server.isOn) {
 			CreateServerSocket ();
-			CreateClientSocket (); // If want a server and client on same machine
+			//CreateClientSocket (); // If want a server and client on same machine
 		} else {
 			CreateClientSocket ();
 		}
@@ -61,8 +67,8 @@ public class SimpleNet : MonoBehaviour {
 		Debug.Log("Create Server Socket");
 		ConnectionConfig config = new ConnectionConfig();
 		_reiliableChannelId = config.AddChannel(QosType.Reliable);
-		int maxConnections = 3;
-		HostTopology topology = new HostTopology(config, maxConnections);
+
+		HostTopology topology = new HostTopology(config, _maxConnections);
 		_socketPort = 8888;//Int32.Parse(_socketPortText.text);
 		_socketId = NetworkTransport.AddHost(topology, _socketPort);
 
@@ -99,26 +105,22 @@ public class SimpleNet : MonoBehaviour {
 		}
 	}
 
-	public void TestDataSend(){
-		string test = "TestDataDK:" +Time.time;
-		byte[] byteData = Encoding.UTF8.GetBytes(test);
-		SendReliableData (byteData, byteData.Length);
-	}
-
 	public void SendReliableData(byte[] buffer, int bufferLength){
 		byte error;
 		int connectionId;
 		int socketId;
+		int channel;
 		if (_server.isOn) {
-			connectionId = _otherPlayerConnectionId;
-			socketId = _otherPlayerHostId;
-			//Try send to other player
+			connectionId = useDebug ? debugConnectionID : _otherPlayerConnectionId;
+			socketId = useDebug ? debugSocketID : _otherPlayerHostId;
+			channel = useDebug ? debugChannelID : _otherPlayerChannel;
 		} else {
 			connectionId = _connectionId;
 			socketId = _socketId;
+			channel = _reiliableChannelId;
 		}
 		//TODO: move to broadcast system if players are to be >2
-		NetworkTransport.Send(socketId, connectionId, _reiliableChannelId, buffer, bufferLength,  out error);
+		NetworkTransport.Send(socketId, connectionId, channel, buffer, bufferLength,  out error);
 		NetworkError netError = (NetworkError)error;
 		_debug.text += "\nSendReliableData: "+netError.ToString ();
 		Debug.LogError (netError.ToString ());
@@ -154,27 +156,15 @@ public class SimpleNet : MonoBehaviour {
 			}else{
 				_otherPlayerConnectionId = connectionId;
 				_otherPlayerHostId = recHostId;
+				_otherPlayerChannel = channelId;
 				//somebody else connect to me
-				Debug.LogError("somebody else connect to me");
+				Debug.LogError(string.Format("Host {0} connected to me. {1}, chan:{2}", _otherPlayerHostId, _otherPlayerHostId,_otherPlayerChannel));
+				_debug.text = (string.Format("Host {0} connected to me. {1} chan:{2}", _otherPlayerHostId, _otherPlayerHostId,_otherPlayerChannel));
 			}
-			break;
-		case NetworkEventType.BroadcastEvent:
-			_debug.text = "Data: got BroadcastEvent some";
-			int broadcastHostId; 
-			byte[] broadcastBuffer = new byte[maxBufferSize]; 
-			int broadcastDataSize;
-			byte broadcastError;
-
-			NetworkTransport.GetBroadcastConnectionMessage (broadcastHostId, broadcastBuffer, maxBufferSize, broadcastDataSize, broadcastError);
-			if (this.dataListener!=null){
-				//broadcastHostId is prob wrong here
-				dataListener (broadcastHostId, broadcastBuffer, maxBufferSize, broadcastDataSize);
-			}
-			Debug.LogError ("BroadcastEvent");
 			break;
 		case NetworkEventType.DataEvent:
-			Debug.LogError ("parse data");
-			_debug.text = "Data: got some";
+
+			_debug.text = string.Format("Data: got some from host:{0} conn:{1} chan:{2} ",recHostId,connectionId,channelId) ;
 			if (this.dataListener!=null){
 				dataListener (connectionId, recBuffer, bufferSize, dataSize);
 			}
@@ -202,7 +192,6 @@ public class SimpleNet : MonoBehaviour {
 					Debug.LogError (netError.ToString ());
 				}
 			}else{
-				//somebody else connect to me
 				Debug.LogError("one of the established connection has been disconnected");
 			}
 			break;
