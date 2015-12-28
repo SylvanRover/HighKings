@@ -140,10 +140,12 @@ public class HexGrid : MonoBehaviour {
 		HexPosition.setColor("Attack", attackColor, 4);
 		HexPosition.setColor("Cursor", cursorColor, 5);
 		HexPosition.Marker = marker;
-		foreach (Transform child in obstacles.transform) {
-			HexPosition position = new HexPosition(child.position);
-			child.position = position.getPosition();
-			position.flag("Obstacle");
+		if (obstacles!=null){
+			foreach (Transform child in obstacles.transform) {
+				HexPosition position = new HexPosition(child.position);
+				child.position = position.getPosition();
+				position.flag("Obstacle");
+			}
 		}
         GameObject[] captureObj = GameObject.FindGameObjectsWithTag("MapDropZone");
         for (int i=0; i< captureObj.Length; i++) {
@@ -196,7 +198,9 @@ public class HexGrid : MonoBehaviour {
 	public void unselect () {
 		HexPosition.clearSelection ();
 		selection = null;
-		mouse.select ("Cursor");
+		if (mouse!=null){
+			mouse.select ("Cursor");
+		}
 		if (!selectSelectable ()) {
 			endTurn ();
 		}

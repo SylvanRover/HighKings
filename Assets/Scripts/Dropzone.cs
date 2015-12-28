@@ -34,12 +34,13 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         playerController = GameObject.FindGameObjectWithTag("PlayerController").GetComponent<PlayerController>();
         captureParent = transform.parent;
         capturePoint = captureParent.transform.parent.GetComponent<CapturePoint>();
-
-        if (capturePoint.ownership == 0) {
-            state = State.PLAYER1;
-        } else if (capturePoint.ownership == 1) {
-            state = State.PLAYER2;
-        }
+		if (capturePoint!=null){
+	        if (capturePoint.ownership == 0) {
+	            state = State.PLAYER1;
+	        } else if (capturePoint.ownership == 1) {
+	            state = State.PLAYER2;
+	        }
+		}
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
