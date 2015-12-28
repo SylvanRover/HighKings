@@ -15,51 +15,52 @@ public class Unit : MonoBehaviour {
 	public float VARIATION;
 	public int SPEED;
 	public int RANGE;
-    //private int HP_BAR_WIDTH = 64;
-    //private int HP_BAR_HEIGHT = 16;
-    private bool moving = false;
+	//private int HP_BAR_WIDTH = 64;
+	//private int HP_BAR_HEIGHT = 16;
+	private bool moving = false;
 	private float t;
 	private Vector3[] path;
 	private int n;	//position on the path
 	private const float MOTION_SPEED = 0.05f;
 
-    //public bool unitIsActive = false;
-    //public Sprite unitButtonSprite;
+	//public bool unitIsActive = false;
+	//public Sprite unitButtonSprite;
 
-    //public RectTransform button;
-    //public SelectionRingAnim selectionRing;
+	//public RectTransform button;
+	//public SelectionRingAnim selectionRing;
 
-    //public Transform unitPos;
+	//public Transform unitPos;
 
-    public Image healthbarImage;
-    public Color neutralOwned;
-    public Color playerOwned;
-    public Color enemyOwned;
+	public Image healthbarImage;
+	public Color neutralOwned;
+	public Color playerOwned;
+	public Color enemyOwned;
 
-    private GameObject unitMesh;
-    private Animator unitAnimr;
-    public MakePrefabAppear spawn;
-    private UnitManager unitManager;
+	private GameObject unitMesh;
+	private Animator unitAnimr;
+	public MakePrefabAppear spawn;
+	private UnitManager unitManager;
 
-    // Unit Variables
-    public int unitID;
-    public int ownership = 0;
-    public string unitName;
-    public string unitPrefabName;
-    //public string unitType;
-    //public int unitCost;
-    //public int movementCost;
-    //public int movementMax;
-    //public int speed;
-    //public int unitBuildTime;
-    //public int unitPop;
-    //public float healthMax;
-    //public float healthCurrent;
-    //public float damage;
-    //public float attackRange;
-    //public float armourPoints;
-    //public float lineOfSight;
-    public float movementSpeed = 1;
+	// Unit Variables
+	public int unitID;
+	public int ownership = 0;
+	public string unitName;
+	public string unitPrefabName;
+	//public string unitType;
+	//public int unitCost;
+	//public int movementCost;
+	//public int movementMax;
+	//public int speed;
+	//public int unitBuildTime;
+	//public int unitPop;
+	//public float healthMax;
+	//public float healthCurrent;
+	//public float damage;
+	//public float attackRange;
+	//public float armourPoints;
+	//public float lineOfSight;
+	public float movementSpeed = 1;
+
 
 	private SimpleStatus.PlayUnitState _state;
 	public int uniqueID = -1;
@@ -94,155 +95,149 @@ public class Unit : MonoBehaviour {
 		return _state;
 	}
 
+	public int Ownership {
+
+		get { return ownership; }
+		set {
+			ownership = value;
+			if (ownership == -1) {
+				healthbarImage.color = neutralOwned;
+			}
+			if (ownership == 0) {
+				healthbarImage.color = playerOwned;
+			}
+			if (ownership == 1) {
+				healthbarImage.color = enemyOwned;
+			}
+		}
+	}
+
+	public Text unitNameText;
+
+	public RectTransform healthRect;
+	public RectTransform damageRect;
+	public GameObject healthbar;
+	public float healthbarWidth = 54;
+	public float healthbarFadeTime = 3;
+	private Animator anim;
+	public float wait = 0.5f;
+	public Vector2 currentSize;
+	private Vector2 endSize;
+	public Vector2 resetSize;
+	public float currentTime = 0f;
+	public float damageDuration = 2f;
+	public float damageDurationWait = 3f;
+	public bool animateDamage = false;
+
+	private float startTime;
+
+	//Event Trigger nn Click but not after Drag
+	public bool onUp = false;
+	public bool onDrag = false;
+
+	public void OnDragEnd() {
+		onDrag = true;
+	}
+
+	public void OnPointerUp() {
+		if (!onDrag) {
+			onUp = true;
+		}
+	}
+
+	public void SetUnitType() {
+		if (this.tag == "Unit") {
+			// Setting Unit Variables
+			if (unitID == 0) {
+				unitName = "Swordsman";
+				unitPrefabName = "Unit_00";
+				unitNameText.text = unitName;
+				MAX_HP = 4;
+				hp = MAX_HP;
+				STRENGTH = 1;
+				VARIATION = 0;
+				SPEED = 3;
+				RANGE = 1;
+				unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
+				unitAnimr = unitMesh.GetComponentInChildren<Animator>();
+			}
+			if (unitID == 1) {
+				unitName = "Archer";
+				unitPrefabName = "Unit_01";
+				unitNameText.text = unitName;
+				MAX_HP = 2;
+				hp = MAX_HP;
+				STRENGTH = 1;
+				VARIATION = 0;
+				SPEED = 3;
+				RANGE = 4;
+				unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
+				unitAnimr = unitMesh.GetComponentInChildren<Animator>();
+			}
+			if (unitID == 2) {
+				unitName = "Knight";
+				unitPrefabName = "Unit_02";
+				unitNameText.text = unitName;
+				MAX_HP = 5;
+				hp = MAX_HP;
+				STRENGTH = 2;
+				VARIATION = 0;
+				SPEED = 6;
+				RANGE = 1;
+				unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
+				unitAnimr = unitMesh.GetComponentInChildren<Animator>();
+			}
+		} else {
+			unitName = "Castle";
+			unitPrefabName = "Castle_00";
+			MAX_HP = 10;
+			hp = MAX_HP;
+			//spawn.SpawnUnit(unitID, PLAYER, unitPrefabName);
+		}
 
 
-    public int Ownership {
+	}
 
-        get { return ownership; }
-        set {
-            ownership = value;
-            if (ownership == -1) {
-                healthbarImage.color = neutralOwned;
-            }
-            if (ownership == 0) {
-                healthbarImage.color = playerOwned;
-            }
-            if (ownership == 1) {
-                healthbarImage.color = enemyOwned;
-            }
-        }
-    }
+	//Healbar
+	public IEnumerator HealthbarFade() {
+		anim = healthbar.GetComponent<Animator>();
+		yield return new WaitForSeconds(healthbarFadeTime);
+		anim.SetBool("On", false);
+	}
 
-    public Text unitNameText;
+	IEnumerator AnimateDamage() {
+		currentSize = damageRect.sizeDelta;
+		yield return new WaitForSeconds(damageDurationWait);
+		animateDamage = true;
+	}
 
-    public RectTransform healthRect;
-    public RectTransform damageRect;
-    public GameObject healthbar;
-    public float healthbarWidth = 54;
-    public float healthbarFadeTime = 3;
-    private Animator anim;
-    public float wait = 0.5f;
-    public Vector2 currentSize;
-    private Vector2 endSize;
-    public Vector2 resetSize;
-    public float currentTime = 0f;
-    public float damageDuration = 2f;
-    public float damageDurationWait = 3f;
-    public bool animateDamage = false;
-
-    private float startTime;
-
-    //Event Trigger nn Click but not after Drag
-    public bool onUp = false;
-    public bool onDrag = false;
-
-    public void OnDragEnd() {
-        onDrag = true;
-    }
-
-    public void OnPointerUp() {
-        if (!onDrag) {
-            onUp = true;
-        }
-    }
-
-    public void SetUnitType() {
-        if (this.tag == "Unit") {
-            // Setting Unit Variables
-            if (unitID == 0) {
-				unitType = UnitType.Infantry;
-                unitName = "Swordsman";
-                unitPrefabName = "Unit_00";
-                unitNameText.text = unitName;
-                MAX_HP = 4;
-                hp = MAX_HP;
-                STRENGTH = 1;
-                VARIATION = 0;
-                SPEED = 3;
-                RANGE = 1;
-                unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
-                unitAnimr = unitMesh.GetComponentInChildren<Animator>();
-            }
-            if (unitID == 1) {
-				unitType = UnitType.Ranged;
-                unitName = "Archer";
-                unitPrefabName = "Unit_01";
-                unitNameText.text = unitName;
-                MAX_HP = 2;
-                hp = MAX_HP;
-                STRENGTH = 1;
-                VARIATION = 0;
-                SPEED = 3;
-                RANGE = 4;
-                unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
-                unitAnimr = unitMesh.GetComponentInChildren<Animator>();
-            }
-            if (unitID == 2) {
-				unitType = UnitType.Mounted;
-                unitName = "Knight";
-                unitPrefabName = "Unit_02";
-                unitNameText.text = unitName;
-                MAX_HP = 5;
-                hp = MAX_HP;
-                STRENGTH = 2;
-                VARIATION = 0;
-                SPEED = 6;
-                RANGE = 1;
-                unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
-                unitAnimr = unitMesh.GetComponentInChildren<Animator>();
-            }
-        } else {
-			unitType = UnitType.Castle;
-            unitName = "Castle";
-            unitPrefabName = "Castle_00";
-            MAX_HP = 10;
-            hp = MAX_HP;
-            //spawn.SpawnUnit(unitID, PLAYER, unitPrefabName);
-        }
-
-
-    }
-
-    //Healbar
-    public IEnumerator HealthbarFade() {
-        anim = healthbar.GetComponent<Animator>();
-        yield return new WaitForSeconds(healthbarFadeTime);
-        anim.SetBool("On", false);
-    }
-
-    IEnumerator AnimateDamage() {
-        currentSize = damageRect.sizeDelta;
-        yield return new WaitForSeconds(damageDurationWait);
-        animateDamage = true;
-    }
-
-    public void SetGrid (HexGrid grid) {
+	public void SetGrid (HexGrid grid) {
 		this.grid = grid;
 		grid.SendMessage ("AddUnit", this);
 	}
-	
+
 	public float HP {
 		get {
 			return hp;
 		}
 	}
 
-    public void Damage(float value) {
-        if (anim != null) {
-            anim = healthbar.GetComponent<Animator>();
-            anim.SetBool("On", true);
-        }
-        hp -= value;
-        //endSize = new Vector2 ((healthCurrent/healthMax) * healthbarWidth, health.sizeDelta.y);
-        if (healthRect != null) {
-        healthRect.sizeDelta = new Vector2((hp / MAX_HP) * healthbarWidth, healthRect.sizeDelta.y);
-        }
-        StopAllCoroutines();
-        StartCoroutine(AnimateDamage());
-        StartCoroutine(HealthbarFade());
-    }
+	public void Damage(float value) {
+		if (anim != null) {
+			anim = healthbar.GetComponent<Animator>();
+			anim.SetBool("On", true);
+		}
+		hp -= value;
+		//endSize = new Vector2 ((healthCurrent/healthMax) * healthbarWidth, health.sizeDelta.y);
+		if (healthRect != null) {
+			healthRect.sizeDelta = new Vector2((hp / MAX_HP) * healthbarWidth, healthRect.sizeDelta.y);
+		}
+		StopAllCoroutines();
+		StartCoroutine(AnimateDamage());
+		StartCoroutine(HealthbarFade());
+	}
 
-    /*void SetPosition (HexPosition position) {
+	/*void SetPosition (HexPosition position) {
 		this.position = position;
 		transform.position = position.getPosition ();
 		position.add ("Unit", this);
@@ -262,7 +257,7 @@ public class Unit : MonoBehaviour {
 		grid.SendMessage ("ActionComplete");
 	}*/
 
-    public HexPosition Coordinates {
+	public HexPosition Coordinates {
 		get {
 			return position;
 		}
@@ -272,15 +267,15 @@ public class Unit : MonoBehaviour {
 			value.add ("Unit", this);
 		}
 	}
-	
+
 	public State Status {
 		get { return state; }
 		set { state = value; }
 	}
-	
+
 	public void move (HexPosition[] path) {
 
-        if (path.Length < 2) {
+		if (path.Length < 2) {
 			skipMove();
 			return;
 		}
@@ -291,105 +286,105 @@ public class Unit : MonoBehaviour {
 			this.path[i] = path[i].getPosition();
 		}
 
-        // Capture Point
-        if (destination.containsKey("CapturePoint")) {
-            //print("ERROR: Space is capture point.");
-            Debug.LogError("contains dropzone");
-            grid.actuallyCapture();
-            //return;
-        }
+		// Capture Point
+		if (destination.containsKey("CapturePoint")) {
+			//print("ERROR: Space is capture point.");
+			Debug.LogError("contains dropzone");
+			grid.actuallyCapture();
+			//return;
+		}
 
 		state = State.ATTACK;
 		if (destination.containsKey ("Unit")) {
 			print ("ERROR: Space occupied.");
 			grid.actionComplete();
 			return;
-        }
+		}
 
-        position.remove ("Unit");
+		position.remove ("Unit");
 		destination.add ("Unit", this);
 		//transform.position = desitination.getPosition();
 		t = 0;
 		n = 0;
 		moving = true;
 		position = destination;
-    }
-	
+	}
+
 	public void skipMove () {
 		state = State.ATTACK;
 	}
-	
+
 	public void attack (Unit enemy) {
 		state = State.WAIT;
 		enemy.defend(STRENGTH, VARIATION, transform.position);
-        unitAnimr.SetTrigger("Attack");
+		unitAnimr.SetTrigger("Attack");
 
-        // Face direction of enemy
-        Vector3 heading = (enemy.transform.position - transform.position);
-        //float distance = heading.magnitude;
-        //Vector3 direction = heading / distance; // This is now the normalized direction.
-        transform.rotation = horizontalLookRotation(heading);
-    }
-	
+		// Face direction of enemy
+		Vector3 heading = (enemy.transform.position - transform.position);
+		//float distance = heading.magnitude;
+		//Vector3 direction = heading / distance; // This is now the normalized direction.
+		transform.rotation = horizontalLookRotation(heading);
+	}
+
 	public void newTurn () {
 		state = State.MOVE;
 	}
-	
+
 	public void defend (float strength, float variation, Vector3 attacker) {
 		int damage = NegativeBinomialDistribution.fromMeanAndStandardDeviation(strength-1, variation)+1;
 		//hp -= damage;
-        Damage(strength);
-        if (unitAnimr != null) {
-            unitAnimr.SetTrigger("GetHit");
-        }
+		Damage(strength);
+		if (unitAnimr != null) {
+			unitAnimr.SetTrigger("GetHit");
+		}
 
-        // Face direction of attacker
-        Vector3 heading = (attacker - transform.position);
-        transform.rotation = horizontalLookRotation(heading);
+		// Face direction of attacker
+		Vector3 heading = (attacker - transform.position);
+		transform.rotation = horizontalLookRotation(heading);
 
-        if (hp <= 0) {
+		if (hp <= 0) {
 			position.remove ("Unit");
 			grid.remove (this);
 			UnityEngine.Object.Destroy(this.gameObject);
 		}
-    }
+	}
 
-    public void capture(Unit unit, CapturePoint capturePoint) {
-        capturePoint.capture(unit);
-    }
+	public void capture(Unit unit, CapturePoint capturePoint) {
+		capturePoint.capture(unit);
+	}
 
 	// Use this for initialization
 	void Start () {
 
-        ownership = PLAYER;
-        //spawn = this.GetComponent<MakePrefabAppear>();
+		ownership = PLAYER;
+		//spawn = this.GetComponent<MakePrefabAppear>();
 
-        SetUnitType();
+		SetUnitType();
 
-        // Setting Health
-        hp = MAX_HP;
-        resetSize = healthRect.sizeDelta;
-        anim = healthbar.GetComponent<Animator>();
+		// Setting Health
+		hp = MAX_HP;
+		resetSize = healthRect.sizeDelta;
+		anim = healthbar.GetComponent<Animator>();
 
-        if (healthbarImage != null) {
-            if (ownership == -1) {
-                healthbarImage.color = neutralOwned;
-            }
-            if (ownership == 0) {
-                healthbarImage.color = playerOwned;
-            }
-            if (ownership == 1) {
-                healthbarImage.color = enemyOwned;
-            }
-        }
+		if (healthbarImage != null) {
+			if (ownership == -1) {
+				healthbarImage.color = neutralOwned;
+			}
+			if (ownership == 0) {
+				healthbarImage.color = playerOwned;
+			}
+			if (ownership == 1) {
+				healthbarImage.color = enemyOwned;
+			}
+		}
 
-        hp = MAX_HP;
+		hp = MAX_HP;
 	}
-	
+
 	private Vector3 bezier (Vector3 p0, Vector3 c0, Vector3 c1, Vector3 p1, float t) {
 		return (1-t)*(1-t)*(1-t)*p0 + 3*(1-t)*(1-t)*t*c0 + 3*(1-t)*t*t*c1 + t*t*t*p1;
 	}
-	
+
 	private Vector3 dbezier (Vector3 p0, Vector3 c0, Vector3 c1, Vector3 p1, float t) {
 		Vector3 dir = 3*(1-t)*(1-t)*(c0-p0) + 6*(1-t)*t*(c1-c0) + 3*t*t*(p1-c1);
 		if (dir.magnitude < 0.001) {
@@ -397,7 +392,7 @@ public class Unit : MonoBehaviour {
 		}
 		return dir;
 	}
-	
+
 	/*private Quaternion bezierRotation (Vector3 p0, Vector3 c0, Vector3 c1, Vector3 p1, float t) {
 		Vector3 dir = dbezier (p0, c0, c1, p1, t);
 		dir.y = 0;
@@ -405,48 +400,48 @@ public class Unit : MonoBehaviour {
 		rotation.SetLookRotation (dir);
 		return rotation;
 	}*/
-	
+
 	private Quaternion horizontalLookRotation (Vector3 dir) {
 		dir.y = 0;
 		Quaternion rotation = new Quaternion ();
 		rotation.SetLookRotation (dir);
 		return rotation;
 	}
-	
+
 	private void fullBezier (Vector3 p0, Vector3 c0, Vector3 c1, Vector3 p1, float t, out Vector3 position, out Quaternion rotation) {
 		position = bezier (p0, c0, c1, p1, t);
 		rotation = horizontalLookRotation (dbezier (p0, c0, c1, p1, t));
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 
-        /*if (healthCurrent <= 0) {
+		/*if (healthCurrent <= 0) {
             Destroy(this.gameObject);
         }*/
 
-        if (animateDamage) {
-            if (currentTime <= damageDuration) {
-                currentTime += Time.deltaTime;
-                damageRect.sizeDelta = Vector2.Lerp(currentSize, healthRect.sizeDelta, currentTime / damageDuration);
-            }
-            else {
-                //damage.sizeDelta.y = currentSize;
-                currentTime = 0f;
-            }
-            if (damageRect.sizeDelta == healthRect.sizeDelta) {
-                animateDamage = false;
-            }
-        }
+		if (animateDamage) {
+			if (currentTime <= damageDuration) {
+				currentTime += Time.deltaTime;
+				damageRect.sizeDelta = Vector2.Lerp(currentSize, healthRect.sizeDelta, currentTime / damageDuration);
+			}
+			else {
+				//damage.sizeDelta.y = currentSize;
+				currentTime = 0f;
+			}
+			if (damageRect.sizeDelta == healthRect.sizeDelta) {
+				animateDamage = false;
+			}
+		}
 
-        //There has to be a better way to do this. Especially if I want to stick rotations in there.
-        if (moving) {
+		//There has to be a better way to do this. Especially if I want to stick rotations in there.
+		if (moving) {
 
-            if (unitAnimr != null) {
-                unitAnimr.SetFloat("UnitSpeed", movementSpeed);
-            }
+			if (unitAnimr != null) {
+				unitAnimr.SetFloat("UnitSpeed", movementSpeed);
+			}
 
-            if (path.Length < 2) {	//Shouldn't happen.
+			if (path.Length < 2) {	//Shouldn't happen.
 				moving = false;
 				grid.actionComplete ();
 				return;
@@ -461,10 +456,10 @@ public class Unit : MonoBehaviour {
 					transform.rotation = horizontalLookRotation (path[1]-path[0]);
 					t += MOTION_SPEED;
 				}
-				
+
 			} else if (path.Length == 3) {
 
-                if (t >= 2) {
+				if (t >= 2) {
 					transform.position = path[2];
 					moving = false;
 					grid.actionComplete ();
@@ -480,7 +475,7 @@ public class Unit : MonoBehaviour {
 				}
 			} else {
 
-                if (n == 0) {
+				if (n == 0) {
 					if (t >= 0.5f) {
 						t -= 0.5f;
 						++n;	//Falls through.
@@ -509,7 +504,7 @@ public class Unit : MonoBehaviour {
 						transform.position = path[n];
 						moving = false;
 						grid.actionComplete ();
-                        Debug.LogError(string.Format("End of movement at u:{0}v:{1} isCapturePoint?:{2}", position.U, position.V, position.containsKey("CapturePoint")));
+						Debug.LogError(string.Format("End of movement at u:{0}v:{1} isCapturePoint?:{2}", position.U, position.V, position.containsKey("CapturePoint")));
 						return;
 					} else {
 						transform.rotation = horizontalLookRotation (path[n]-path[n-1]);
@@ -519,12 +514,12 @@ public class Unit : MonoBehaviour {
 				}
 			}
 		} else {
-            if (unitAnimr != null) {
-                unitAnimr.SetFloat("UnitSpeed", 0);
-            }
-        }
+			if (unitAnimr != null) {
+				unitAnimr.SetFloat("UnitSpeed", 0);
+			}
+		}
 	}
-	
+
 	void OnGUI () {	//TODO: Get rid of magic numbers.
 		Vector3 coordinates = Camera.main.WorldToScreenPoint (transform.position + new Vector3(0,1.5f,0) + 0.5f*Camera.main.transform.up);	//TODO: Make this some kind of constant.
 		coordinates.y = Screen.height - coordinates.y;
