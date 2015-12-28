@@ -38,6 +38,15 @@ public class PlayerController : MonoBehaviour {
         RoundStart();
     }
 
+    public void AddGoldPerTurn(int goldAmount) {
+        goldPerTurn += goldAmount;
+        goldPerTurnText.text = ("+" + goldPerTurn.ToString());
+    }
+    public void SubtractGoldPerTurn(int goldAmount) {
+        goldPerTurn -= goldAmount;
+        goldPerTurnText.text = ("+" + goldPerTurn.ToString());
+    }
+
     public void RoundStart() {
         goldCurrent = goldCurrent + goldPerTurn;
         if (goldCurrent > goldMax) {

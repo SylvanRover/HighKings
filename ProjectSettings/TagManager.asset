@@ -9,6 +9,9 @@ TagManager:
   - Castle
   - MapDropZone
   - PlayerController
+  - HexGrid
+  - UnitObject
+  - UnitHolder
   layers:
   - Default
   - TransparentFX

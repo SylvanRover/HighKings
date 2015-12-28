@@ -4,40 +4,34 @@ using System.Collections;
 
 public class RadialTimer : MonoBehaviour {
 
-	private ArmyStats army;
-	public CommanderMGMT commanderMGMT;
-	public Text textLevel;
+	public Unit unitStats;
+	//public Text textLevel;
 	public Image damageTimer;
 	public Image healthTimer;
-	public Image actionTimer;
-	public Image actionBubble;
-	public Sprite actionIdle;
-	public Sprite actionMoving;
-	public Sprite actionBattleAttacking;
-	public Sprite actionBattleDefending;
-	public Sprite actionDefending;
-	public Sprite actionHarvesting;
-	public Color colorMoving;
-	public Color colorBattleAttacking;
-	public Color colorBattleDefending;
-	public Color colorHarvesting;
-
-	// Use this for initialization
-	void Start () {	
-		army = commanderMGMT.commanderButtonStats;
-	}
+	//public Image actionTimer;
+	//public Image actionBubble;
+	//public Sprite actionIdle;
+	//public Sprite actionMoving;
+	//public Sprite actionBattleAttacking;
+	//public Sprite actionBattleDefending;
+	//public Sprite actionDefending;
+	//public Sprite actionHarvesting;
+	//public Color colorMoving;
+	//public Color colorBattleAttacking;
+	//public Color colorBattleDefending;
+	//public Color colorHarvesting;
 
 	// Update is called once per frame
 	void Update () {
 
-		textLevel.text = commanderMGMT.commanderButtonStats.commanderLevel.ToString();
+		//textLevel.text = commanderMGMT.commanderButtonStats.commanderLevel.ToString();
 
-		if (commanderMGMT.commanderButtonStats != null) {
-			army = commanderMGMT.commanderButtonStats;
-			damageTimer.fillAmount = (army.damage.sizeDelta.x / army.resetSize.x) / 2;
-			healthTimer.fillAmount = (army.healthCurrent / army.healthMax) / 2;
+		if (unitStats != null) {
+			//army = commanderMGMT.commanderButtonStats;
+			damageTimer.fillAmount = (unitStats.damageRect.sizeDelta.x / unitStats.resetSize.x);
+			healthTimer.fillAmount = (unitStats.hp / unitStats.MAX_HP);
 			
-			if (army.actionMoving) {
+			/*if (army.actionMoving) {
 				actionBubble.sprite = actionMoving;
 				actionTimer.color = colorMoving;
 				actionTimer.fillAmount = army.progressLine._progress01 / 2;
@@ -61,9 +55,9 @@ public class RadialTimer : MonoBehaviour {
 			} else {
 				actionBubble.sprite = actionIdle;
 				actionTimer.fillAmount = 0f;
-			}
-		} else {
-			actionTimer.fillAmount = 0f;
+			}*/
+		//} else {
+		//	actionTimer.fillAmount = 0f;
 		}
 	}
 }

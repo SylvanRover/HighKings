@@ -89,7 +89,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &137690
 GameObject:
   m_ObjectHideFlags: 1
@@ -209,7 +209,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &182022
 GameObject:
   m_ObjectHideFlags: 1
@@ -388,29 +388,27 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 118132}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b355250e5bb094a4c9fb693bc1b679b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   commanderMGMT: {fileID: 0}
   textLevel: {fileID: 0}
-  damageTimer: {fileID: 0}
-  healthTimer: {fileID: 0}
+  damageTimer: {fileID: 11484730}
+  healthTimer: {fileID: 11401120}
   actionTimer: {fileID: 0}
   actionBubble: {fileID: 0}
-  actionIdle: {fileID: 21300000, guid: ffd9e2c7d97ac884592acfc989f1289f, type: 3}
-  actionMoving: {fileID: 21300000, guid: ebae85213a5f36244b07f98611691715, type: 3}
-  actionBattleAttacking: {fileID: 21300000, guid: 7ef2211a6081e514f996f45d2861bd4e,
-    type: 3}
-  actionBattleDefending: {fileID: 21300000, guid: ad3f8778e138a914088ac0d2f1c20ed9,
-    type: 3}
-  actionDefending: {fileID: 21300000, guid: 8159e559942a5a340a4e29107e96fd62, type: 3}
-  actionHarvesting: {fileID: 21300000, guid: 5094298bb9805d04a86e58544803f040, type: 3}
-  colorMoving: {r: 0, g: 0.66896534, b: 1, a: 1}
-  colorBattleAttacking: {r: 0.89705884, g: 0.20447662, b: 0.20447662, a: 1}
-  colorBattleDefending: {r: 1, g: 0.9399594, b: 0.45588237, a: 1}
-  colorHarvesting: {r: 0.9117647, g: 0.5847871, b: 0, a: 1}
+  actionIdle: {fileID: 0}
+  actionMoving: {fileID: 0}
+  actionBattleAttacking: {fileID: 0}
+  actionBattleDefending: {fileID: 0}
+  actionDefending: {fileID: 0}
+  actionHarvesting: {fileID: 0}
+  colorMoving: {r: 0, g: 0, b: 0, a: 0}
+  colorBattleAttacking: {r: 0, g: 0, b: 0, a: 0}
+  colorBattleDefending: {r: 0, g: 0, b: 0, a: 0}
+  colorHarvesting: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &11421554
 MonoBehaviour:
   m_ObjectHideFlags: 1

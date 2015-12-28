@@ -7,14 +7,14 @@ public class MakePrefabAppear : MonoBehaviour {
 	[SerializeField] private string _prefabName = "Type Prefab Name Here";
 	[SerializeField] public Transform _where;
 	private GameObject _theGameObject;
-    private UnitStats unitStats;
+    private Unit unitStats;
 	// Use this for initialization
 
 	public void Appear () {
 		if (_where == null) {
 			_where = this.transform;
 		}
-		Clear();
+		//Clear();
 		_theGameObject = (GameObject)GameObject.Instantiate(Resources.Load(_prefabName));
 		_theGameObject.transform.parent = _where;
 		_theGameObject.transform.localPosition = Vector3.zero;
@@ -24,18 +24,31 @@ public class MakePrefabAppear : MonoBehaviour {
 		_theGameObject.transform.LookAt(lookAtPoint);
 	}
 
-    public void SpawnUnit(int i, int o) {
+    public GameObject SpawnUnit(int i, int o) {
         if (_where == null) {
             _where = this.transform;
         }
-        Clear();
+        //Clear();
         _theGameObject = (GameObject)GameObject.Instantiate(Resources.Load(_prefabName));
         _theGameObject.transform.parent = _where;
         _theGameObject.transform.localPosition = Vector3.zero;
-        unitStats = _theGameObject.GetComponent<UnitStats>();
+        _theGameObject.transform.rotation = Quaternion.identity;
+        unitStats = _theGameObject.GetComponent<Unit>();
         unitStats.unitID = i;
         unitStats.ownership = o;
-        unitStats.SetUnitType();
+        _theGameObject.transform.parent = GameObject.FindGameObjectWithTag("UnitHolder").transform;
+        return _theGameObject;
+    }
+    public GameObject SpawnUnitObject(int i, string n) {
+        if (_where == null) {
+            _where = this.transform;
+        }
+        //Clear();
+        _theGameObject = (GameObject)GameObject.Instantiate(Resources.Load(n));
+        _theGameObject.transform.parent = _where;
+        _theGameObject.transform.localPosition = Vector3.zero;
+        _theGameObject.transform.rotation = _where.rotation;
+        return _theGameObject;
     }
 
     // Update is called once per frame

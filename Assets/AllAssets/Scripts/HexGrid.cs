@@ -17,11 +17,15 @@ public class HexGrid : MonoBehaviour {
 
 	public GameObject marker;
 	public GameObject unitsRoot;
-	public GameObject obstacles;
-	private List<Unit> units = new List<Unit>();		//I should make this thread safe.
-	//public GameObject[] players;
-	
-	private bool waiting = false;
+    public GameObject capturePointsRoot;
+    public GameObject obstacles;
+    //public List<Dropzone> capturePoints;
+    private List<Unit> units = new List<Unit>();		//I should make this thread safe.
+    private List<CapturePoint> capturePoints = new List<CapturePoint>();
+    private List<Dropzone> dropzones = new List<Dropzone>();
+    //public GameObject[] players;
+
+    private bool waiting = false;
 	//private int timeout = 0;		//waiting is still false as this counts down.
 	//private const int MAX_TIME = 1000;
 	
@@ -37,8 +41,16 @@ public class HexGrid : MonoBehaviour {
 	bool gameOver = false;
 	bool modeSelected = false;
 	bool computerPlayer;
-	
-	public void wait() {
+
+    public Color pathColor;
+    public Color selectionColor;
+    public Color selectableColor;
+    public Color attackColor;
+    public Color cursorColor;
+
+    private PlayerController playerController;
+
+    public void wait() {
 		waiting = true;
 	}
 
@@ -48,7 +60,7 @@ public class HexGrid : MonoBehaviour {
 	}
 	
 	//Is this thread safe? I don't know how thread safety works.
-	void AddUnit (Unit unit) {
+	public void AddUnit (Unit unit) {
 		while(updating > 0) {
 			//do nothing.
 		}
@@ -57,8 +69,27 @@ public class HexGrid : MonoBehaviour {
 		--updating;
 		unit.Coordinates = new HexPosition (unit.transform.position);
 	}
-	
-	public void remove (Unit unit) {
+
+    public void AddCapturePoint(CapturePoint capturePoint) {
+        while (updating > 0) {
+            //do nothing.
+        }
+        ++updating;
+        capturePoints.Add(capturePoint);
+        --updating;
+        capturePoint.Coordinates = new HexPosition(capturePoint.transform.position);
+    }
+    public void AddDropzone(Dropzone dropzone) {
+        while (updating > 0) {
+            //do nothing.
+        }
+        ++updating;
+        dropzones.Add(dropzone);
+        --updating;
+        dropzone.Coordinates = new HexPosition(dropzone.transform.position);
+    }
+
+    public void remove (Unit unit) {
 		units.Remove (unit);
 	}
 	
@@ -101,19 +132,28 @@ public class HexGrid : MonoBehaviour {
 
 	void Start () {
 		unitsRoot.BroadcastMessage ("SetGrid", this);
-		//timeout = MAX_TIME;
-		HexPosition.setColor("Path", Color.yellow, 1);
-		HexPosition.setColor("Selection", Color.green, 2);
-		HexPosition.setColor("Selectable", Color.green, 3);
-		HexPosition.setColor("Attack", Color.red, 4);
-		HexPosition.setColor("Cursor", Color.blue, 5);
+        capturePointsRoot.BroadcastMessage("SetGrid", this);
+        //timeout = MAX_TIME;
+        HexPosition.setColor("Path", pathColor, 1);
+		HexPosition.setColor("Selection", selectionColor, 2);
+		HexPosition.setColor("Selectable", selectableColor, 3);
+		HexPosition.setColor("Attack", attackColor, 4);
+		HexPosition.setColor("Cursor", cursorColor, 5);
 		HexPosition.Marker = marker;
 		foreach (Transform child in obstacles.transform) {
 			HexPosition position = new HexPosition(child.position);
 			child.position = position.getPosition();
 			position.flag("Obstacle");
 		}
-	}
+        GameObject[] captureObj = GameObject.FindGameObjectsWithTag("MapDropZone");
+        for (int i=0; i< captureObj.Length; i++) {
+            HexPosition position = new HexPosition(captureObj[i].transform.position);
+            captureObj[1].transform.position = position.getPosition(); // maight want to move parent instead
+            position.flag("CapturePoint");
+        }
+        
+        playerController = GameObject.FindGameObjectWithTag("PlayerController").GetComponent<PlayerController>();
+    }
 	
 	private void select () {
 		if (mouse.isSelected ("Selectable")) {
@@ -141,13 +181,19 @@ public class HexGrid : MonoBehaviour {
 		foreach (Unit unit in units) {	//I only need to do this with units on that team, but checking won't speed things up. I could also only do it when player overflows.
 			unit.newTurn ();
 		}
-		player = (player + 1) % PLAYERS;
+
+        playerController = GameObject.FindGameObjectWithTag("PlayerController").GetComponent<PlayerController>();
+        if (player != playerController.playerID) {
+            playerController.RoundStart();
+        }
+
+        player = (player + 1) % PLAYERS;
 		if(player == 0 || !computerPlayer) {
 			selectSelectable ();
 		}
 	}
 	
-	private void unselect () {
+	public void unselect () {
 		HexPosition.clearSelection ();
 		selection = null;
 		mouse.select ("Cursor");
@@ -175,6 +221,15 @@ public class HexGrid : MonoBehaviour {
 		checkGameOver ();
 		unselect ();
 	}
+
+    public void actuallyCapture () {
+        if (selection != null) {
+            Unit unit = (Unit)selection.getValue("Unit");
+            if (unit != null) {
+                unit.capture(unit, (CapturePoint)mouse.getValue("CapturePoint"));
+            }
+        }
+    }
 	
 	private void move () {
 		if (mouse.Equals (selection)) {

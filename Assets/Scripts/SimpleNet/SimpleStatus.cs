@@ -120,6 +120,7 @@ public class SimpleStatus : MonoBehaviour {
 			BinaryFormatter binaryFormatter = new BinaryFormatter ();
 			holder = binaryFormatter.Deserialize (memoryStream) as NetworkData;
 		}
+
 		UpdateAllDropZones (holder.dropzones);
 		UpdateAllUnits (holder.units);
 	}
