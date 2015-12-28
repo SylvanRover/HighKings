@@ -219,19 +219,30 @@ public class HexGrid : MonoBehaviour {
 			return;
 		}
 	}
-	
+
 	private void actuallyAttack () {
 		((Unit) selection.getValue("Unit")).attack ((Unit) mouse.getValue("Unit"));
 		checkGameOver ();
 		unselect ();
 	}
 
+	public void actuallyCapture(Unit unit, CapturePoint point){
+		if (point!=null && unit!=null){
+			unit.capture(unit, point);
+		}else{
+			Debug.LogError("unit or point is null");
+		}
+	}
+
     public void actuallyCapture () {
         if (selection != null) {
             Unit unit = (Unit)selection.getValue("Unit");
-            if (unit != null) {
-                unit.capture(unit, (CapturePoint)mouse.getValue("CapturePoint"));
-            }
+			if (mouse!=null) {
+				CapturePoint capture = (CapturePoint)mouse.getValue("CapturePoint");
+				actuallyCapture(unit,capture);
+			}else{
+				Debug.LogError("mouse is null");
+			}
         }
     }
 	

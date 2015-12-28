@@ -40,7 +40,7 @@ public class SimpleNet : MonoBehaviour {
 	private int _otherPlayerConnectionId; //Testing
 	private int _otherPlayerHostId; //Testing
 	private int _otherPlayerChannel; //Testing
-	private int maxBufferSize = 1024;
+	private int maxBufferSize = 8192;
 
 	public static int PlayerID = 0;
 
@@ -50,7 +50,7 @@ public class SimpleNet : MonoBehaviour {
 	void Start () {
 		// An example of initializing the Transport Layer with custom settings
 		GlobalConfig gConfig = new GlobalConfig();
-		gConfig.MaxPacketSize = 2048; //Needs to be large for json
+		gConfig.MaxPacketSize = 8192; //Needs to be large for json
 		NetworkTransport.Init(gConfig);
 	}
 

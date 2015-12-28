@@ -149,6 +149,7 @@ public class Unit : MonoBehaviour {
 		if (this.tag == "Unit") {
 			// Setting Unit Variables
 			if (unitID == 0) {
+				unitType = UnitType.Infantry;
 				unitName = "Swordsman";
 				unitPrefabName = "Unit_00";
 				unitNameText.text = unitName;
@@ -162,6 +163,7 @@ public class Unit : MonoBehaviour {
 				unitAnimr = unitMesh.GetComponentInChildren<Animator>();
 			}
 			if (unitID == 1) {
+				unitType = UnitType.Ranged;
 				unitName = "Archer";
 				unitPrefabName = "Unit_01";
 				unitNameText.text = unitName;
@@ -175,6 +177,7 @@ public class Unit : MonoBehaviour {
 				unitAnimr = unitMesh.GetComponentInChildren<Animator>();
 			}
 			if (unitID == 2) {
+				unitType = UnitType.Mounted;
 				unitName = "Knight";
 				unitPrefabName = "Unit_02";
 				unitNameText.text = unitName;
@@ -188,6 +191,7 @@ public class Unit : MonoBehaviour {
 				unitAnimr = unitMesh.GetComponentInChildren<Animator>();
 			}
 		} else {
+			unitType = UnitType.Castle;
 			unitName = "Castle";
 			unitPrefabName = "Castle_00";
 			MAX_HP = 10;
@@ -350,7 +354,11 @@ public class Unit : MonoBehaviour {
 	}
 
 	public void capture(Unit unit, CapturePoint capturePoint) {
-		capturePoint.capture(unit);
+		if (capturePoint!=null && unit!=null){
+			capturePoint.capture(unit);
+		}else{
+			Debug.LogError("capture failed because something null");
+		}
 	}
 
 	// Use this for initialization
@@ -443,12 +451,14 @@ public class Unit : MonoBehaviour {
 
 			if (path.Length < 2) {	//Shouldn't happen.
 				moving = false;
+				MovementOver();
 				grid.actionComplete ();
 				return;
 			} else if (path.Length == 2) {
 				if (t >= 1) {
 					transform.position = path[1];
 					moving = false;
+					MovementOver();
 					grid.actionComplete ();
 					return;
 				} else {
@@ -462,6 +472,7 @@ public class Unit : MonoBehaviour {
 				if (t >= 2) {
 					transform.position = path[2];
 					moving = false;
+					MovementOver();
 					grid.actionComplete ();
 					return;
 				} else {
@@ -503,8 +514,8 @@ public class Unit : MonoBehaviour {
 					if (t >= 0.5f) {
 						transform.position = path[n];
 						moving = false;
+						MovementOver();
 						grid.actionComplete ();
-						Debug.LogError(string.Format("End of movement at u:{0}v:{1} isCapturePoint?:{2}", position.U, position.V, position.containsKey("CapturePoint")));
 						return;
 					} else {
 						transform.rotation = horizontalLookRotation (path[n]-path[n-1]);
@@ -518,6 +529,10 @@ public class Unit : MonoBehaviour {
 				unitAnimr.SetFloat("UnitSpeed", 0);
 			}
 		}
+	}
+
+	void MovementOver(){
+		Debug.LogError(string.Format("End of movement at u:{0}v:{1} isCapturePoint?:{2}", position.U, position.V, position.containsKey("CapturePoint")));
 	}
 
 	void OnGUI () {	//TODO: Get rid of magic numbers.
