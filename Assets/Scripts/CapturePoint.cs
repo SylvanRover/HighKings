@@ -122,6 +122,7 @@ public class CapturePoint : MonoBehaviour {
         } else if (unit.ownership != ownership && state != State.NEUTRAL) {
             state = State.NEUTRAL;
             Ownership = -1;
+
             if (unit.ownership == 1) {
             playerController.SubtractGoldPerTurn(goldAmount);
             }
