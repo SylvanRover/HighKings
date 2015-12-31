@@ -10,11 +10,10 @@ public class PlayerController : MonoBehaviour {
    [SerializeField] private int goldCurrent;
     public int goldMax;
     public int goldPerTurn;
-    public int techAge = 0;
-    public int playerRound = 0;
+    //public int techAge = 0;
 
-    public Text goldCurrentText;
-    public Text goldPerTurnText;
+    private Text goldCurrentText;
+    private Text goldPerTurnText;
 
     public int GoldCurrent {
 
@@ -36,6 +35,8 @@ public class PlayerController : MonoBehaviour {
 
     void Start() {
         RoundStart();
+        goldCurrentText = GameObject.Find("Current Gold").GetComponent<Text>();
+        goldPerTurnText = GameObject.Find("Gold Per Turn").GetComponent<Text>(); ;
     }
 
     public void AddGoldPerTurn(int goldAmount) {
