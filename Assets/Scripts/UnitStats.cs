@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using Map.Events;
 
 public class UnitStats : MonoBehaviour {
 
@@ -9,7 +8,7 @@ public class UnitStats : MonoBehaviour {
 	public Sprite unitButtonSprite;
 
 	public RectTransform button;
-	public SelectionRingAnim selectionRing;
+	//public SelectionRingAnim selectionRing;
 
 	public Transform unitPos;
 

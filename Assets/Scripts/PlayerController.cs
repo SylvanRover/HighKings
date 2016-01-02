@@ -1,60 +1,118 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : NetworkBehaviour {
 
+    [SyncVar]
+    public string playerUniqueName;
+    private NetworkInstanceId playerNetID;
+    private Transform myTransform;
+
+    [SyncVar]
     public int playerID;
     public int popCap;
    [SerializeField] private int goldCurrent;
     public int goldMax;
     public int goldPerTurn;
-    //public int techAge = 0;
+    public int techAge = 0;
+    public int playerRound = 0;
+    private GameObject cam;
 
     private Text goldCurrentText;
     private Text goldPerTurnText;
 
     public int GoldCurrent {
-
         get { return goldCurrent; }
         set {
             goldCurrent = value;
-            goldCurrentText.text = goldCurrent.ToString();
+            goldCurrentText.GetComponent<Text>().text = goldCurrent.ToString();
         }
     }
 
-    /*[System.Serializable]
-    public class Unit {
-        public string Name;
-        public int ID;
-        public int Level;
+    public override void OnStartLocalPlayer() {
+        base.OnStartLocalPlayer();
+        GetNetIdentity();
+        SetIdentity();
     }
 
-    public List<Unit> unitData;*/
+    void Awake() {
+        myTransform = transform;
+    }
 
-    void Start() {
-        RoundStart();
-        goldCurrentText = GameObject.Find("Current Gold").GetComponent<Text>();
-        goldPerTurnText = GameObject.Find("Gold Per Turn").GetComponent<Text>(); ;
+    [Client]
+    void GetNetIdentity() {
+        playerNetID = GetComponent<NetworkIdentity>().netId;
+        CmdTellServerMyIdentity(MakeUniqueIdentity());
+    }
+
+    void SetIdentity() {
+        if (!isLocalPlayer) {
+            myTransform.name = playerUniqueName;
+        } else {
+            myTransform.name = MakeUniqueIdentity();
+            int.TryParse(playerNetID.ToString(), out playerID);
+        }
+    }
+
+    string MakeUniqueIdentity() {
+        string uniqueName = "Player " + playerNetID.ToString();
+        return uniqueName;
+    }
+
+    [Command]
+    void CmdTellServerMyIdentity(string name) {
+        playerUniqueName = name; 
+    }
+
+
+
+    // Start after scene is loaded
+    void SceneReady() {
+        if (isLocalPlayer) {
+            Debug.LogError("Player ID is " + playerNetID.ToString());
+
+            cam = GameObject.FindGameObjectWithTag("CameraHolder");
+            cam.transform.position = transform.position;
+            goldCurrentText = GameObject.Find("TEXTGoldCurrent").GetComponent<Text>();
+            goldPerTurnText = GameObject.Find("TEXTGoldPerTurn").GetComponent<Text>();
+            RoundStart();
+        }
+        myTransform = transform;
+        transform.parent = GameObject.Find("Units").transform;        
+    }
+
+    void Update() {
+        if (myTransform.name == "" || myTransform.name == "Player Castle(Clone)") {
+            SetIdentity();
+        }
     }
 
     public void AddGoldPerTurn(int goldAmount) {
-        goldPerTurn += goldAmount;
-        goldPerTurnText.text = ("+" + goldPerTurn.ToString());
+        if (isLocalPlayer) {
+            goldPerTurn += goldAmount;
+            goldPerTurnText.text = ("+" + goldPerTurn.ToString());
+        }
+        
     }
+
     public void SubtractGoldPerTurn(int goldAmount) {
-        goldPerTurn -= goldAmount;
-        goldPerTurnText.text = ("+" + goldPerTurn.ToString());
+        if (isLocalPlayer) {
+             goldPerTurn -= goldAmount;
+             goldPerTurnText.text = ("+" + goldPerTurn.ToString());
+        }       
     }
 
     public void RoundStart() {
-        goldCurrent = goldCurrent + goldPerTurn;
-        if (goldCurrent > goldMax) {
-            goldCurrent = goldMax;
+        if (isLocalPlayer) {
+            goldCurrent = goldCurrent + goldPerTurn;
+            if (goldCurrent > goldMax) {
+                goldCurrent = goldMax;
+            }
+            goldCurrentText.text = GoldCurrent.ToString();
+            goldPerTurnText.text = ( "+" + goldPerTurn.ToString() );
         }
-        goldCurrentText.text = goldCurrent.ToString();
-        goldPerTurnText.text = ( "+" + goldPerTurn.ToString() );
     }
-
 }

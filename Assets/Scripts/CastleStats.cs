@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using Map.Events;
 
 public class CastleStats : MonoBehaviour {
 

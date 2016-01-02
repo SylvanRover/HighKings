@@ -4,8 +4,8 @@ using UnityEngine.UI;
 
 public class RadialTimerBubble : MonoBehaviour {
 
-	private ArmyStats army;
-	private UICommanderBubble bubbleUI;
+	//private ArmyStats army;
+	//private UICommanderBubble bubbleUI;
 	public Image actionTimer;
 	public Color colorMoving;
 	public Color colorBattleAttacking;
@@ -14,14 +14,14 @@ public class RadialTimerBubble : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {	
-		bubbleUI = GetComponent<UICommanderBubble> ();
-		army = bubbleUI.targetButton;
+		//bubbleUI = GetComponent<UICommanderBubble> ();
+		//army = bubbleUI.targetButton;
 	}
 	
 	// Update is called once per frame
 	void Update () {		
 		
-		if (bubbleUI.targetButton != null) {
+		/*if (bubbleUI.targetButton != null) {
 			if (army.actionMoving) {
 				actionTimer.color = colorMoving;
 				actionTimer.fillAmount = army.progressLine._progress01;
@@ -43,6 +43,6 @@ public class RadialTimerBubble : MonoBehaviour {
 			}
 		} else {
 			actionTimer.fillAmount = 0f;
-		}
+		}*/
 	}
 }

@@ -1,18 +1,22 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 using System.Collections;
 using UnityEngine.EventSystems;
 
-public class CapturePoint : MonoBehaviour {
+public class CapturePoint : NetworkBehaviour {
 
     private HexGrid grid;
     private HexPosition position;
-    public enum State { NEUTRAL, PLAYER1, PLAYER2 };
-    public State state = State.NEUTRAL;
 
-    private PlayerController playerController;
+    public enum State { NEUTRAL, PLAYER, ENEMY };
+    [SyncVar]
+    public State state = State.NEUTRAL;
+    [SyncVar]
+    public int PLAYER = -1;
+
+    private GameObject[] playerControllers;
     private UnitCardStats unitCardStats;
-    //private MakePrefabAppear spawn;
     public HexGrid hexGrid;
 
     private GameObject myObject;
@@ -22,9 +26,7 @@ public class CapturePoint : MonoBehaviour {
     public int goldAmount;
     public bool isTower = false;
     public bool isBarracks = false;
-    //public Sprite captureIcon;
 
-    public int ownership = -1;
 
     public Image dropZoneImage;
     private Renderer hexRenderer;
@@ -35,10 +37,10 @@ public class CapturePoint : MonoBehaviour {
 
     public int Ownership {
 
-        get { return ownership; }
+        get { return PLAYER; }
         set {
-            ownership = value;
-            if (ownership == -1) {
+            PLAYER = value;
+            if (PLAYER == -1) {
                 for (int i = 0; i < gameObject.transform.childCount; i++) {
                     Transform Go = gameObject.transform.GetChild(i);
                     Transform GoChild = Go.transform.GetChild(0);
@@ -49,23 +51,23 @@ public class CapturePoint : MonoBehaviour {
                 }
                 //hexRenderer.material.SetColor("_Color", neutralOwned);
             }
-            if (ownership == 0) {
+            if (PLAYER == 0) {
                 for(int i = 0; i < gameObject.transform.childCount; i++) {
                     Transform Go = gameObject.transform.GetChild(i);
                     Transform GoChild = Go.transform.GetChild(0);
                     Dropzone GoDrop = GoChild.transform.GetComponent<Dropzone>();
-                    GoDrop.Status = Dropzone.State.PLAYER1;
+                    GoDrop.Status = Dropzone.State.PLAYER;
                     hexRenderer = Go.GetComponent<Renderer>();
                     hexRenderer.material.SetColor("_Color", playerOwned);
                 }
                 //hexRenderer.material.SetColor("_Color", playerOwned);
             }
-            if (ownership == 1) {
+            if (PLAYER == 1) {
                 for(int i = 0; i < gameObject.transform.childCount; i++) {
                     Transform Go = gameObject.transform.GetChild(i);
                     Transform GoChild = Go.transform.GetChild(0);
                     Dropzone GoDrop = GoChild.transform.GetComponent<Dropzone>();
-                    GoDrop.Status = Dropzone.State.PLAYER2;
+                    GoDrop.Status = Dropzone.State.ENEMY;
                     hexRenderer = Go.GetComponent<Renderer>();
                     hexRenderer.material.SetColor("_Color", enemyOwned);
                 }
@@ -75,17 +77,17 @@ public class CapturePoint : MonoBehaviour {
     }
 
     void Start() {
-        Ownership = ownership;
+        Ownership = PLAYER;
 
         //spawn = gameObject.GetComponent<MakePrefabAppear>();
         hexGrid = GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>();
 
-        playerController = GameObject.FindGameObjectWithTag("PlayerController").GetComponent<PlayerController>();
+        playerControllers = GameObject.FindGameObjectsWithTag("PlayerController");
         
-        if (ownership == 0) {
-            state = State.PLAYER1;
-        } else if (ownership == 1) {
-            state = State.PLAYER2;
+        if (PLAYER == 0) {
+            state = State.PLAYER;
+        } else if (PLAYER == 1) {
+            state = State.ENEMY;
         }
     }
 
@@ -110,22 +112,27 @@ public class CapturePoint : MonoBehaviour {
         set { state = value; }
     }
 
+    [Client]
     public void capture(Unit unit) {
-        if (unit.ownership != ownership && state == State.NEUTRAL) {
-            if (unit.ownership == 0) {
-                state = State.PLAYER1;
-                playerController.AddGoldPerTurn(goldAmount);
+        if (unit.PLAYER != PLAYER && state == State.NEUTRAL) {
+            if (unit.PLAYER == PLAYER) {
+                state = State.PLAYER;
+                foreach (GameObject playerController in playerControllers) {
+                    playerController.GetComponent<PlayerController>().AddGoldPerTurn(goldAmount);
+                }
             } else {
-                state = State.PLAYER2;
+                state = State.ENEMY;
             }
-            Ownership = unit.ownership;
-        } else if (unit.ownership != ownership && state != State.NEUTRAL) {
+            Ownership = unit.PLAYER;
+        } else if (unit.PLAYER != PLAYER && state != State.NEUTRAL) {
             state = State.NEUTRAL;
             Ownership = -1;
 
-            if (unit.ownership == 1) {
-            playerController.SubtractGoldPerTurn(goldAmount);
+            if (unit.PLAYER != PLAYER) {
+                foreach (GameObject playerController in playerControllers) {
+                    playerController.GetComponent<PlayerController>().SubtractGoldPerTurn(goldAmount);
+                }
             }
-        }
+        }        
     }
 }

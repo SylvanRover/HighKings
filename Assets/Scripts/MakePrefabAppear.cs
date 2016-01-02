@@ -7,10 +7,10 @@ public class MakePrefabAppear : MonoBehaviour {
 	[SerializeField] private string _prefabName = "Type Prefab Name Here";
 	[SerializeField] public Transform _where;
 	private GameObject _theGameObject;
-    private Unit unitStats;
+    private Unit unit;
 	// Use this for initialization
 
-	public void Appear () {
+	/*public void Appear () {
 		if (_where == null) {
 			_where = this.transform;
 		}
@@ -22,7 +22,7 @@ public class MakePrefabAppear : MonoBehaviour {
 	public void Appear (Vector3 lookAtPoint) {
 		Appear ();
 		_theGameObject.transform.LookAt(lookAtPoint);
-	}
+	}*/
 
     public GameObject SpawnUnit(int i, int o) {
         if (_where == null) {
@@ -33,9 +33,9 @@ public class MakePrefabAppear : MonoBehaviour {
         _theGameObject.transform.parent = _where;
         _theGameObject.transform.localPosition = Vector3.zero;
         _theGameObject.transform.rotation = Quaternion.identity;
-        unitStats = _theGameObject.GetComponent<Unit>();
-        unitStats.unitID = i;
-        unitStats.ownership = o;
+        unit = _theGameObject.GetComponent<Unit>();
+        unit.unitID = i;
+        unit.PLAYER = o;
         _theGameObject.transform.parent = GameObject.FindGameObjectWithTag("UnitHolder").transform;
         return _theGameObject;
     }
