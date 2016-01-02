@@ -12,15 +12,16 @@ public class CapturePoint : NetworkBehaviour {
     public enum State { NEUTRAL, PLAYER, ENEMY };
     [SyncVar]
     public State state = State.NEUTRAL;
-    [SyncVar]
     public int PLAYER = -1;
 
-    private GameObject[] playerControllers;
+    private GameObject[] players;
+    public PlayerController player;
     private UnitCardStats unitCardStats;
-    public HexGrid hexGrid;
+    //public HexGrid hexGrid;
 
     private GameObject myObject;
     private Unit myUnit;
+    private GameObject captureParent;
 
     public int captureState = 0;
     public int goldAmount;
@@ -40,34 +41,41 @@ public class CapturePoint : NetworkBehaviour {
         get { return PLAYER; }
         set {
             PLAYER = value;
+            players = GameObject.FindGameObjectsWithTag("PlayerController");
+            foreach (GameObject p in players) {
+                if (p.GetComponent<NetworkIdentity>().isLocalPlayer) {
+                    player = p.GetComponent<PlayerController>();
+                }
+            }
             if (PLAYER == -1) {
                 for (int i = 0; i < gameObject.transform.childCount; i++) {
                     Transform Go = gameObject.transform.GetChild(i);
                     Transform GoChild = Go.transform.GetChild(0);
                     Dropzone GoDrop = GoChild.transform.GetComponent<Dropzone>();
                     GoDrop.Status = Dropzone.State.NEUTRAL;
+                    state = State.NEUTRAL;
                     hexRenderer = Go.GetComponent<Renderer>();
                     hexRenderer.material.SetColor("_Color", neutralOwned);
                 }
                 //hexRenderer.material.SetColor("_Color", neutralOwned);
-            }
-            if (PLAYER == 0) {
+            } else if (PLAYER == player.playerID) {
                 for(int i = 0; i < gameObject.transform.childCount; i++) {
                     Transform Go = gameObject.transform.GetChild(i);
                     Transform GoChild = Go.transform.GetChild(0);
                     Dropzone GoDrop = GoChild.transform.GetComponent<Dropzone>();
                     GoDrop.Status = Dropzone.State.PLAYER;
+                    state = State.PLAYER;
                     hexRenderer = Go.GetComponent<Renderer>();
                     hexRenderer.material.SetColor("_Color", playerOwned);
                 }
                 //hexRenderer.material.SetColor("_Color", playerOwned);
-            }
-            if (PLAYER == 1) {
+            } else {
                 for(int i = 0; i < gameObject.transform.childCount; i++) {
                     Transform Go = gameObject.transform.GetChild(i);
                     Transform GoChild = Go.transform.GetChild(0);
                     Dropzone GoDrop = GoChild.transform.GetComponent<Dropzone>();
                     GoDrop.Status = Dropzone.State.ENEMY;
+                    state = State.ENEMY;
                     hexRenderer = Go.GetComponent<Renderer>();
                     hexRenderer.material.SetColor("_Color", enemyOwned);
                 }
@@ -77,18 +85,15 @@ public class CapturePoint : NetworkBehaviour {
     }
 
     void Start() {
-        Ownership = PLAYER;
+        captureParent = GameObject.Find("CapturePoints");
+        transform.parent = captureParent.transform;
+    }
 
+    void SceneReady() {
+        unitCardStats = GameObject.FindGameObjectWithTag("UnitCard").GetComponent<UnitCardStats>();
+        grid = GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>();
+        //Ownership = PLAYER;
         //spawn = gameObject.GetComponent<MakePrefabAppear>();
-        hexGrid = GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>();
-
-        playerControllers = GameObject.FindGameObjectsWithTag("PlayerController");
-        
-        if (PLAYER == 0) {
-            state = State.PLAYER;
-        } else if (PLAYER == 1) {
-            state = State.ENEMY;
-        }
     }
 
     public void SetGrid(HexGrid grid) {
@@ -117,9 +122,7 @@ public class CapturePoint : NetworkBehaviour {
         if (unit.PLAYER != PLAYER && state == State.NEUTRAL) {
             if (unit.PLAYER == PLAYER) {
                 state = State.PLAYER;
-                foreach (GameObject playerController in playerControllers) {
-                    playerController.GetComponent<PlayerController>().AddGoldPerTurn(goldAmount);
-                }
+                player.AddGoldPerTurn(goldAmount);
             } else {
                 state = State.ENEMY;
             }
@@ -129,9 +132,7 @@ public class CapturePoint : NetworkBehaviour {
             Ownership = -1;
 
             if (unit.PLAYER != PLAYER) {
-                foreach (GameObject playerController in playerControllers) {
-                    playerController.GetComponent<PlayerController>().SubtractGoldPerTurn(goldAmount);
-                }
+                player.SubtractGoldPerTurn(goldAmount);
             }
         }        
     }

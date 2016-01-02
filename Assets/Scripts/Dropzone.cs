@@ -1,33 +1,33 @@
 using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 using UnityEngine.EventSystems;
 
-public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler {
+public class Dropzone : NetworkBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler {
    
     private HexGrid grid;
     private HexPosition position;
     public enum State { NEUTRAL, PLAYER, ENEMY};
     public State state = State.NEUTRAL;
 
-    private GameObject[] playerControllers;
+    private GameObject[] players;
+    private PlayerController player;
     private UnitCardStats unitCardStats;
     private MakePrefabAppear spawn;
-    public HexGrid hexGrid;
+    //public HexGrid hexGrid;
 
     //private SimpleStatus.DropZoneState _state;
-    public CapturePoint capturePoint;
-    public Transform captureParent;
+    private CapturePoint capturePoint;
+    private Transform captureParent;
 
     private GameObject myObject;
     private Unit myUnit;
 
 
-    void Start() {
+    void SceneReady() {
         spawn = gameObject.GetComponent<MakePrefabAppear>();
-        hexGrid = GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>();
-
-        playerControllers = GameObject.FindGameObjectsWithTag("PlayerController");
-
+        grid = GameObject.Find("HexGrid").GetComponent<HexGrid>();
+        //players = GameObject.FindGameObjectsWithTag("PlayerController");
         captureParent = transform.parent;
         capturePoint = captureParent.transform.parent.GetComponent<CapturePoint>();
 
@@ -49,6 +49,12 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
     }
 
     public void OnDrop(PointerEventData eventData) {
+        players = GameObject.FindGameObjectsWithTag("PlayerController");
+        foreach (GameObject p in players) {
+            if (p.GetComponent<NetworkIdentity>().isLocalPlayer) {
+                player = p.GetComponent<PlayerController>();
+            }
+        }
         Debug.Log(eventData.pointerDrag.name + " was dropped on " + gameObject.name);
 
         Draggable d = eventData.pointerDrag.GetComponent<Draggable>();
@@ -71,18 +77,17 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
             //_state.owned = true;	
 			//_state.playerOccupier = SimpleNet.PlayerID;
 
-            foreach (GameObject playerController in playerControllers) {
-                if (playerController.GetComponent<PlayerController>().GoldCurrent >= unitCardStats.unitCost) {
-                    myObject = spawn.SpawnUnit(unitCardStats.unitID, unitCardStats.ownership);
-                    myObject.name = "Unit";
-                    myUnit = myObject.GetComponent<Unit>();
-                    myUnit.SetGrid(hexGrid);
-                    hexGrid.unselect();
+            if (player.GoldCurrent >= unitCardStats.unitCost) {
+                spawn = gameObject.GetComponent<MakePrefabAppear>();
+                myObject = spawn.SpawnUnit(unitCardStats.unitID, unitCardStats.cardID);
+                myObject.name = "Unit";
+                myUnit = myObject.GetComponent<Unit>();
+                myUnit.SetGrid(grid);
+                grid.unselect();
 
-                    playerController.GetComponent<PlayerController>().GoldCurrent = playerController.GetComponent<PlayerController>().GoldCurrent - unitCardStats.unitCost;
-                } else {
-                Debug.LogError("Not enough Gold");
-                }
+                player.GoldCurrent = player.GoldCurrent - unitCardStats.unitCost;
+            } else {
+            Debug.LogError("Not enough Gold");
             }
             
         } else if (state != State.PLAYER) {

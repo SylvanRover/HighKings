@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -13,11 +14,11 @@ using System.Collections.Generic;
  *																											*
 \************************************************************************************************************/
 
-public class HexGrid : MonoBehaviour {
+public class HexGrid : NetworkBehaviour {
 
 	public GameObject marker;
 	private GameObject unitsRoot;
-    public GameObject capturePointsRoot;
+    private GameObject capturePointsRoot;
     public GameObject obstacles;
     //public List<Dropzone> capturePoints;
     private List<Unit> units = new List<Unit>();		//I should make this thread safe.
@@ -133,6 +134,7 @@ public class HexGrid : MonoBehaviour {
 	void Start () {
         unitsRoot = GameObject.Find("Units");
 		//unitsRoot.BroadcastMessage ("SetGrid", this);
+        capturePointsRoot = GameObject.Find("CapturePoints");
         capturePointsRoot.BroadcastMessage("SetGrid", this);
         //timeout = MAX_TIME;
         HexPosition.setColor("Path", pathColor, 1);

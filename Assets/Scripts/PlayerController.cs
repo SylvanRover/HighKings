@@ -20,6 +20,7 @@ public class PlayerController : NetworkBehaviour {
     public int techAge = 0;
     public int playerRound = 0;
     private GameObject cam;
+    public CapturePoint capturePoint;
 
     private Text goldCurrentText;
     private Text goldPerTurnText;
@@ -42,10 +43,14 @@ public class PlayerController : NetworkBehaviour {
         myTransform = transform;
     }
 
+    void Start() {
+        capturePoint.Ownership = playerID;
+    }
+
     [Client]
     void GetNetIdentity() {
         playerNetID = GetComponent<NetworkIdentity>().netId;
-        CmdTellServerMyIdentity(MakeUniqueIdentity());
+        CmdTellServerMyIdentity(MakeUniqueIdentity(), MakeUniqueIdentityInt());
     }
 
     void SetIdentity() {
@@ -53,7 +58,7 @@ public class PlayerController : NetworkBehaviour {
             myTransform.name = playerUniqueName;
         } else {
             myTransform.name = MakeUniqueIdentity();
-            int.TryParse(playerNetID.ToString(), out playerID);
+            playerID = MakeUniqueIdentityInt();
         }
     }
 
@@ -62,9 +67,16 @@ public class PlayerController : NetworkBehaviour {
         return uniqueName;
     }
 
+    int MakeUniqueIdentityInt() {
+        int netID;
+        int.TryParse(playerNetID.ToString(), out netID);
+        return netID;
+    }
+
     [Command]
-    void CmdTellServerMyIdentity(string name) {
-        playerUniqueName = name; 
+    void CmdTellServerMyIdentity(string name, int id) {
+        playerUniqueName = name;
+        playerID = id;
     }
 
 
