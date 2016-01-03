@@ -95,19 +95,18 @@ public class Dropzone : NetworkBehaviour, IDropHandler, IPointerEnterHandler, IP
             if (player.GoldCurrent >= unitCardStats.unitCost) {
                 spawn = gameObject.GetComponent<MakePrefabAppear>();
                 myObject = spawn.SpawnUnit(unitCardStats.unitID, unitCardStats.cardID);
+                //NetworkServer.Spawn(myObject);
+
                 myObject.name = "Unit";
                 myUnit = myObject.GetComponent<Unit>();
                 myUnit.SetGrid(grid);
                 grid.unselect();
                 player.GoldCurrent = player.GoldCurrent - unitCardStats.unitCost;
 
-                // spawn on the clients
-                NetworkServer.Spawn(myObject);
-
                 // Send command to server about unit spawn
                 //CmdTellServerOfUnit(myObject, myUnit.PLAYER);
             } else {
-            Debug.LogError("Not enough Gold");
+                Debug.LogError("Not enough Gold");
             }
             
         } else if (state != State.PLAYER) {
@@ -126,6 +125,10 @@ public class Dropzone : NetworkBehaviour, IDropHandler, IPointerEnterHandler, IP
     public void SetGrid(HexGrid grid) {
         this.grid = grid;
         grid.SendMessage("AddDropzone", this);
+
+        if (grid == null) {
+            Debug.LogError(this + "has not set grid");
+        }
     }
 
     public HexPosition Coordinates {

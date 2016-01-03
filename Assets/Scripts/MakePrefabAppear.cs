@@ -41,7 +41,7 @@ public class MakePrefabAppear : NetworkBehaviour {
         _theGameObject.transform.parent = GameObject.FindGameObjectWithTag("UnitHolder").transform;
         return _theGameObject;
     }
-    public GameObject SpawnUnitObject(int i, string n) {
+    public GameObject SpawnUnitObject(string n) {
         if (_where == null) {
             _where = this.transform;
         }

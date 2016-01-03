@@ -123,7 +123,7 @@ public class UnitOrig : MonoBehaviour {
                 VARIATION = 0;
                 SPEED = 3;
                 RANGE = 1;
-                unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
+                unitMesh = spawn.SpawnUnitObject(unitPrefabName);
                 unitAnimr = unitMesh.GetComponentInChildren<Animator>();
             }
             if (unitID == 1) {
@@ -136,7 +136,7 @@ public class UnitOrig : MonoBehaviour {
                 VARIATION = 0;
                 SPEED = 3;
                 RANGE = 4;
-                unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
+                unitMesh = spawn.SpawnUnitObject(unitPrefabName);
                 unitAnimr = unitMesh.GetComponentInChildren<Animator>();
             }
             if (unitID == 2) {
@@ -149,7 +149,7 @@ public class UnitOrig : MonoBehaviour {
                 VARIATION = 0;
                 SPEED = 6;
                 RANGE = 1;
-                unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
+                unitMesh = spawn.SpawnUnitObject(unitPrefabName);
                 unitAnimr = unitMesh.GetComponentInChildren<Animator>();
             }
         } else {

@@ -37,13 +37,14 @@ public class Unit : NetworkBehaviour {
     public Color neutralOwned;
     public Color playerOwned;
     public Color enemyOwned;
-
+    
     private GameObject unitMesh;
     private Animator unitAnimr;
-    public MakePrefabAppear spawn;
-    private UnitManager unitManager;
+    private MakePrefabAppear spawn;
+    private GameObject unitParent;
 
     // Unit Variables
+    [SyncVar (hook = "SetUnitType")]
     public int unitID;
     public string unitName;
     public string unitPrefabName;
@@ -85,6 +86,38 @@ public class Unit : NetworkBehaviour {
     public bool onUp = false;
     public bool onDrag = false;
 
+    void Start() {
+        spawn = GetComponent<MakePrefabAppear>();
+        unitParent = GameObject.Find("Units");
+        transform.parent = unitParent.transform;
+
+        int tempID = unitID;
+        SetUnitType(tempID);
+
+        grid = GameObject.Find("HexGrid").GetComponent<HexGrid>();
+        SetGrid(grid);
+
+        // Setting Health
+        hp = MAX_HP;
+        resetSize = healthRect.sizeDelta;
+        anim = healthbar.GetComponent<Animator>();
+
+        if (healthbarImage != null) {
+            if (PLAYER == -1) {
+                healthbarImage.color = neutralOwned;
+            }
+            if (PLAYER == 0) {
+                healthbarImage.color = playerOwned;
+            }
+            if (PLAYER == 1) {
+                healthbarImage.color = enemyOwned;
+            }
+        }
+
+        hp = MAX_HP;
+        NetworkServer.Spawn(this.gameObject);
+    }
+
     public int Ownership {
 
         get { return PLAYER; }
@@ -112,10 +145,10 @@ public class Unit : NetworkBehaviour {
         }
     }
 
-    public void SetUnitType() {
+    public void SetUnitType(int id) {
         if (this.tag == "Unit") {
             // Setting Unit Variables
-            if (unitID == 0) {
+            if (id == 0) {
                 unitName = "Swordsman";
                 unitPrefabName = "Unit_00";
                 unitNameText.text = unitName;
@@ -125,13 +158,13 @@ public class Unit : NetworkBehaviour {
                 VARIATION = 0;
                 SPEED = 3;
                 RANGE = 1;
-                unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
+                unitMesh = spawn.SpawnUnitObject(unitPrefabName);
                 unitAnimr = unitMesh.GetComponentInChildren<Animator>();
 
                 // spawn on the clients
-                NetworkServer.Spawn(unitMesh);
+                //NetworkServer.Spawn(unitMesh);
             }
-            if (unitID == 1) {
+            if (id == 1) {
                 unitName = "Archer";
                 unitPrefabName = "Unit_01";
                 unitNameText.text = unitName;
@@ -141,13 +174,13 @@ public class Unit : NetworkBehaviour {
                 VARIATION = 0;
                 SPEED = 3;
                 RANGE = 4;
-                unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
+                unitMesh = spawn.SpawnUnitObject(unitPrefabName);
                 unitAnimr = unitMesh.GetComponentInChildren<Animator>();
 
                 // spawn on the clients
-                NetworkServer.Spawn(unitMesh);
+                //NetworkServer.Spawn(unitMesh);
             }
-            if (unitID == 2) {
+            if (id == 2) {
                 unitName = "Knight";
                 unitPrefabName = "Unit_02";
                 unitNameText.text = unitName;
@@ -157,11 +190,11 @@ public class Unit : NetworkBehaviour {
                 VARIATION = 0;
                 SPEED = 6;
                 RANGE = 1;
-                unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
+                unitMesh = spawn.SpawnUnitObject(unitPrefabName);
                 unitAnimr = unitMesh.GetComponentInChildren<Animator>();
 
                 // spawn on the clients
-                NetworkServer.Spawn(unitMesh);
+                //NetworkServer.Spawn(unitMesh);
             }
         } else {
             unitName = "Player Castle";
@@ -297,8 +330,6 @@ public class Unit : NetworkBehaviour {
 
         // Face direction of enemy
         Vector3 heading = (enemy.transform.position - transform.position);
-        //float distance = heading.magnitude;
-        //Vector3 direction = heading / distance; // This is now the normalized direction.
         transform.rotation = horizontalLookRotation(heading);
     }
 	
@@ -328,35 +359,6 @@ public class Unit : NetworkBehaviour {
     public void capture(Unit unit, CapturePoint capturePoint) {
         capturePoint.capture(unit);
     }
-
-	// Use this for initialization
-	void Start () {
-        //spawn = this.GetComponent<MakePrefabAppear>();
-
-        SetUnitType();
-
-        // Setting Health
-        hp = MAX_HP;
-        resetSize = healthRect.sizeDelta;
-        anim = healthbar.GetComponent<Animator>();
-
-        if (healthbarImage != null) {
-            if (PLAYER == -1) {
-                healthbarImage.color = neutralOwned;
-            }
-            if (PLAYER == 0) {
-                healthbarImage.color = playerOwned;
-            }
-            if (PLAYER == 1) {
-                healthbarImage.color = enemyOwned;
-            }
-        }
-
-        hp = MAX_HP;
-
-        grid = GameObject.Find("HexGrid").GetComponent<HexGrid>();
-        SetGrid(grid);
-	}
 	
 	private Vector3 bezier (Vector3 p0, Vector3 c0, Vector3 c1, Vector3 p1, float t) {
 		return (1-t)*(1-t)*(1-t)*p0 + 3*(1-t)*(1-t)*t*c0 + 3*(1-t)*t*t*c1 + t*t*t*p1;
