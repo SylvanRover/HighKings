@@ -10,9 +10,8 @@ public class CapturePoint : NetworkBehaviour {
     private HexPosition position;
 
     public enum State { NEUTRAL, PLAYER, ENEMY };
-    [SyncVar]
     public State state = State.NEUTRAL;
-    public int PLAYER = -1;
+    [SyncVar (hook = "ChangeOwnership")] public int PLAYER = -1;
 
     private GameObject[] players;
     public PlayerController player;
@@ -35,6 +34,26 @@ public class CapturePoint : NetworkBehaviour {
     public Color neutralOwned;
     public Color playerOwned;
     public Color enemyOwned;
+
+    void Start() {
+        //if (transform.parent.tag != "PlayerController") {
+        captureParent = GameObject.Find("CapturePoints");
+        transform.parent = captureParent.transform;
+        unitCardStats = GameObject.FindGameObjectWithTag("UnitCard").GetComponent<UnitCardStats>();
+        grid = GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>();
+        //Ownership = PLAYER;
+        //spawn = gameObject.GetComponent<MakePrefabAppear>();
+        //}        
+    }
+
+    /*void SceneReady() {
+        captureParent = GameObject.Find("CapturePoints");
+        transform.parent = captureParent.transform;
+        unitCardStats = GameObject.FindGameObjectWithTag("UnitCard").GetComponent<UnitCardStats>();
+        grid = GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>();
+        //Ownership = PLAYER;
+        //spawn = gameObject.GetComponent<MakePrefabAppear>();
+    }*/
 
     public int Ownership {
 
@@ -84,25 +103,14 @@ public class CapturePoint : NetworkBehaviour {
         }
     }
 
-    void Start() {
-        //if (transform.parent.tag != "PlayerController") {
-            captureParent = GameObject.Find("CapturePoints");
-            transform.parent = captureParent.transform;
-            unitCardStats = GameObject.FindGameObjectWithTag("UnitCard").GetComponent<UnitCardStats>();
-            grid = GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>();
-            //Ownership = PLAYER;
-            //spawn = gameObject.GetComponent<MakePrefabAppear>();
-        //}        
+    void ChangeOwnership(int o) {
+        Ownership = o;
     }
 
-    /*void SceneReady() {
-        captureParent = GameObject.Find("CapturePoints");
-        transform.parent = captureParent.transform;
-        unitCardStats = GameObject.FindGameObjectWithTag("UnitCard").GetComponent<UnitCardStats>();
-        grid = GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>();
-        //Ownership = PLAYER;
-        //spawn = gameObject.GetComponent<MakePrefabAppear>();
-    }*/
+    public State Status {
+        get { return state; }
+        set { state = value; }
+    }
 
     public void SetGrid(HexGrid grid) {
         this.grid = grid;
@@ -118,11 +126,6 @@ public class CapturePoint : NetworkBehaviour {
             transform.position = value.getPosition();
             value.add("CapturePoint", this);
         }
-    }
-
-    public State Status {
-        get { return state; }
-        set { state = value; }
     }
 
     public void capture(Unit unit) {

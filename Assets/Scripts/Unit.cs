@@ -6,9 +6,11 @@ using System.Collections;
 public class Unit : NetworkBehaviour {
 	private HexGrid grid;
 	private HexPosition position;
+
 	public enum State {MOVE, ATTACK, WAIT};
 	private State state = State.MOVE;
-	public int PLAYER;
+
+    public int PLAYER;
 	public float MAX_HP;
 	public float hp;
 	public float STRENGTH;
@@ -60,23 +62,6 @@ public class Unit : NetworkBehaviour {
     //public float lineOfSight;
     public float movementSpeed = 1;
 
-    public int Ownership {
-
-        get { return PLAYER; }
-        set {
-            PLAYER = value;
-            if (PLAYER == -1) {
-                healthbarImage.color = neutralOwned;
-            }
-            if (PLAYER == 0) {
-                healthbarImage.color = playerOwned;
-            }
-            if (PLAYER == 1) {
-                healthbarImage.color = enemyOwned;
-            }
-        }
-    }
-
     public Text unitNameText;
 
     public RectTransform healthRect;
@@ -99,6 +84,23 @@ public class Unit : NetworkBehaviour {
     //Event Trigger nn Click but not after Drag
     public bool onUp = false;
     public bool onDrag = false;
+
+    public int Ownership {
+
+        get { return PLAYER; }
+        set {
+            PLAYER = value;
+            if (PLAYER == -1) {
+                healthbarImage.color = neutralOwned;
+            }
+            if (PLAYER == 0) {
+                healthbarImage.color = playerOwned;
+            }
+            if (PLAYER == 1) {
+                healthbarImage.color = enemyOwned;
+            }
+        }
+    }
 
     public void OnDragEnd() {
         onDrag = true;
@@ -125,6 +127,8 @@ public class Unit : NetworkBehaviour {
                 RANGE = 1;
                 unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
                 unitAnimr = unitMesh.GetComponentInChildren<Animator>();
+
+                // spawn on the clients
                 NetworkServer.Spawn(unitMesh);
             }
             if (unitID == 1) {
@@ -139,6 +143,8 @@ public class Unit : NetworkBehaviour {
                 RANGE = 4;
                 unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
                 unitAnimr = unitMesh.GetComponentInChildren<Animator>();
+
+                // spawn on the clients
                 NetworkServer.Spawn(unitMesh);
             }
             if (unitID == 2) {
@@ -153,6 +159,8 @@ public class Unit : NetworkBehaviour {
                 RANGE = 1;
                 unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
                 unitAnimr = unitMesh.GetComponentInChildren<Animator>();
+
+                // spawn on the clients
                 NetworkServer.Spawn(unitMesh);
             }
         } else {
