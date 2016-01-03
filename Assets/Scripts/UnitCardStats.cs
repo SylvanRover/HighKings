@@ -33,15 +33,8 @@ public class UnitCardStats : NetworkBehaviour {
             if (player.GetComponent<NetworkIdentity>().isLocalPlayer) {
                 cardNetID = player.GetComponent<NetworkIdentity>().netId;
                 int.TryParse(cardNetID.ToString(), out cardID);
-                CmdTellServerMyIdentity(cardID);
                 Debug.LogError("Card ID is " + cardID);
             }
         }
     }
-
-    [Command]
-    void CmdTellServerMyIdentity(int id) {
-        cardID = id;
-    }
-
 }

@@ -20,6 +20,8 @@ public class PlayerController : NetworkBehaviour {
     public int techAge = 0;
     public int playerRound = 0;
     private GameObject cam;
+    [SyncVar]
+    public int capturePointID;
     public CapturePoint capturePoint;
 
     private Text goldCurrentText;
@@ -43,10 +45,6 @@ public class PlayerController : NetworkBehaviour {
         myTransform = transform;
     }
 
-    void Start() {
-        capturePoint.Ownership = playerID;
-    }
-
     [Client]
     void GetNetIdentity() {
         playerNetID = GetComponent<NetworkIdentity>().netId;
@@ -56,9 +54,12 @@ public class PlayerController : NetworkBehaviour {
     void SetIdentity() {
         if (!isLocalPlayer) {
             myTransform.name = playerUniqueName;
+            capturePoint.Ownership = capturePointID;
         } else {
             myTransform.name = MakeUniqueIdentity();
             playerID = MakeUniqueIdentityInt();
+            capturePointID = MakeUniqueIdentityInt();
+            capturePoint.Ownership = capturePointID;
         }
     }
 
@@ -77,9 +78,8 @@ public class PlayerController : NetworkBehaviour {
     void CmdTellServerMyIdentity(string name, int id) {
         playerUniqueName = name;
         playerID = id;
+        capturePointID = id;
     }
-
-
 
     // Start after scene is loaded
     void SceneReady() {

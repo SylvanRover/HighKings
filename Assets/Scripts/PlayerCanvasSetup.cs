@@ -9,6 +9,7 @@ public class PlayerCanvasSetup : MonoBehaviour {
         players = GameObject.FindGameObjectsWithTag("PlayerController");
         foreach (GameObject player in players) {
             player.SendMessage("SceneReady");
+            Debug.LogError("player is" + player);
         }
     }
 }

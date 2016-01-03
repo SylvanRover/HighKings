@@ -125,6 +125,7 @@ public class Unit : NetworkBehaviour {
                 RANGE = 1;
                 unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
                 unitAnimr = unitMesh.GetComponentInChildren<Animator>();
+                NetworkServer.Spawn(unitMesh);
             }
             if (unitID == 1) {
                 unitName = "Archer";
@@ -138,6 +139,7 @@ public class Unit : NetworkBehaviour {
                 RANGE = 4;
                 unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
                 unitAnimr = unitMesh.GetComponentInChildren<Animator>();
+                NetworkServer.Spawn(unitMesh);
             }
             if (unitID == 2) {
                 unitName = "Knight";
@@ -151,6 +153,7 @@ public class Unit : NetworkBehaviour {
                 RANGE = 1;
                 unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
                 unitAnimr = unitMesh.GetComponentInChildren<Animator>();
+                NetworkServer.Spawn(unitMesh);
             }
         } else {
             unitName = "Player Castle";

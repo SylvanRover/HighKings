@@ -24,12 +24,29 @@ public class Dropzone : NetworkBehaviour, IDropHandler, IPointerEnterHandler, IP
     private Unit myUnit;
 
 
+    void Start() {
+            captureParent = transform.parent;
+            capturePoint = captureParent.transform.parent.GetComponent<CapturePoint>();
+        if (captureParent.transform.parent.tag != "PlayerController") {
+            spawn = gameObject.GetComponent<MakePrefabAppear>();
+            grid = GameObject.Find("HexGrid").GetComponent<HexGrid>();
+            //players = GameObject.FindGameObjectsWithTag("PlayerController");
+
+            if (capturePoint != null) {
+                if (capturePoint.PLAYER == 0) {
+                    state = State.PLAYER;
+                } else if (capturePoint.PLAYER == 1) {
+                    state = State.ENEMY;
+                }
+            }
+        }
+    }
     void SceneReady() {
+        captureParent = transform.parent;
+        capturePoint = captureParent.transform.parent.GetComponent<CapturePoint>();
         spawn = gameObject.GetComponent<MakePrefabAppear>();
         grid = GameObject.Find("HexGrid").GetComponent<HexGrid>();
         //players = GameObject.FindGameObjectsWithTag("PlayerController");
-        captureParent = transform.parent;
-        capturePoint = captureParent.transform.parent.GetComponent<CapturePoint>();
 
         if (capturePoint != null) {
             if (capturePoint.PLAYER == 0) {
@@ -80,6 +97,7 @@ public class Dropzone : NetworkBehaviour, IDropHandler, IPointerEnterHandler, IP
             if (player.GoldCurrent >= unitCardStats.unitCost) {
                 spawn = gameObject.GetComponent<MakePrefabAppear>();
                 myObject = spawn.SpawnUnit(unitCardStats.unitID, unitCardStats.cardID);
+                NetworkServer.Spawn(myObject);
                 myObject.name = "Unit";
                 myUnit = myObject.GetComponent<Unit>();
                 myUnit.SetGrid(grid);
@@ -91,7 +109,7 @@ public class Dropzone : NetworkBehaviour, IDropHandler, IPointerEnterHandler, IP
             }
             
         } else if (state != State.PLAYER) {
-            Debug.LogError("Dropzone not owned by you");
+            Debug.LogError("Dropzone owned by " + capturePoint.PLAYER);
         }
         //}
     }

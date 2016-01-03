@@ -85,16 +85,24 @@ public class CapturePoint : NetworkBehaviour {
     }
 
     void Start() {
-        captureParent = GameObject.Find("CapturePoints");
-        transform.parent = captureParent.transform;
+        //if (transform.parent.tag != "PlayerController") {
+            captureParent = GameObject.Find("CapturePoints");
+            transform.parent = captureParent.transform;
+            unitCardStats = GameObject.FindGameObjectWithTag("UnitCard").GetComponent<UnitCardStats>();
+            grid = GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>();
+            //Ownership = PLAYER;
+            //spawn = gameObject.GetComponent<MakePrefabAppear>();
+        //}        
     }
 
-    void SceneReady() {
+    /*void SceneReady() {
+        captureParent = GameObject.Find("CapturePoints");
+        transform.parent = captureParent.transform;
         unitCardStats = GameObject.FindGameObjectWithTag("UnitCard").GetComponent<UnitCardStats>();
         grid = GameObject.FindGameObjectWithTag("HexGrid").GetComponent<HexGrid>();
         //Ownership = PLAYER;
         //spawn = gameObject.GetComponent<MakePrefabAppear>();
-    }
+    }*/
 
     public void SetGrid(HexGrid grid) {
         this.grid = grid;
@@ -117,7 +125,6 @@ public class CapturePoint : NetworkBehaviour {
         set { state = value; }
     }
 
-    [Client]
     public void capture(Unit unit) {
         if (unit.PLAYER != PLAYER && state == State.NEUTRAL) {
             if (unit.PLAYER == PLAYER) {

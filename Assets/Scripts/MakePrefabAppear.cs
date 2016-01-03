@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 
-public class MakePrefabAppear : MonoBehaviour {
+public class MakePrefabAppear : NetworkBehaviour {
 
 
 	[SerializeField] private string _prefabName = "Type Prefab Name Here";
@@ -29,6 +30,7 @@ public class MakePrefabAppear : MonoBehaviour {
             _where = this.transform;
         }
         //Clear();
+        //_theGameObject = (GameObject)Network.Instantiate(Resources.Load(_prefabName), transform.position, transform.rotation, 0);
         _theGameObject = (GameObject)GameObject.Instantiate(Resources.Load(_prefabName));
         _theGameObject.transform.parent = _where;
         _theGameObject.transform.localPosition = Vector3.zero;
