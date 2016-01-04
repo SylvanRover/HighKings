@@ -35,7 +35,7 @@ public class MakePrefabAppear : MonoBehaviour {
         _theGameObject.transform.rotation = Quaternion.identity;
         unitStats = _theGameObject.GetComponent<Unit>();
         unitStats.unitID = i;
-        unitStats.ownership = o;
+        unitStats.PLAYER = o;
         _theGameObject.transform.parent = GameObject.FindGameObjectWithTag("UnitHolder").transform;
         return _theGameObject;
     }

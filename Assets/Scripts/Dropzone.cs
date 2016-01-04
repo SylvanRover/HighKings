@@ -59,7 +59,7 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
         unitCardStats = d.GetComponent<UnitCardStats>();
 
-        if (capturePoint.ownership == playerController.playerID) {
+        if (capturePoint.ownership == unitCardStats.ownership) {
             //_state.owned = true;
         }
 
@@ -68,12 +68,9 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
         }
 
 		//FOR now no checking
-        if (state == State.PLAYER1 && !position.containsKey("Unit")) { // Need to fix it to make it usable by both players, not just hard coded to be player 1
-            //_state.owned = true;	
-			//_state.playerOccupier = SimpleNet.PlayerID;
-
+        if (state == State.PLAYER1 && unitCardStats.ownership == 0 && !position.containsKey("Unit")) {
             if (playerController.GoldCurrent >= unitCardStats.unitCost) {
-                myObject = spawn.SpawnUnit(unitCardStats.unitID, unitCardStats.ownership);
+                myObject = spawn.SpawnUnit(unitCardStats.unitID, 0);
                 myObject.name = "Unit";
                 myUnit = myObject.GetComponent<Unit>();
                 myUnit.SetGrid(hexGrid);
@@ -82,6 +79,22 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
                 playerController.GoldCurrent = playerController.GoldCurrent - unitCardStats.unitCost;
             } else {
             Debug.LogError("Not enough Gold");
+            }
+        } else if (state != State.PLAYER1) {
+            Debug.LogError("Dropzone not owned by you");
+        }
+
+        if (state == State.PLAYER2 && unitCardStats.ownership == 1 && !position.containsKey("Unit")) {
+            if (playerController.GoldCurrent2 >= unitCardStats.unitCost) {
+                myObject = spawn.SpawnUnit(unitCardStats.unitID, 1);
+                myObject.name = "Unit";
+                myUnit = myObject.GetComponent<Unit>();
+                myUnit.SetGrid(hexGrid);
+                hexGrid.unselect();
+
+                playerController.GoldCurrent2 = playerController.GoldCurrent2 - unitCardStats.unitCost;
+            } else {
+                Debug.LogError("Not enough Gold");
             }
         } else if (state != State.PLAYER1) {
             Debug.LogError("Dropzone not owned by you");

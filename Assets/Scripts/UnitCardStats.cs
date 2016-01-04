@@ -5,7 +5,7 @@ using System.Collections;
 public class UnitCardStats : MonoBehaviour {
 
     public int unitID;
-    public int ownership = 1;
+    public int ownership = 0;
     public string unitName;
     public int unitCost = 1;
     public Text unitNameText;

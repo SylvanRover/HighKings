@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class PlayerController : MonoBehaviour {
 
     public int playerID;
+    private int maxPlayers = 1;
     public int popCap;
    [SerializeField] private int goldCurrent;
     public int goldMax;
@@ -24,6 +25,19 @@ public class PlayerController : MonoBehaviour {
             goldCurrentText.text = goldCurrent.ToString();
         }
     }
+    [SerializeField]
+    private int goldCurrent2;
+    public int goldMax2;
+    public int goldPerTurn2;
+
+    public int GoldCurrent2 {
+
+        get { return goldCurrent2; }
+        set {
+            goldCurrent2 = value;
+            goldCurrentText.text = goldCurrent.ToString();
+        }
+    }
 
     /*[System.Serializable]
     public class Unit {
@@ -38,13 +52,35 @@ public class PlayerController : MonoBehaviour {
         RoundStart();
     }
 
+    public void SwitchToPlayer(int p) {
+        playerID = p;
+        if (playerID == 0) {
+            goldCurrentText.text = goldCurrent.ToString();
+            goldPerTurnText.text = ("+" + goldPerTurn.ToString());
+        } else {
+            goldCurrentText.text = goldCurrent2.ToString();
+            goldPerTurnText.text = ("+" + goldPerTurn2.ToString());
+        }
+    }
+
+
     public void AddGoldPerTurn(int goldAmount) {
-        goldPerTurn += goldAmount;
-        goldPerTurnText.text = ("+" + goldPerTurn.ToString());
+        if (playerID == 0) {
+            goldPerTurn += goldAmount;
+            goldPerTurnText.text = ("+" + goldPerTurn.ToString());
+        } else {
+            goldPerTurn2 += goldAmount;
+            goldPerTurnText.text = ("+" + goldPerTurn2.ToString());
+        }
     }
     public void SubtractGoldPerTurn(int goldAmount) {
-        goldPerTurn -= goldAmount;
-        goldPerTurnText.text = ("+" + goldPerTurn.ToString());
+        if (playerID == 0) {
+            goldPerTurn -= goldAmount;
+            goldPerTurnText.text = ("+" + goldPerTurn.ToString());
+        } else {
+            goldPerTurn2 -= goldAmount;
+            goldPerTurnText.text = ("+" + goldPerTurn2.ToString());
+        }
     }
 
     public void RoundStart() {

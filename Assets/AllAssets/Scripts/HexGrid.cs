@@ -15,7 +15,11 @@ using System.Collections.Generic;
 
 public class HexGrid : MonoBehaviour {
 
-	public GameObject marker;
+    public UnitCardStats cardID_00;
+    public UnitCardStats cardID_01;
+    public UnitCardStats cardID_02;
+
+    public GameObject marker;
 	public GameObject unitsRoot;
     public GameObject capturePointsRoot;
     public GameObject obstacles;
@@ -190,8 +194,13 @@ public class HexGrid : MonoBehaviour {
         player = (player + 1) % PLAYERS;
 		if(player == 0 || !computerPlayer) {
 			selectSelectable ();
-		}
-	}
+        }
+
+        cardID_00.ownership = player;
+        cardID_01.ownership = player;
+        cardID_02.ownership = player;
+        playerController.SwitchToPlayer(player);
+    }
 	
 	public void unselect () {
 		HexPosition.clearSelection ();
