@@ -70,33 +70,31 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 		//FOR now no checking
         if (state == State.PLAYER1 && unitCardStats.ownership == 0 && !position.containsKey("Unit")) {
             if (playerController.GoldCurrent >= unitCardStats.unitCost) {
+                playerController.GoldCurrent = playerController.GoldCurrent - unitCardStats.unitCost;
                 myObject = spawn.SpawnUnit(unitCardStats.unitID, 0);
                 myObject.name = "Unit";
                 myUnit = myObject.GetComponent<Unit>();
                 myUnit.SetGrid(hexGrid);
                 hexGrid.unselect();
-
-                playerController.GoldCurrent = playerController.GoldCurrent - unitCardStats.unitCost;
             } else {
             Debug.LogError("Not enough Gold");
             }
-        } else if (state != State.PLAYER1) {
+        } else if (playerController.playerID == 0 && state != State.PLAYER1) {
             Debug.LogError("Dropzone not owned by you");
         }
 
         if (state == State.PLAYER2 && unitCardStats.ownership == 1 && !position.containsKey("Unit")) {
             if (playerController.GoldCurrent2 >= unitCardStats.unitCost) {
+                playerController.GoldCurrent2 = playerController.GoldCurrent2 - unitCardStats.unitCost;
                 myObject = spawn.SpawnUnit(unitCardStats.unitID, 1);
                 myObject.name = "Unit";
                 myUnit = myObject.GetComponent<Unit>();
                 myUnit.SetGrid(hexGrid);
                 hexGrid.unselect();
-
-                playerController.GoldCurrent2 = playerController.GoldCurrent2 - unitCardStats.unitCost;
             } else {
                 Debug.LogError("Not enough Gold");
             }
-        } else if (state != State.PLAYER1) {
+        } else if (playerController.playerID == 1 && state != State.PLAYER2) {
             Debug.LogError("Dropzone not owned by you");
         }
         //}

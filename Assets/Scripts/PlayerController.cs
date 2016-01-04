@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour {
         get { return goldCurrent2; }
         set {
             goldCurrent2 = value;
-            goldCurrentText.text = goldCurrent.ToString();
+            goldCurrentText.text = goldCurrent2.ToString();
         }
     }
 
@@ -84,12 +84,21 @@ public class PlayerController : MonoBehaviour {
     }
 
     public void RoundStart() {
-        goldCurrent = goldCurrent + goldPerTurn;
-        if (goldCurrent > goldMax) {
-            goldCurrent = goldMax;
+        if (playerID == 0) {
+            goldCurrent = goldCurrent + goldPerTurn;
+            if (goldCurrent > goldMax) {
+                goldCurrent = goldMax;
+            }
+            goldCurrentText.text = goldCurrent.ToString();
+            goldPerTurnText.text = ( "+" + goldPerTurn.ToString() );
+        } else if (playerID == 1) {
+            goldCurrent2 = goldCurrent2 + goldPerTurn2;
+            if (goldCurrent2 > goldMax2) {
+                goldCurrent2 = goldMax2;
+            }
+            goldCurrentText.text = goldCurrent2.ToString();
+            goldPerTurnText.text = ("+" + goldPerTurn2.ToString());
         }
-        goldCurrentText.text = goldCurrent.ToString();
-        goldPerTurnText.text = ( "+" + goldPerTurn.ToString() );
     }
 
 }
