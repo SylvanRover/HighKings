@@ -115,41 +115,59 @@ public class Unit : MonoBehaviour {
             if (unitID == 0) {
                 unitName = "Swordsman";
                 unitPrefabName = "Unit_00";
-                unitNameText.text = unitName;
+                if (unitNameText != null) {
+                    unitNameText.text = unitName;
+                }
                 MAX_HP = 4;
                 hp = MAX_HP;
                 STRENGTH = 1;
                 VARIATION = 0;
                 SPEED = 3;
                 RANGE = 1;
-                unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
-                unitAnimr = unitMesh.GetComponentInChildren<Animator>();
+                if (spawn != null) {
+                    unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
+                }
+                if (unitMesh != null) {
+                    unitAnimr = unitMesh.GetComponentInChildren<Animator>();
+                }
             }
             if (unitID == 1) {
                 unitName = "Archer";
                 unitPrefabName = "Unit_01";
-                unitNameText.text = unitName;
+                if (unitNameText != null) {
+                    unitNameText.text = unitName;
+                }
                 MAX_HP = 2;
                 hp = MAX_HP;
                 STRENGTH = 1;
                 VARIATION = 0;
                 SPEED = 3;
                 RANGE = 4;
-                unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
-                unitAnimr = unitMesh.GetComponentInChildren<Animator>();
+                if (spawn != null) {
+                    unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
+                }
+                if (unitMesh != null) {
+                    unitAnimr = unitMesh.GetComponentInChildren<Animator>();
+                }
             }
             if (unitID == 2) {
                 unitName = "Knight";
                 unitPrefabName = "Unit_02";
-                unitNameText.text = unitName;
+                if (unitNameText != null) {
+                    unitNameText.text = unitName;
+                }
                 MAX_HP = 5;
                 hp = MAX_HP;
                 STRENGTH = 2;
                 VARIATION = 0;
                 SPEED = 6;
                 RANGE = 1;
-                unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
-                unitAnimr = unitMesh.GetComponentInChildren<Animator>();
+                if (spawn != null) {
+                    unitMesh = spawn.SpawnUnitObject(unitID, unitPrefabName);
+                }
+                if (unitMesh != null) {
+                    unitAnimr = unitMesh.GetComponentInChildren<Animator>();
+                }
             }
         } else {
             unitName = "Castle";
@@ -164,9 +182,11 @@ public class Unit : MonoBehaviour {
 
     //Healbar
     public IEnumerator HealthbarFade() {
-        anim = healthbar.GetComponent<Animator>();
-        yield return new WaitForSeconds(healthbarFadeTime);
-        anim.SetBool("On", false);
+        if (anim != null) {
+            anim = healthbar.GetComponent<Animator>();
+            yield return new WaitForSeconds(healthbarFadeTime);
+            anim.SetBool("On", false);
+        }
     }
 
     IEnumerator AnimateDamage() {
@@ -176,8 +196,10 @@ public class Unit : MonoBehaviour {
     }
 
     public void SetGrid (HexGrid grid) {
-		this.grid = grid;
-		grid.SendMessage ("AddUnit", this);
+        if (grid != null) {
+            this.grid = grid;
+            grid.SendMessage("AddUnit", this);
+        }
 	}
 	
 	public float HP {
@@ -192,34 +214,13 @@ public class Unit : MonoBehaviour {
             anim.SetBool("On", true);
         }
         hp -= value;
-        //endSize = new Vector2 ((healthCurrent/healthMax) * healthbarWidth, health.sizeDelta.y);
         if (healthRect != null) {
-        healthRect.sizeDelta = new Vector2((hp / MAX_HP) * healthbarWidth, healthRect.sizeDelta.y);
+            healthRect.sizeDelta = new Vector2((hp / MAX_HP) * healthbarWidth, healthRect.sizeDelta.y);
         }
         StopAllCoroutines();
         StartCoroutine(AnimateDamage());
         StartCoroutine(HealthbarFade());
     }
-
-    /*void SetPosition (HexPosition position) {
-		this.position = position;
-		transform.position = position.getPosition ();
-		position.add ("Unit", this);
-		grid.SendMessage ("ActionComplete");
-	}
-	
-	public void Move (HexPosition desitination) {
-		grid.SendMessage ("MessageRecieved");
-		if (desitination.containsKey ("Unit")) {
-			grid.SendMessage ("ActionComplete");
-			return;
-		}
-		position.delete ("Unit");
-		desitination.add ("Unit", this);
-		transform.position = desitination.getPosition();
-		position = desitination;
-		grid.SendMessage ("ActionComplete");
-	}*/
 
     public HexPosition Coordinates {
 		get {
@@ -243,7 +244,7 @@ public class Unit : MonoBehaviour {
 			skipMove();
 			return;
 		}
-		grid.wait();
+        grid.wait();
 		HexPosition destination = path[path.Length-1];
 		this.path = new Vector3[path.Length];
 		for (int i = 0; i < path.Length; ++i) {
@@ -252,22 +253,22 @@ public class Unit : MonoBehaviour {
 
         // Capture Point
         if (destination.containsKey("CapturePoint")) {
-            //print("ERROR: Space is capture point.");
             Debug.LogError("contains dropzone");
-            grid.actuallyCapture();
-            //return;
+            if (grid != null) {
+                grid.actuallyCapture();
+            }
         }
 
 		state = State.ATTACK;
 		if (destination.containsKey ("Unit")) {
 			print ("ERROR: Space occupied.");
-			grid.actionComplete();
+            if (grid != null) {
+                grid.actionComplete();
+            }
 			return;
         }
-
-        position.remove ("Unit");
-		destination.add ("Unit", this);
-		//transform.position = desitination.getPosition();
+        position.remove("Unit");
+        destination.add("Unit", this);
 		t = 0;
 		n = 0;
 		moving = true;
@@ -386,11 +387,7 @@ public class Unit : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-
-        /*if (healthCurrent <= 0) {
-            Destroy(this.gameObject);
-        }*/
+	void FixedUpdate () {
 
         if (animateDamage) {
             if (currentTime <= damageDuration) {
@@ -398,7 +395,6 @@ public class Unit : MonoBehaviour {
                 damageRect.sizeDelta = Vector2.Lerp(currentSize, healthRect.sizeDelta, currentTime / damageDuration);
             }
             else {
-                //damage.sizeDelta.y = currentSize;
                 currentTime = 0f;
             }
             if (damageRect.sizeDelta == healthRect.sizeDelta) {

@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler {
 
     public Transform ParentToReturnTo = null;
+    public float DurationWait = 1f;
     GameObject placeholder = null;
 
 	public void OnBeginDrag( PointerEventData eventData ) {
@@ -38,11 +39,14 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         this.transform.SetParent( ParentToReturnTo );
         this.transform.SetSiblingIndex( placeholder.transform.GetSiblingIndex() );
 
-        //this.transform.localPosition = Vector3.zero;
-        //this.transform.localScale = Vector3.one;
-        //this.transform.rotation = Quaternion.identity;
+        ResetRaycastWait();
 
         Destroy(placeholder);
+    }
+
+    IEnumerator ResetRaycastWait() {
+        yield return new WaitForSeconds(DurationWait);
+        ResetRaycast(true);
     }
 
     public void ResetRaycast(bool b) {

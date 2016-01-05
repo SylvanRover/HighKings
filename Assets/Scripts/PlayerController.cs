@@ -27,7 +27,9 @@ public class PlayerController : MonoBehaviour {
         get { return goldCurrent; }
         set {
             goldCurrent = value;
-            goldCurrentText.text = goldCurrent.ToString();
+            if (goldCurrentText != null) {
+                goldCurrentText.text = goldCurrent.ToString();
+            }
         }
     }
     [SerializeField]
@@ -40,7 +42,9 @@ public class PlayerController : MonoBehaviour {
         get { return goldCurrent2; }
         set {
             goldCurrent2 = value;
-            goldCurrentText.text = goldCurrent2.ToString();
+            if (goldCurrentText != null) {
+                goldCurrentText.text = goldCurrent2.ToString();
+            }
         }
     }
 
@@ -77,19 +81,27 @@ public class PlayerController : MonoBehaviour {
     public void AddGoldPerTurn(int goldAmount) {
         if (playerID == 0) {
             goldPerTurn += goldAmount;
-            goldPerTurnText.text = ("+" + goldPerTurn.ToString());
+            if (goldCurrentText != null) {
+                goldPerTurnText.text = ("+" + goldPerTurn.ToString());
+            }
         } else {
             goldPerTurn2 += goldAmount;
-            goldPerTurnText.text = ("+" + goldPerTurn2.ToString());
+            if (goldCurrentText != null) {
+                goldPerTurnText.text = ("+" + goldPerTurn2.ToString());
+            }
         }
     }
     public void SubtractGoldPerTurn(int goldAmount) {
         if (playerID == 0) {
             goldPerTurn -= goldAmount;
-            goldPerTurnText.text = ("+" + goldPerTurn.ToString());
+            if (goldCurrentText != null) {
+                goldPerTurnText.text = ("+" + goldPerTurn.ToString());
+            }
         } else {
             goldPerTurn2 -= goldAmount;
-            goldPerTurnText.text = ("+" + goldPerTurn2.ToString());
+            if (goldCurrentText != null) {
+                goldPerTurnText.text = ("+" + goldPerTurn2.ToString());
+            }
         }
     }
 
@@ -99,15 +111,19 @@ public class PlayerController : MonoBehaviour {
             if (goldCurrent > goldMax) {
                 goldCurrent = goldMax;
             }
-            goldCurrentText.text = goldCurrent.ToString();
-            goldPerTurnText.text = ( "+" + goldPerTurn.ToString() );
+            if (goldCurrentText != null) {
+                goldCurrentText.text = goldCurrent.ToString();
+                goldPerTurnText.text = ("+" + goldPerTurn.ToString());
+            }
         } else if (playerID == 1) {
             goldCurrent2 = goldCurrent2 + goldPerTurn2;
             if (goldCurrent2 > goldMax2) {
                 goldCurrent2 = goldMax2;
             }
-            goldCurrentText.text = goldCurrent2.ToString();
-            goldPerTurnText.text = ("+" + goldPerTurn2.ToString());
+            if (goldCurrentText != null) {
+                goldCurrentText.text = goldCurrent2.ToString();
+                goldPerTurnText.text = ("+" + goldPerTurn2.ToString());
+            }
         }
     }
 
