@@ -4,22 +4,32 @@ using System.Collections;
 
 public class RadialTimer : MonoBehaviour {
 
-	public Unit unitStats;
-	//public Text textLevel;
-	public Image damageTimer;
+	public Unit unitStats0;
+    public Unit unitStats1;
+    private Unit unitStats;
+    //public Text textLevel;
+    public Image damageTimer;
 	public Image healthTimer;
-	//public Image actionTimer;
-	//public Image actionBubble;
-	//public Sprite actionIdle;
-	//public Sprite actionMoving;
-	//public Sprite actionBattleAttacking;
-	//public Sprite actionBattleDefending;
-	//public Sprite actionDefending;
-	//public Sprite actionHarvesting;
-	//public Color colorMoving;
-	//public Color colorBattleAttacking;
-	//public Color colorBattleDefending;
-	//public Color colorHarvesting;
+    //public Image actionTimer;
+    //public Image actionBubble;
+    //public Sprite actionIdle;
+    //public Sprite actionMoving;
+    //public Sprite actionBattleAttacking;
+    //public Sprite actionBattleDefending;
+    //public Sprite actionDefending;
+    //public Sprite actionHarvesting;
+    //public Color colorMoving;
+    //public Color colorBattleAttacking;
+    //public Color colorBattleDefending;
+    //public Color colorHarvesting;
+
+    public void SwitchPlayer(int p) {
+        if (p == 0) {
+            unitStats = unitStats0;
+        } else {
+            unitStats = unitStats1;
+        }
+    }
 
 	// Update is called once per frame
 	void Update () {

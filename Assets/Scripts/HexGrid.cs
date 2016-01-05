@@ -22,7 +22,7 @@ public class HexGrid : MonoBehaviour {
     public GameObject marker;
 	public GameObject unitsRoot;
     public GameObject capturePointsRoot;
-    public GameObject obstacles;
+    //public GameObject obstacles;
     //public List<Dropzone> capturePoints;
     private List<Unit> units = new List<Unit>();		//I should make this thread safe.
     private List<CapturePoint> capturePoints = new List<CapturePoint>();
@@ -43,7 +43,8 @@ public class HexGrid : MonoBehaviour {
 	private HexPosition[] path = null;
 	private AI ai;
 	bool gameOver = false;
-	bool modeSelected = false;
+    bool castleGameOver = false;
+    bool modeSelected = false;
 	bool computerPlayer;
 
     public Color pathColor;
@@ -144,11 +145,11 @@ public class HexGrid : MonoBehaviour {
 		HexPosition.setColor("Attack", attackColor, 4);
 		HexPosition.setColor("Cursor", cursorColor, 5);
 		HexPosition.Marker = marker;
-		foreach (Transform child in obstacles.transform) {
+		/*foreach (Transform child in obstacles.transform) {
 			HexPosition position = new HexPosition(child.position);
 			child.position = position.getPosition();
 			position.flag("Obstacle");
-		}
+		}*/
         GameObject[] captureObj = GameObject.FindGameObjectsWithTag("MapDropZone");
         for (int i=0; i< captureObj.Length; i++) {
             HexPosition position = new HexPosition(captureObj[i].transform.position);
@@ -215,7 +216,7 @@ public class HexGrid : MonoBehaviour {
 	private void checkGameOver() {
 		gameOver = true;
 		foreach (Unit unit in units) {
-			if (unit.PLAYER != player) {
+            if (unit.PLAYER != player && !castleGameOver) {
 				gameOver = false;
 				break;
 			}
@@ -224,6 +225,12 @@ public class HexGrid : MonoBehaviour {
 			return;
 		}
 	}
+
+    public void CastleDestroyed(int p) {
+        gameOver = true;
+        castleGameOver = true;
+    }
+
 	
 	private void actuallyAttack () {
 		((Unit) selection.getValue("Unit")).attack ((Unit) mouse.getValue("Unit"));

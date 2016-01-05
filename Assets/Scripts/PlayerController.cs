@@ -16,6 +16,11 @@ public class PlayerController : MonoBehaviour {
 
     public Text goldCurrentText;
     public Text goldPerTurnText;
+    public Image radialHealth;
+    public Color healthColor0;
+    public Color healthColor1;
+
+    private RadialTimer radialTimer;
 
     public int GoldCurrent {
 
@@ -49,6 +54,7 @@ public class PlayerController : MonoBehaviour {
     public List<Unit> unitData;*/
 
     void Start() {
+        radialTimer = GetComponent<RadialTimer>();
         RoundStart();
     }
 
@@ -57,9 +63,13 @@ public class PlayerController : MonoBehaviour {
         if (playerID == 0) {
             goldCurrentText.text = goldCurrent.ToString();
             goldPerTurnText.text = ("+" + goldPerTurn.ToString());
+            radialHealth.color = healthColor0;
+            radialTimer.SwitchPlayer(p);
         } else {
             goldCurrentText.text = goldCurrent2.ToString();
             goldPerTurnText.text = ("+" + goldPerTurn2.ToString());
+            radialHealth.color = healthColor1;
+            radialTimer.SwitchPlayer(p);
         }
     }
 

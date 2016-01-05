@@ -284,10 +284,10 @@ public class Unit : MonoBehaviour {
         unitAnimr.SetTrigger("Attack");
 
         // Face direction of enemy
-        Vector3 heading = (enemy.transform.position - transform.position);
-        //float distance = heading.magnitude;
-        //Vector3 direction = heading / distance; // This is now the normalized direction.
-        transform.rotation = horizontalLookRotation(heading);
+        if (gameObject.tag != "Castle") {
+            Vector3 heading = (enemy.transform.position - transform.position);
+            transform.rotation = horizontalLookRotation(heading);
+        }
     }
 	
 	public void newTurn () {
@@ -303,18 +303,26 @@ public class Unit : MonoBehaviour {
         }
 
         // Face direction of attacker
-        Vector3 heading = (attacker - transform.position);
-        transform.rotation = horizontalLookRotation(heading);
+        if (gameObject.tag != "Castle") {
+            Vector3 heading = (attacker - transform.position);
+            transform.rotation = horizontalLookRotation(heading);
+        }
 
         if (hp <= 0) {
 			position.remove ("Unit");
 			grid.remove (this);
-			Object.Destroy(this.gameObject);
+            if (gameObject.tag == "Castle") {
+                grid.CastleDestroyed(unitID);
+            } else {
+			    Object.Destroy(this.gameObject);
+            }
 		}
     }
 
     public void capture(Unit unit, CapturePoint capturePoint) {
-        capturePoint.capture(unit);
+        if (capturePoint != null) {
+            capturePoint.capture(unit);
+        }
     }
 
 	// Use this for initialization
