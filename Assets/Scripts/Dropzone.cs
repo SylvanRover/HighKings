@@ -98,6 +98,7 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
             Debug.LogError("Dropzone not owned by you");
         }
         //}
+        d.ResetRaycast(true);
     }
 
     public void SetGrid(HexGrid grid) {

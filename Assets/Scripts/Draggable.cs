@@ -42,8 +42,10 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         //this.transform.localScale = Vector3.one;
         //this.transform.rotation = Quaternion.identity;
 
-        GetComponent<CanvasGroup>().blocksRaycasts = true;
-
         Destroy(placeholder);
+    }
+
+    public void ResetRaycast(bool b) {
+        GetComponent<CanvasGroup>().blocksRaycasts = b;
     }
 }
