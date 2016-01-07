@@ -16,7 +16,7 @@ using System.Collections.Generic;
 
 public class HexGrid : NetworkBehaviour {
 
-	public GameObject marker;
+    public GameObject marker;
 	private GameObject unitsRoot;
     private GameObject capturePointsRoot;
     public GameObject obstacles;
@@ -25,19 +25,18 @@ public class HexGrid : NetworkBehaviour {
     private List<CapturePoint> capturePoints = new List<CapturePoint>();
     private List<Dropzone> dropzones = new List<Dropzone>();
     //public GameObject[] players;
-
     private bool waiting = false;
 	//private int timeout = 0;		//waiting is still false as this counts down.
 	//private const int MAX_TIME = 1000;
 	
 	private enum Turn {SELECT, MOVE, ATTACK};
-	private Turn turn = Turn.SELECT;
+    private Turn turn = Turn.SELECT;
 	public int PLAYERS = 2;
 	private int player = 0;
 	private int updating = 0;
-	private HexPosition mouse = null;
-	private HexPosition selection = null;
-	private HexPosition[] path = null;
+    private HexPosition mouse = null;
+    private HexPosition selection = null;
+    private HexPosition[] path = null;
 	private AI ai;
 	bool gameOver = false;
 	bool modeSelected = false;
