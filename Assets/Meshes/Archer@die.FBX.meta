@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 4d8033a51d20926468f05365ab4bdbe8
-timeCreated: 1452250102
+guid: 06004a21b57cf3c478e247f30b410ab8
+timeCreated: 1452213936
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -78,7 +78,7 @@ ModelImporter:
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
-    resampleRotations: 1
+    resampleRotations: 0
     optimizeGameObjects: 0
     motionNodeName: 
     animationImportErrors: 
@@ -95,7 +95,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.3
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1

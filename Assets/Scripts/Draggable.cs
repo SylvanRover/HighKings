@@ -39,7 +39,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         this.transform.SetParent( ParentToReturnTo );
         this.transform.SetSiblingIndex( placeholder.transform.GetSiblingIndex() );
 
-        ResetRaycastWait();
+		StartCoroutine(ResetRaycastWait());
 
         Destroy(placeholder);
     }

@@ -35,6 +35,10 @@ public class Unit : MonoBehaviour {
     public Color playerOwned;
     public Color enemyOwned;
 
+	public Color playerMat;
+	public Color enemyMat;
+	private GameObject[] objectMats;
+
     private GameObject unitMesh;
     private Animator unitAnimr;
     public MakePrefabAppear spawn;
@@ -91,6 +95,7 @@ public class Unit : MonoBehaviour {
     public float currentTime = 0f;
     public float damageDuration = 2f;
     public float damageDurationWait = 3f;
+	public float dieWait = 2f;
     public bool animateDamage = false;
 
     private float startTime;
@@ -130,6 +135,27 @@ public class Unit : MonoBehaviour {
                 if (unitMesh != null) {
                     unitAnimr = unitMesh.GetComponentInChildren<Animator>();
                 }
+				objectMats = gameObject.GetComponentsInChildren<GameObject>();
+				if (PLAYER == 0) {
+					foreach (GameObject mat in objectMats) {
+						Material[] m = mat.GetComponents<Material> ();
+						foreach (Material mm in m) {
+							if (mm.name == "AllianceColor") {
+								mm.color = playerMat;
+							}
+						}
+					}	
+				} else {
+					foreach (GameObject mat in objectMats) {
+						Material[] m = mat.GetComponents<Material> ();
+						foreach (Material mm in m) {
+							if (mm.name == "AllianceColor") {
+								mm.color = playerMat;
+							}
+						}
+					}
+				}
+
             }
             if (unitID == 1) {
                 unitName = "Archer";
@@ -148,7 +174,27 @@ public class Unit : MonoBehaviour {
                 }
                 if (unitMesh != null) {
                     unitAnimr = unitMesh.GetComponentInChildren<Animator>();
-                }
+				}
+				objectMats = gameObject.GetComponentsInChildren<GameObject>();
+				if (PLAYER == 0) {
+					foreach (GameObject mat in objectMats) {
+						Material[] m = mat.GetComponents<Material> ();
+						foreach (Material mm in m) {
+							if (mm.name == "AllianceColor") {
+								mm.color = playerMat;
+							}
+						}
+					}	
+				} else {
+					foreach (GameObject mat in objectMats) {
+						Material[] m = mat.GetComponents<Material> ();
+						foreach (Material mm in m) {
+							if (mm.name == "AllianceColor") {
+								mm.color = playerMat;
+							}
+						}
+					}
+				}
             }
             if (unitID == 2) {
                 unitName = "Knight";
@@ -167,7 +213,27 @@ public class Unit : MonoBehaviour {
                 }
                 if (unitMesh != null) {
                     unitAnimr = unitMesh.GetComponentInChildren<Animator>();
-                }
+				}
+				objectMats = gameObject.GetComponentsInChildren<GameObject>();
+				if (PLAYER == 0) {
+					foreach (GameObject mat in objectMats) {
+						Material[] m = mat.GetComponents<Material> ();
+						foreach (Material mm in m) {
+							if (mm.name == "AllianceColor") {
+								mm.color = playerMat;
+							}
+						}
+					}	
+				} else {
+					foreach (GameObject mat in objectMats) {
+						Material[] m = mat.GetComponents<Material> ();
+						foreach (Material mm in m) {
+							if (mm.name == "AllianceColor") {
+								mm.color = playerMat;
+							}
+						}
+					}
+				}
             }
         } else {
             unitName = "Castle";
@@ -179,6 +245,11 @@ public class Unit : MonoBehaviour {
 
 
     }
+
+	public IEnumerator DieWait() {
+		yield return new WaitForSeconds(dieWait);
+		Object.Destroy(this.gameObject);
+	}
 
     //Healbar
     public IEnumerator HealthbarFade() {
@@ -314,8 +385,9 @@ public class Unit : MonoBehaviour {
 			grid.remove (this);
             if (gameObject.tag == "Castle") {
                 grid.CastleDestroyed(unitID);
-            } else {
-			    Object.Destroy(this.gameObject);
+			} else {
+				unitAnimr.SetTrigger("Die");
+				StartCoroutine(DieWait ());
             }
 		}
     }

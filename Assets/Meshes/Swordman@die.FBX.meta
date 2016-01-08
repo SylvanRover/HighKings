@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: b71ee4ecfa4e6cb468d35d25ccea92de
-timeCreated: 1452250102
+guid: f7c4b11a0ce59044f9b4ee7fd37a0607
+timeCreated: 1452213937
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -96,6 +96,7 @@ ModelImporter:
     4300012: Sword_Trousers
     4300014: Sword_Body
     4300016: Sword_ArmL
+    7400000: Take 001
     9500000: //RootNode
     13700000: Sword_ArmL
     13700002: Sword_ArmR
@@ -108,7 +109,7 @@ ModelImporter:
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
-    resampleRotations: 1
+    resampleRotations: 0
     optimizeGameObjects: 0
     motionNodeName: 
     animationImportErrors: 

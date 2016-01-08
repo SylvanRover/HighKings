@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: bd5ebb878588f974480ce277cc21903d
-timeCreated: 1452250104
+guid: 75be5a2d2ee75e644bf084000320f436
+timeCreated: 1452213937
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -96,6 +96,7 @@ ModelImporter:
     4300012: Sword_Trousers
     4300014: Sword_Body
     4300016: Sword_ArmL
+    7400000: Take 001
     9500000: //RootNode
     13700000: Sword_ArmL
     13700002: Sword_ArmR
@@ -125,7 +126,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.3
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1
