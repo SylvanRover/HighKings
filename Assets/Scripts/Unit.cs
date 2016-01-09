@@ -37,7 +37,7 @@ public class Unit : MonoBehaviour {
 
 	public Color playerMat;
 	public Color enemyMat;
-	private GameObject[] objectMats;
+	private Renderer[] rendererObj;
 
     private GameObject unitMesh;
     private Animator unitAnimr;
@@ -135,26 +135,23 @@ public class Unit : MonoBehaviour {
                 if (unitMesh != null) {
                     unitAnimr = unitMesh.GetComponentInChildren<Animator>();
                 }
-				objectMats = gameObject.GetComponentsInChildren<GameObject>();
-				if (PLAYER == 0) {
-					foreach (GameObject mat in objectMats) {
-						Material[] m = mat.GetComponents<Material> ();
-						foreach (Material mm in m) {
-							if (mm.name == "AllianceColor") {
-								mm.color = playerMat;
-							}
-						}
-					}	
-				} else {
-					foreach (GameObject mat in objectMats) {
-						Material[] m = mat.GetComponents<Material> ();
-						foreach (Material mm in m) {
-							if (mm.name == "AllianceColor") {
-								mm.color = playerMat;
-							}
-						}
-					}
-				}
+
+                // Alliance Color
+                rendererObj = gameObject.GetComponentsInChildren<Renderer>();
+                if (PLAYER == 0) {
+                    foreach (Renderer ren in rendererObj) {
+                        //Debug.LogError(PLAYER + " " + unitName + " " + ren.material.name + " has been found");
+                        if (ren != null && ren.material.name == "AllianceColor (Instance)") {
+                            ren.material.color = playerMat;
+                        }
+                    }
+                } else {
+                    foreach (Renderer ren in rendererObj) {
+                        if (ren != null && ren.material.name == "AllianceColor (Instance)") {
+                            ren.material.color = enemyMat;
+                        }
+                    }
+                }
 
             }
             if (unitID == 1) {
@@ -175,26 +172,23 @@ public class Unit : MonoBehaviour {
                 if (unitMesh != null) {
                     unitAnimr = unitMesh.GetComponentInChildren<Animator>();
 				}
-				objectMats = gameObject.GetComponentsInChildren<GameObject>();
-				if (PLAYER == 0) {
-					foreach (GameObject mat in objectMats) {
-						Material[] m = mat.GetComponents<Material> ();
-						foreach (Material mm in m) {
-							if (mm.name == "AllianceColor") {
-								mm.color = playerMat;
-							}
-						}
-					}	
-				} else {
-					foreach (GameObject mat in objectMats) {
-						Material[] m = mat.GetComponents<Material> ();
-						foreach (Material mm in m) {
-							if (mm.name == "AllianceColor") {
-								mm.color = playerMat;
-							}
-						}
-					}
-				}
+
+                // Alliance Color
+                rendererObj = gameObject.GetComponentsInChildren<Renderer>();
+                if (PLAYER == 0) {
+                    foreach (Renderer ren in rendererObj) {
+                            //Debug.LogError(PLAYER + " " + unitName + " " + ren.material.name + " has been found");
+                        if (ren != null && ren.material.name == "AllianceColor (Instance)") {
+                            ren.material.color = playerMat;
+                        }
+                    }
+                } else {
+                    foreach (Renderer ren in rendererObj) {
+                        if (ren != null && ren.material.name == "AllianceColor (Instance)") {
+                            ren.material.color = enemyMat;
+                        }
+                    }
+                }
             }
             if (unitID == 2) {
                 unitName = "Knight";
@@ -214,26 +208,23 @@ public class Unit : MonoBehaviour {
                 if (unitMesh != null) {
                     unitAnimr = unitMesh.GetComponentInChildren<Animator>();
 				}
-				objectMats = gameObject.GetComponentsInChildren<GameObject>();
-				if (PLAYER == 0) {
-					foreach (GameObject mat in objectMats) {
-						Material[] m = mat.GetComponents<Material> ();
-						foreach (Material mm in m) {
-							if (mm.name == "AllianceColor") {
-								mm.color = playerMat;
-							}
-						}
-					}	
-				} else {
-					foreach (GameObject mat in objectMats) {
-						Material[] m = mat.GetComponents<Material> ();
-						foreach (Material mm in m) {
-							if (mm.name == "AllianceColor") {
-								mm.color = playerMat;
-							}
-						}
-					}
-				}
+
+                // Alliance Color
+                rendererObj = gameObject.GetComponentsInChildren<Renderer>();
+                if (PLAYER == 0) {
+                    foreach (Renderer ren in rendererObj) {
+                        //Debug.LogError(PLAYER + " " + unitName + " " + ren.material.name + " has been found");
+                        if (ren != null && ren.material.name == "AllianceColor (Instance)") {
+                            ren.material.color = playerMat;
+                        }
+                    }
+                } else {
+                    foreach (Renderer ren in rendererObj) {
+                        if (ren != null && ren.material.name == "AllianceColor (Instance)") {
+                            ren.material.color = enemyMat;
+                        }
+                    }
+                }
             }
         } else {
             unitName = "Castle";
